@@ -1,4 +1,4 @@
-<!DOCTYPE>
+<!DOCTYPE html>
 <html lang="{{str_replace('_','-', app()->getLocale())}}">
 <head>
 
@@ -23,10 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 }
 ?>
 <!-- GET CSRF TOKEN -->
-    <script>
-        const csrf = '{{csrf_token()}}'
-        const env = '{{env('APP_ENV')}}';
-    </script>
 
     <title>Simon Lou Template</title>
 
@@ -43,6 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 </head>
 <body data-root-url={{ asset('') }}>
-<div id="App"></div>
+<div id="app"></div>
 </body>
 </html>

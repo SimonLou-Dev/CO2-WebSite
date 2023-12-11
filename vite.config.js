@@ -10,7 +10,7 @@ export default defineConfig({
     plugins: [reactRefresh()],
     root: './resources',
     base: '/assets/',
-    mode: 'production',
+    mode: 'development', // |'development | production',
     define: {
         'process.env': {}
     },
