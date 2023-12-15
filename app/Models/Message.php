@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  *     title="schema of message",
  *     @OA\Property(property="id", type="integer"),
  *     @OA\Property(property="title", type="string"),
- *     @OA\Property(property="content", type="string")
+ *     @OA\Property(property="content", type="string"),
  *     @OA\Property(property="sender_id", type="integer")
  *
  * )

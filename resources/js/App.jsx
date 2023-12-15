@@ -66,61 +66,19 @@ const App = () => {
             console.log(e)
         })
 
-        /*
-
-        window.Echo = new Echo({
-            broadcaster: 'pusher',
-            key: 'appkey',
-            wsHost: window.location.hostname ,
-            cluster: 'mt1',
-            wsPort: 6001,
-            wssPort: 6001,
-            forceTLS: false,
-            encrypted: true,
-            auth: {
-                headers: {
-                    Authorization: 'Bearer ' + token
-                },
-            },
-            authorizer: (channel, options) => {
-                return {
-                    authorize: (socketId, callback) => {
-                        axios.post('/api/broadcasting/auth', {
-                            socket_id: socketId,
-                            channel_name: channel.name
-                        }, {headers: headers, withCredentials: true})
-                            .then(response => {
-                                callback(false, response.data);
-                            })
-                            .catch(error => {
-                                callback(true, error);
-                            });
-                    }
-                };
-            },
-
-        });
-
-
-
-
-        window.channel = window.Echo.channel('private-moi')
-
-        window.channel.listen('*', (e) => {
+        axios.patch("/api/messages/1", {
+            "message": "Hello World",
+            "title": "Hello World"
+        }, {headers: headers}).then(r => {
+            console.log(r)
+        }).catch(e => {
             console.log(e)
         })
 
-        console.log("ListeningEvent")
 
-
-        */
-
-
-
-
-
-
-        //window.UserChannel = pusher.subscribe('messages');
+        return () => {
+            window.messageChannel.unsubscribe();
+        }
 
 
     }, []);

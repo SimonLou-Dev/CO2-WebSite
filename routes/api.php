@@ -19,7 +19,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:sanctum')->group(function() {
-    Route::apiResource("messages", MessageController::class);
+    //Route::apiResource("messages", MessageController::class);
+    Route::post("/messages", [MessageController::class, 'store'])->name("messages.store");
+    Route::get("/messages", [MessageController::class, 'index'])->name("messages.index");
+    Route::get("/messages/{message}", [MessageController::class, 'show'])->name("messages.show");
+    Route::patch("/messages/{message}", [MessageController::class, 'update'])->name("messages.update");
+    Route::delete("/messages/{message}", [MessageController::class, 'destroy'])->name("messages.destroy");
+
+
+
+
+    Route::patch("/user/{role}", [ApiTokenController::class, 'editRole'])->name("users.editRole");
 
 });
 
@@ -29,6 +39,8 @@ Route::get("/test", function() {
 
     return "Hello, world!";
 })->name("test");
+
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

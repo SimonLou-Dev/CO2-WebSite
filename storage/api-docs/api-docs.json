@@ -1,0 +1,497 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Laravel API",
+        "description": "Laravel API OpenApi description",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api",
+            "description": "Laravel API Server"
+        }
+    ],
+    "paths": {
+        "/tokens/create": {
+            "post": {
+                "tags": [
+                    "API"
+                ],
+                "operationId": "d5c60fd09fb8bea95dfc921966972dba",
+                "responses": {
+                    "200": {
+                        "description": "Token created successfully"
+                    }
+                }
+            }
+        },
+        "/messages": {
+            "get": {
+                "tags": [
+                    "MESSAGE"
+                ],
+                "summary": "Get all messages",
+                "operationId": "29e5814ac26e9f3abac96878fd74bb77",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer {access-token}",
+                        "required": true,
+                        "schema": {
+                            "type": "bearerAuth"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of messages",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Message"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "MESSAGE"
+                ],
+                "summary": "Create a new message",
+                "operationId": "941d583a09ed64becb2c2f4753c22501",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer {access-token}",
+                        "required": true,
+                        "schema": {
+                            "type": "bearerAuth"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Message data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "content",
+                                    "title"
+                                ],
+                                "properties": {
+                                    "messsage": {
+                                        "type": "string",
+                                        "example": "Hello World"
+                                    },
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Hello World"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Message created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "$ref": "#/components/schemas/Message"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/messages/{message}": {
+            "get": {
+                "tags": [
+                    "MESSAGE"
+                ],
+                "summary": "Get a message",
+                "operationId": "f3cc6882542cead42004244d61a46295",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer {access-token}",
+                        "required": true,
+                        "schema": {
+                            "type": "bearerAuth"
+                        }
+                    },
+                    {
+                        "name": "message",
+                        "in": "path",
+                        "description": "Message id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "$ref": "#/components/schemas/Message"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "MESSAGE"
+                ],
+                "summary": "Update a message",
+                "operationId": "6de75245b4ce0c7876ce43cd668bf1e2",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer {access-token}",
+                        "required": true,
+                        "schema": {
+                            "type": "bearerAuth"
+                        }
+                    },
+                    {
+                        "name": "message",
+                        "in": "path",
+                        "description": "Message id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Message data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "message",
+                                    "title"
+                                ],
+                                "properties": {
+                                    "messsage": {
+                                        "type": "string",
+                                        "example": "Hello World"
+                                    },
+                                    "title": {
+                                        "type": "string",
+                                        "example": "Hello World"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Message updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "$ref": "#/components/schemas/Message"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "MESSAGE"
+                ],
+                "summary": "delete a message",
+                "operationId": "0ca6ae5ea78f758e0362c68990ef9fa3",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer {access-token}",
+                        "required": true,
+                        "schema": {
+                            "type": "bearerAuth"
+                        }
+                    },
+                    {
+                        "name": "message",
+                        "in": "path",
+                        "description": "Message id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "$ref": "#/components/schemas/Message"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/register": {
+            "post": {
+                "tags": [
+                    "USER"
+                ],
+                "summary": "Register a new user",
+                "operationId": "f1fde7f4a932e393f6042d1b92e65b0a",
+                "requestBody": {
+                    "description": "User data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password, password_confirmation"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "a@b.c"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    },
+                                    "device_name": {
+                                        "type": "string",
+                                        "example": "johns-iphone"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "User created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User created successfully"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "token"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "USER"
+                ],
+                "summary": "Login a user",
+                "operationId": "abc53c091ac89d7a2af0892997d1ee08",
+                "requestBody": {
+                    "description": "User data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password, password_confirmation"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "a@b.c"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    },
+                                    "device_name": {
+                                        "type": "string",
+                                        "example": "johns-iphone"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User logged successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User logged in successfully"
+                                        },
+                                        "token": {
+                                            "type": "string",
+                                            "example": "token"
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Message": {
+                "title": "schema of message",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "content": {
+                        "type": "string"
+                    },
+                    "sender_id": {
+                        "type": "integer"
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "title": "schema of user",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "name": "Authorization",
+                "in": "header",
+                "scheme": "bearer"
+            }
+        }
+    }
+}

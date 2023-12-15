@@ -41,6 +41,8 @@ class MessageController extends Controller
      */
     public function index()
     {
+        $this->authorize('viewAny', Message::class);
+
         return Message::all();
     }
 
@@ -84,13 +86,16 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
+
+        $this->authorize('create', Message::class);
+
         $request->validate([
-            'messsage' => ['required'],
+            'message' => ['required'],
             'title' => ['required'],
         ]);
 
         $message = new Message();
-        $message->content = $request->messsage;
+        $message->content = $request->message;
         $message->title = $request->title;
         $message->sender_id = auth()->user()->id;
         $message->save();
@@ -144,6 +149,9 @@ class MessageController extends Controller
      */
     public function show(Message $message)
     {
+
+        $this->authorize('view', $message);
+
         return $message;
     }
 
@@ -201,12 +209,19 @@ class MessageController extends Controller
 
     public function update(Request $request, Message $message)
     {
+
+        $this->authorize('update', $message);
+
         $request->validate([
-            'content' => ['required'],
+            'message' => ['required'],
             'title' => ['required'],
         ]);
 
-        $message->update($request->validated());
+        $message = Message::where('id', $message->id)->firstOrFail();
+        $message->content = $request->message;
+        $message->title = $request->title;
+        $message->save();
+
 
         return $message;
     }
@@ -252,6 +267,8 @@ class MessageController extends Controller
      */
     public function destroy(Message $message)
     {
+        $this->authorize('delete', $message);
+
         $message->delete();
 
         return response()->json();
