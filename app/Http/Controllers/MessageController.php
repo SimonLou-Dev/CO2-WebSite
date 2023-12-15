@@ -95,7 +95,7 @@ class MessageController extends Controller
         $message->sender_id = auth()->user()->id;
         $message->save();
 
-        broadcast(new MessageSendedEvent($message))->via(['broadcast', 'pusher']);
+        MessageSendedEvent::broadcast();
 
         return response()->json([
             'message' => $message,

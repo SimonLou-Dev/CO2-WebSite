@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+    mosquitto:
+        image: eclipse-mosquitto
+        container_name: mqtt
+        restart: always
+        volumes:
+            - config:/mosquitto/config
+            - data:/mosquitto/data
+            - log:/mosquitto/log
+        ports:
+            - 1883:1883
+            - 9001:9001
+    socketi:
+        image: quay.io/soketi/soketi:1.4-16-debian
+        container_name: socketi
+        restart: always
+        ports:
+            - 6001:6001
+            - 9601:9601
+        environment:
+            - SOKETI_DEFAULT_APP_ID=laravelApp
+            - SOKETI_DEFAULT_APP_KEY=appkey
+            - SOKETI_DEFAULT_APP_SECRET=app-secret
+            - SOKETI_DEBUG=1
+
+volumes:
+    config:
+    data:
+    log:

@@ -21,7 +21,14 @@ class MessageSendedEvent implements ShouldBroadcastNow
 
     public function broadcastOn()
     {
-        return new PresenceChannel('test');
+        return [
+            new PresenceChannel('test'),
+            new PrivateChannel("moi")
+        ];
+    }
+
+    public function broadcastAs(){
+        return "message-send";
     }
 
     public function broadcastWith()
