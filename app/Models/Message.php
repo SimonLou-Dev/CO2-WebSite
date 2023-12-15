@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  *     @OA\Property(property="id", type="integer"),
  *     @OA\Property(property="title", type="string"),
  *     @OA\Property(property="content", type="string")
+ *     @OA\Property(property="sender_id", type="integer")
  *
  * )
  *
@@ -17,4 +18,12 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Message extends Model
 {
+
+    public function sender(){
+        return $this->belongsTo('App\Models\User', 'sender_id');
+    }
+
 }
+
+
+

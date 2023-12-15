@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->string('content');
             $table->string('title');
+            $table->integer('sender_id');
             $table->timestamps();
         });
     }
