@@ -90,12 +90,12 @@ class MessageController extends Controller
         $this->authorize('create', Message::class);
 
         $request->validate([
-            'message' => ['required'],
+            'message_content' => ['required'],
             'title' => ['required'],
         ]);
 
         $message = new Message();
-        $message->content = $request->message;
+        $message->message_content = $request->message_content;
         $message->title = $request->title;
         $message->sender_id = auth()->user()->id;
         $message->save();
@@ -213,12 +213,12 @@ class MessageController extends Controller
         $this->authorize('update', $message);
 
         $request->validate([
-            'message' => ['required'],
+            'message_content' => ['required'],
             'title' => ['required'],
         ]);
 
         $message = Message::where('id', $message->id)->firstOrFail();
-        $message->content = $request->message;
+        $message->message_content = $request->message_content;
         $message->title = $request->title;
         $message->save();
 

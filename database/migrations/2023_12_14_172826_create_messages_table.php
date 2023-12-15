@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
-            $table->string('content');
+            $table->string('message_content');
             $table->string('title');
             $table->integer('sender_id');
             $table->timestamps();
