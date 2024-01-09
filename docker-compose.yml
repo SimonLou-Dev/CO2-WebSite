@@ -109,3 +109,4 @@ volumes:
     mosquitto:
     mysql_data:
     redis-data:
+    postgresqldata:
