@@ -5,3 +5,34 @@
 servers=["tcp://mosquitto:1883"]
 username=""
 password=""
+
+marshaler="protobuf"
+
+# MQTT integration configuration.
+    [integration.mqtt]
+    # Event topic template.
+    event_topic_template="gateway/{{ .GatewayID }}/event/{{ .EventType }}"
+
+    # State topic template.
+    #
+    # States are sent by the gateway as retained MQTT messages (by default)
+    # so that the last message will be stored by the MQTT broker. When set to
+    # a blank string, this feature will be disabled. This feature is only
+    # supported when using the generic authentication type.
+    state_topic_template="gateway/{{ .GatewayID }}/state/{{ .StateType }}"
+
+    # Command topic template.
+    command_topic_template="gateway/{{ .GatewayID }}/command/#"
+
+    [integration.mqtt.auth]
+    type="generic"
+
+        [integration.mqtt.auth.generic]
+
+        servers=[
+            "tcp://$MQTT_BROKER_HOST:1883/",
+        ]
+        username=""
+        password=""
+        qos=0
+        client_id="chirpstack-gat-bridge"

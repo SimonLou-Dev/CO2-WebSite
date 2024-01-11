@@ -44,6 +44,8 @@
     "redis://$REDIS_HOST/",
   ]
 
+    key_prefix="chirpstack"
+
   # TLS enabled.
   tls_enabled=false
 
@@ -103,4 +105,35 @@
 
   [integration.mqtt]
     server="tcp://$MQTT_BROKER_HOST:1883/"
+    event_topic="application/{{application_id}}/device/{{dev_eui}}/event/{{event}}"
+
+      # Command topic.
+      #
+      # This is the topic on which the MQTT subscribes for receiving (enqueue) commands.
+    command_topic="application/{{application_id}}/device/{{dev_eui}}/command/{{command}}"
     json=true
+    qos=0
+    client_id="chirpstack"
+
+[gateway]
+
+    # CA certificate and key file (optional).
+    #
+    # If setting the CA certificate and key file options, ChirpStack
+    # will generate client certificates which can be used by the gateway for
+    # authentication and authorization. The Common Name of the certificate will
+    # be set to the Gateway ID.
+    ca_key=""
+    ca_cert=""
+
+    # Certificate lifetime.
+    #
+    # This defines how long (after generating) the certificate remains valid.
+    client_cert_lifetime="11months 30days 3h 50m 24s"
+
+    # Allow unknown gateways.
+    #
+    # If set to true, then uplinks received from gateways not configured in
+    # ChirpStack will be allowed.
+    allow_unknown_gateways=true
+
