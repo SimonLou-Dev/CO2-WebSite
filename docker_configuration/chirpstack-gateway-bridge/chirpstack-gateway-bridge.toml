@@ -1,10 +1,7 @@
 # See https://www.chirpstack.io/gateway-bridge/install/config/ for a full
 # configuration example and documentation.
 
-[integration.mqtt.auth.generic]
-servers=["tcp://mosquitto:1883"]
-username=""
-password=""
+
 
 marshaler="protobuf"
 
@@ -30,7 +27,7 @@ marshaler="protobuf"
         [integration.mqtt.auth.generic]
 
         servers=[
-            "tcp://$MQTT_BROKER_HOST:1883/",
+            "tcp://172.20.0.10:1883/",
         ]
         username=""
         password=""
