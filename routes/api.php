@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\Room\RoomController;
+use App\Http\Controllers\Sensor\SensorController;
 use App\Http\Controllers\User\ApiTokenController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Http\Request;
@@ -24,6 +26,9 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::patch("/user/{role}", [ApiTokenController::class, 'editRole'])->name("users.editRole");
 
 });
+
+Route::apiResource("/sensors", SensorController::class);
+Route::apiResource('/rooms', RoomController::class);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
