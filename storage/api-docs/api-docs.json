@@ -12,12 +12,45 @@
         }
     ],
     "paths": {
+        "/health": {
+            "get": {
+                "tags": [
+                    "health"
+                ],
+                "summary": "Check API status",
+                "operationId": "d7881aae1e52fd1e1bb7145b746f3905",
+                "responses": {
+                    "200": {
+                        "description": "API is alive",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "api_name": {
+                                            "type": "string",
+                                            "example": "laravel_CO2"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "request lost"
+                    },
+                    "500": {
+                        "description": "api error"
+                    }
+                }
+            }
+        },
         "/tokens/create": {
             "post": {
                 "tags": [
                     "API"
                 ],
-                "operationId": "d5c60fd09fb8bea95dfc921966972dba",
+                "operationId": "f0bcd0615fdc7228618a9bb82ca496c1",
                 "responses": {
                     "200": {
                         "description": "Token created successfully"
@@ -31,7 +64,7 @@
                     "USER"
                 ],
                 "summary": "Register a new user",
-                "operationId": "f1fde7f4a932e393f6042d1b92e65b0a",
+                "operationId": "596169d03e90fa336fb3e1aa9bfe7367",
                 "requestBody": {
                     "description": "User data",
                     "required": true,
@@ -106,7 +139,7 @@
                     "USER"
                 ],
                 "summary": "Login a user",
-                "operationId": "abc53c091ac89d7a2af0892997d1ee08",
+                "operationId": "d1572a3de62d3f37c8c83d0f0bc13c88",
                 "requestBody": {
                     "description": "User data",
                     "required": true,
