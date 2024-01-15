@@ -111,7 +111,7 @@ class RoomController extends Controller
 
     public function store(Request $request)
     {
-        //$this->authorize('create', Room::class);
+        $this->authorize('create', Room::class);
 
         $data = $request->validate([
             'name' => ['string','unique:rooms'],

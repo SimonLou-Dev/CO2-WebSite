@@ -22,22 +22,26 @@ class RoomPolicy
 
     public function create(User $user): bool
     {
-        return true;
+        if ($user->hasPermissionTo("*") || $user->hasPermissionTo("room_modify")) return true;
+        return false;
     }
 
     public function update(User $user, Room $room): bool
     {
-        return true;
+        if ($user->hasPermissionTo("*") || $user->hasPermissionTo("room_modify")) return true;
+        return false;
     }
 
     public function delete(User $user, Room $room): bool
     {
-        return true;
+        if ($user->hasPermissionTo("*") || $user->hasPermissionTo("room_modify")) return true;
+        return false;
     }
 
     public function restore(User $user, Room $room): bool
     {
-        return true;
+        if ($user->hasPermissionTo("*") || $user->hasPermissionTo("room_modify")) return true;
+        return false;
     }
 
     public function forceDelete(User $user, Room $room): bool
