@@ -9,6 +9,7 @@ use App\Http\Controllers\User\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
+use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,27 +22,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
 Route::middleware('auth:sanctum')->group(function() {
 
-    Route::patch("/user/{role}", [ApiTokenController::class, 'editRole'])->name("users.editRole");
+    Route::apiResource("/sensors", SensorController::class);
+    Route::apiResource('/rooms', RoomController::class);
+
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
 
 });
 
-Route::apiResource("/sensors", SensorController::class);
-Route::apiResource('/rooms', RoomController::class);
-
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
+//Auth
 Route::post("/register", [UserController::class, 'register'])->name("register");
 Route::post("/login", [UserController::class, 'login'])->name("login");
 
+Route::get("/csrf", [CsrfCookieController::class, "show"])->name("custom-csrf");
+
 Route::post("/tokens/create", [ApiTokenController::class, 'create'])->name("api-tokens.create");
 
+//Health
 Route::get("/health", [HomeController::class, 'getHealth'])->name("api-health");
 Route::get('/test-mqtt', [HomeController::class, 'testMqtt'])->name("test-mqtt");
 
-Broadcast::routes(['middleware' => ['auth:sanctum']]);
+
 

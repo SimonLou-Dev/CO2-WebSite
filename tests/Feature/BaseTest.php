@@ -24,4 +24,11 @@ class BaseTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_get_csrf(): void
+    {
+        $response = $this->get('/api/csrf');
+
+        $response->assertStatus(204);
+    }
+
 }

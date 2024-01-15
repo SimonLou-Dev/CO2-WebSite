@@ -12,6 +12,20 @@
         }
     ],
     "paths": {
+        "/csrf": {
+            "get": {
+                "tags": [
+                    "health"
+                ],
+                "summary": "get CSRF token",
+                "operationId": "925b7fccc2c108f4a794d18ee4cee851",
+                "responses": {
+                    "404": {
+                        "description": "get CSRF token in cookie (XSRF-TOKEN)"
+                    }
+                }
+            }
+        },
         "/health": {
             "get": {
                 "tags": [

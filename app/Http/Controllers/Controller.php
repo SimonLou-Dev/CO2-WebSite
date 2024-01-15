@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 /**
  *
@@ -35,6 +36,19 @@ use Illuminate\Routing\Controller as BaseController;
  *     @OA\Property (property="prev_page_url", type="string"),
  *     @OA\Property (property="data", type="array", @OA\Items()),
  * )
+ *
+
+ *
+ * @OA\Get(
+ *     path="/csrf",
+ *     summary="get CSRF token",
+ *     tags={"health"},
+ *     @OA\Response(
+ *          response=404,
+ *          description="get CSRF token in cookie (XSRF-TOKEN)",
+ *    )
+ *)
+ *
  *
  *
  */
