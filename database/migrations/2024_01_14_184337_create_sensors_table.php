@@ -12,7 +12,6 @@ return new class extends Migration {
             $table->dateTime('last_message')->nullable();
             $table->integer('created_by');
             $table->integer('room_id');
-            $table->softDeletes();
             $table->timestamps();
         });
     }

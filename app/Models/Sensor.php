@@ -27,7 +27,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Sensor extends Model
 {
-    use SoftDeletes, HasFactory;
+    use HasFactory;
 
     protected $fillable = ["room_id", "created_by"];
 
@@ -63,6 +63,11 @@ class Sensor extends Model
         }
 
         return "0x".$value;
+    }
+
+    public function getRoom()
+    {
+        return $this->belongsTo(Room::class, "room_id");
     }
 
 

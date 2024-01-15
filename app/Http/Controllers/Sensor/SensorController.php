@@ -62,7 +62,7 @@ class SensorController extends Controller
      */
     public function index()
     {
-        //$this->authorize('viewAny', Sensor::class);
+        $this->authorize('viewAny', Sensor::class);
 
         return Sensor::paginate();
     }
@@ -114,7 +114,7 @@ class SensorController extends Controller
      */
     public function store(Request $request)
     {
-        //$this->authorize('create', Sensor::class);
+        $this->authorize('create', Sensor::class);
 
         $data = $request->validate([
             'room_id' => ['required', 'integer','exists:rooms,id','unique:sensors'],
@@ -226,9 +226,7 @@ class SensorController extends Controller
         $this->authorize('update', $sensor);
 
         $data = $request->validate([
-            'last_message' => ['nullable', 'date'],
-            'created_by' => ['required', 'integer'],
-            'romm_id' => ['required', 'integer'],
+            'room_id' => ['required', 'integer'],
         ]);
 
         $sensor->update($data);

@@ -6,21 +6,13 @@ use App\Models\Room;
 use Illuminate\Foundation\Testing\WithFaker;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
+use Tests\Utils\ModelTestTools;
 use Tests\Utils\UserTestTools;
 
 class RoomControllerTest extends TestCase
 {
 
     use WithFaker;
-
-    private function createRoom(): Room
-    {
-        $room = Room::factory()->make();
-        $room->save();
-
-        return Room::where("name", $room->name)->first();
-
-    }
 
 
     public function test_withoutPerm()
@@ -80,7 +72,7 @@ class RoomControllerTest extends TestCase
         $user = UserTestTools::getTestUser("administrator");
         Sanctum::actingAs($user);
 
-        $room = $this->createRoom();
+        $room = ModelTestTools::createRoom();
 
         $response = $this->getJson('/api/rooms/'.$room->id);
 
@@ -92,7 +84,7 @@ class RoomControllerTest extends TestCase
         $user = UserTestTools::getTestUser();
         Sanctum::actingAs($user);
 
-        $room = $this->createRoom();
+        $room = ModelTestTools::createRoom();
 
         $response = $this->getJson('/api/rooms/'.$room->id);
 
@@ -104,7 +96,7 @@ class RoomControllerTest extends TestCase
         $user = UserTestTools::getTestUser("administrator");
         Sanctum::actingAs($user);
 
-        $room = $this->createRoom();
+        $room = ModelTestTools::createRoom();
         $name = $this->faker->name;
 
         $response = $this->putJson('/api/rooms/'.$room->id,
@@ -123,16 +115,13 @@ class RoomControllerTest extends TestCase
         $user = UserTestTools::getTestUser("administrator");
         Sanctum::actingAs($user);
 
-        $room = $this->createRoom();
-        $name = $this->faker->name;
+        $room = ModelTestTools::createRoom();
 
         $response = $this->delete('/api/rooms/'.$room->id);
 
         $response->assertStatus(200);
 
-        $this->assertDatabaseMissing("rooms", [
-            "name"=> $name,
-        ]);
+
     }
 
 

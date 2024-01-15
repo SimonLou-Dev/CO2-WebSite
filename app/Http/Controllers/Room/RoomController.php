@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Room;
 
 use App\Http\Controllers\Controller;
 use App\Models\Room;
+use App\Models\Sensor;
 use Illuminate\Http\Request;
 
 class RoomController extends Controller
@@ -275,7 +276,11 @@ class RoomController extends Controller
     {
         $this->authorize('delete', $room);
 
-        $room->delete();
+        if(Sensor::where("room_id", $room->id)->count() == 0){
+            $room->forceDelete();
+        }else {
+            $room->delete();
+        }
 
         return response()->json();
     }
