@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *     title="schema of room",
  *     @OA\Property(property="id", type="integer"),
  *     @OA\Property(property="name", type="string"),
- *     @OA\Property(property="created_at", type="string")
+ *     @OA\Property(property="created_at", type="string"),
  *     @OA\Property(property="updated_at", type="string")
  *
  * )

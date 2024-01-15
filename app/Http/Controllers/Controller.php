@@ -25,6 +25,17 @@ use Illuminate\Routing\Controller as BaseController;
  *     name="Authorization",
  * ),
  *
+ * @OA\Schema (
+ *  schema="PaginatedResult",
+ *  title="Pagination exemple",
+ *     @OA\Property (property="total", type="integer"),
+ *     @OA\Property (property="current_page", type="integer"),
+ *     @OA\Property (property="per_page", type="integer"),
+ *     @OA\Property (property="next_page_url", type="string"),
+ *     @OA\Property (property="prev_page_url", type="string"),
+ *     @OA\Property (property="data", type="array", @OA\Items()),
+ * )
+ *
  *
  */
 class Controller extends BaseController

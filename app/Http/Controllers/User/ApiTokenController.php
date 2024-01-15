@@ -18,7 +18,7 @@ class ApiTokenController extends Controller
      *
      * @OA\Post(
      *     path="/tokens/create",
-     *     tags={"API"},
+     *     tags={"USER"},
      *     @OA\Response(
      *         response="200",
      *         description="Token created successfully",

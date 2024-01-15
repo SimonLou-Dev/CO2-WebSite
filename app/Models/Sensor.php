@@ -15,10 +15,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  *     title="schema of sensor",
  *     @OA\Property(property="id", type="integer"),
  *     @OA\Property(property="last_message", type="string"),
- *     @OA\Property(property="created_by", type="string")
- *     @OA\Property(property="room_id", type="int")
- *      @OA\Property(property="created_at", type="string")
- *      @OA\Property(property="updated_at", type="string")
+ *     @OA\Property(property="created_by", type="string"),
+ *     @OA\Property(property="room_id", type="int"),
+ *      @OA\Property(property="id_hex", type="string"),
+ *      @OA\Property(property="created_at", type="string"),
+ *      @OA\Property(property="updated_at", type="string"),
  *      @OA\Property(property="deleted_at", type="string")
  * )
  *
