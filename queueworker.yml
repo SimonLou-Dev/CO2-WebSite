@@ -1,23 +1,16 @@
 apps:
   # Run php artisan queue:listen to execute queue job
   - script    : 'artisan'
-    name      : 'artisan-discordemebd-worker'
+    name      : 'artisan-queue-worker'
     cwd       : '/var/www'
-    args      : 'queue:work --queue discord' # or queue:work
+    args      : 'queue:work' # or queue:work
     interpreter : 'php'
-    error_file: "./storage/logs/discordemebd_error_pm2.log"
-    out_file: "./storage/logs/discordemebd_outpm2.log"
+    error_file: "./storage/logs/queue-worker_error_pm2.log"
+    out_file: "./storage/logs/queue-worker_outpm2.log"
   - script: 'artisan'
-    name: 'artisan-pdfgeneration-worker'
+    name: 'artisan-mqttListener-worker'
     cwd: '/var/www'
-    args: 'queue:work --queue pdfgeneration' # or queue:work
+    args: 'mqtt:listen' # or queue:work
     interpreter: 'php'
-    error_file: "./storage/logs/pdfgeneration_error_pm2.log"
-    out_file: "./storage/logs/pdfgeneration_outpm2.log"
-  - script: 'artisan'
-    name: 'artisan-schedule-runner'
-    cwd: '/var/www'
-    args: 'schedule:run-cronless' # or queue:work
-    interpreter: 'php'
-    error_file: "./storage/logs/schedule_error_pm2.log"
-    out_file: "./storage/logs/schedule_outpm2.log"
+    error_file: "./storage/logs/mqttListener_error_pm2.log"
+    out_file: "./storage/logs/mqttListener_outpm2.log"
