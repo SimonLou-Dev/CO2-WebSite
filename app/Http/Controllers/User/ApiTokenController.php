@@ -19,6 +19,16 @@ class ApiTokenController extends Controller
      * @OA\Post(
      *     path="/tokens/create",
      *     tags={"USER"},
+     *     security={{"bearerAuth":{}}},
+     *        @OA\Parameter(
+     *    *      name="Authorization",
+     *    *      in="header",
+     *    *      required=true,
+     *    *      description="Bearer {access-token}",
+     *    *      @OA\Schema(
+     *    *          type="bearerAuth"
+     *    *      )
+     *    *     ),
      *     @OA\RequestBody(
      *          required=true,
      *          description="User data",

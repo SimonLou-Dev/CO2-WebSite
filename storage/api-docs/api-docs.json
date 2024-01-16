@@ -667,6 +667,17 @@
                     "USER"
                 ],
                 "operationId": "f0bcd0615fdc7228618a9bb82ca496c1",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer {access-token}",
+                        "required": true,
+                        "schema": {
+                            "type": "bearerAuth"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "description": "User data",
                     "required": true,
@@ -707,7 +718,12 @@
                     "422": {
                         "description": "Validation error"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/register": {
