@@ -121,8 +121,9 @@ class UserController extends Controller
      *
      */
     public function login(Request $request){
+
         $request->validate([
-            'email' => 'required|email',
+            'email' => 'required',
             'password' => 'required',
             'device_name' => 'required',
         ]);
@@ -131,7 +132,7 @@ class UserController extends Controller
 
         if(!$user || !Hash::check($request->password, $user->password)){
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect']
+                'password' => ['The provided credentials are incorrect']
             ]);
         }
 
@@ -279,7 +280,7 @@ class UserController extends Controller
      *
      *)
      */
-    public function destroy(Sensor $user)
+    public function destroy(User $user)
     {
         $this->authorize('user_delete', $user);
 

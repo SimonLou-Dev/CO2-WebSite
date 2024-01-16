@@ -667,9 +667,45 @@
                     "USER"
                 ],
                 "operationId": "f0bcd0615fdc7228618a9bb82ca496c1",
+                "requestBody": {
+                    "description": "User data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "token_name"
+                                ],
+                                "properties": {
+                                    "token_name": {
+                                        "type": "string",
+                                        "example": "jean"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "200": {
-                        "description": "Token created successfully"
+                        "description": "Token created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "azeaz-azeazea-azeazeaz-azeaeae"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
                     }
                 }
             }

@@ -20,11 +20,13 @@ class RoomControllerTest extends TestCase
         $user = UserTestTools::getTestUser();
         Sanctum::actingAs($user);
 
+        $room = ModelTestTools::createRoom();
+
         $this->get('/api/rooms')->assertStatus(200);
         $this->post('/api/rooms')->assertStatus(403);
-        $this->put('/api/rooms/1')->assertStatus(403);
-        $this->get('/api/rooms/1')->assertStatus(200);
-        $this->delete('/api/rooms/1')->assertStatus(403);
+        $this->put('/api/rooms/' . $room->id)->assertStatus(403);
+        $this->get('/api/rooms/' . $room->id)->assertStatus(200);
+        $this->delete('/api/rooms/' . $room->id)->assertStatus(403);
     }
 
     public function test_viewAll_usr()

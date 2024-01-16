@@ -21,11 +21,13 @@ class SensorControllerTest extends TestCase
         $user = UserTestTools::getTestUser();
         Sanctum::actingAs($user);
 
+        $sensor = ModelTestTools::createSensor();
+
         $this->get('/api/sensors')->assertStatus(403);
         $this->post('/api/sensors')->assertStatus(403);
-        $this->put('/api/sensors/1')->assertStatus(403);
-        $this->get('/api/sensors/1')->assertStatus(403);
-        $this->delete('/api/sensors/1')->assertStatus(403);
+        $this->put('/api/sensors/' . $sensor->id)->assertStatus(403);
+        $this->get('/api/sensors/' . $sensor->id)->assertStatus(403);
+        $this->delete('/api/sensors/' . $sensor->id)->assertStatus(403);
     }
 
     public function test_viewAll_adm()

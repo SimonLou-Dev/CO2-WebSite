@@ -19,9 +19,25 @@ class ApiTokenController extends Controller
      * @OA\Post(
      *     path="/tokens/create",
      *     tags={"USER"},
+     *     @OA\RequestBody(
+     *          required=true,
+     *          description="User data",
+     *           @OA\JsonContent(
+     *               required={"token_name"},
+     *               @OA\Property(property="token_name", type="string", example="jean"),
+
+     *           )
+     *       ),
      *     @OA\Response(
      *         response="200",
      *         description="Token created successfully",
+     *          @OA\JsonContent(
+     *               @OA\Property(property="token", type="string", example="azeaz-azeazea-azeazeaz-azeaeae"),
+     *           ),
+     *     ),
+     *      @OA\Response(
+     *           response=422,
+     *           description="Validation error"
      *     )
      *
      * )
@@ -29,6 +45,10 @@ class ApiTokenController extends Controller
      */
     public function create(Request $request)
     {
+        $this->validate($request, [
+           "token_name"=>["required"]
+        ]);
+
         $token = $request->user()->createToken($request->token_name);
 
         return ['token' => $token->plainTextToken];
