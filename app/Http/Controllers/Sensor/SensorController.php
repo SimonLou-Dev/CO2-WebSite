@@ -4,7 +4,14 @@ namespace App\Http\Controllers\Sensor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Sensor;
+use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
 use Illuminate\Http\Request;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use SimpleSoftwareIO\QrCode\QrCodeServiceProvider;
+
 
 class SensorController extends Controller
 {
@@ -279,5 +286,10 @@ class SensorController extends Controller
         $sensor->delete();
 
         return response()->json();
+    }
+
+    public function getQrCode(string $sensor){
+        
+
     }
 }

@@ -25,6 +25,10 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
 Route::middleware('auth:sanctum')->group(function() {
 
+    Route::patch("/logout", [UserController::class, "logout"]);
+    Route::get("/users", [UserController::class, "getAllUsers"]);
+    Route::delete("/users/{user}", [UserController::class, "destroy"]);
+
     Route::apiResource("/sensors", SensorController::class);
     Route::apiResource('/rooms', RoomController::class);
 
@@ -33,6 +37,8 @@ Route::middleware('auth:sanctum')->group(function() {
     });
 
 });
+
+Route::get("/sensors/{sensor}/qrcode", [SensorController::class, "getQrCode"]);
 
 //Auth
 Route::post("/register", [UserController::class, 'register'])->name("register");

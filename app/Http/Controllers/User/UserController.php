@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Sensor;
 use App\Models\User;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use OpenApi\Annotations\OpenApi as OA;
+use Psy\Util\Str;
 
 class UserController extends Controller
 {
@@ -142,6 +145,147 @@ class UserController extends Controller
             'token' => $user->createToken($request->device_name)->plainTextToken
         ], 200);
 
+    }
+
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     *
+     *
+     * @OA\Patch(
+     *     path="/logout",
+     *     summary="logout a user",
+     *     tags={"USER"},
+     *          security={{"bearerAuth":{}}},
+     *       @OA\Parameter(
+     *   *      name="Authorization",
+     *   *      in="header",
+     *   *      required=true,
+     *   *      description="Bearer {access-token}",
+     *   *      @OA\Schema(
+     *   *          type="bearerAuth"
+     *   *      )
+     *   *     ),
+     *     @OA\Response(
+     *          response=200,
+     *          description="User logged out successfully",
+     *    ),
+     *     @OA\Response(
+     *          response=403,
+     *          description="Auth error"
+     *    )
+     *)
+     *
+     *
+     *
+     */
+    public function logout(Request $request){
+
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json();
+    }
+
+
+    /**
+     * @param Request $request
+     *
+     *
+     * @OA\Get(
+     *     path="/users",
+     *     summary="get all users paginated",
+     *     tags={"USER"},
+     *     security={{"bearerAuth":{}}},
+     *      @OA\Parameter(
+     *  *      name="Authorization",
+     *  *      in="header",
+     *  *      required=true,
+     *  *      description="Bearer {access-token}",
+     *  *      @OA\Schema(
+     *  *          type="bearerAuth"
+     *  *      )
+     *  *     ),
+     *      @OA\Parameter (
+     *          name="search",
+     *          in="query",
+     *          required=false,
+     *          allowEmptyValue=true,
+     *          example="michel"
+     *      ),
+     *     @OA\Response(
+     *          response=200,
+     *          description="User logged out successfully",
+     *          @OA\JsonContent(
+     *           allOf={
+     *               @OA\Schema (ref="#/components/schemas/PaginatedResult"),
+     *               @OA\Schema (
+     *                   @OA\Property (property="data", type="array", @OA\Items(ref="#/components/schemas/User")),
+     *               ),
+     *            }
+     *        ),
+     *    ),
+     *     @OA\Response(
+     *          response=403,
+     *          description="Auth error"
+     *    )
+     *)
+     */
+    public function getAllUsers(Request $request){
+
+        $this->authorize('user_viewAll', $request->user());
+
+        $search = $request->get("user");
+
+        return User::where("name","LIKE", "%".$search."%")->orWhere("email","LIKE", "%".$search."%")->paginate();
+
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     *
+     *
+     * @OA\Delete(
+     *     path="/users/{userId}",
+     *     summary="Delete user",
+     *     tags={"USER"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     * *      name="Authorization",
+     * *      in="header",
+     * *      required=true,
+     * *      description="Bearer {access-token}",
+     * *      @OA\Schema(
+     * *          type="bearerAuth"
+     * *      )
+     * *     ),
+     *     @OA\PathParameter (
+     *        name="userId",
+     *        description="Id Of selected user",
+     *        required=true,
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=200,
+     *          description="Sensor deleted succesfully",
+     *          @OA\JsonContent(
+     *          ),
+     *    ),
+     *      @OA\Response(
+     *            response=403,
+     *            description="Not Allowed"
+     *      )
+     *
+     *)
+     */
+    public function destroy(Sensor $user)
+    {
+        $this->authorize('user_delete', $user);
+
+        $user->delete();
+
+        return response()->json();
     }
 
 }

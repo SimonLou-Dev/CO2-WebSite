@@ -6,6 +6,7 @@ namespace App\Providers;
 use App\Models\Message;
 use App\Models\Room;
 use App\Models\Sensor;
+use App\Models\User;
 use App\Policies\MessagePolicy;
 use App\Policies\RoomPolicy;
 use App\Policies\SensorPolicy;
@@ -31,5 +32,13 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerPolicies();
+
+        \Gate::define("user_viewAll", function (User $user){
+            return ($user->hasPermissionTo("*") || $user->hasPermissionTo("user_viewAll"));
+        });
+
+        \Gate::define("user_delete", function (User $user){
+            return ($user->hasPermissionTo("*") || $user->hasPermissionTo("user_delete"));
+        });
     }
 }

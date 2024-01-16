@@ -161,6 +161,7 @@ return [
          */
 
         Spatie\Permission\PermissionServiceProvider::class,
+        \SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
 
 
 
