@@ -38,6 +38,8 @@ Route::middleware('auth:sanctum')->group(function() {
 
 });
 
+
+
 Route::get("/sensors/{sensor}/qrcode", [SensorController::class, "getQrCode"]);
 
 //Auth

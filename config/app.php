@@ -191,6 +191,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         'Vite'=>\App\Facade\Accessor\ViteFacade::class,
         'Redis' => Illuminate\Support\Facades\Redis::class,
+        "CodeQr"=>\SimpleSoftwareIO\QrCode\Facades\QrCode::class,
     ])->toArray(),
 
 ];
