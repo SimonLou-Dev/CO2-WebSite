@@ -9,6 +9,7 @@ use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use SimpleSoftwareIO\QrCode\QrCodeServiceProvider;
@@ -290,18 +291,22 @@ class SensorController extends Controller
     }
 
     public function getQrCode(string $sensor){
-        $path = Storage::path('public\images\LogoQrCode.png');
+        $path = Storage::get('public\images\LogoQrCode.png');
+        $savePath = Storage::path('public/QrCodes/sensor_'.dechex($sensor).'.png');
+        if(Storage::exists($savePath)) return response()->file($savePath);
+        $url = env("APP_URL") . '/sensor/'.dechex($sensor);
 
-        return \CodeQr::size(700)
+
+        \CodeQr::size(500)
             ->format("png")
-            ->mergeString($path,.8)
+            ->mergeString($path,.3)
             ->encoding("UTF-8")
             ->errorCorrection('H')
             ->eye("circle")
             ->style('round')
-            ->eyeColor(0, 0, 75, 35, 0, 0, 0)
-            ->color(225,75,0)
-            ->generate("text");
+            ->generate($url, $savePath);
+
+        return response()->file($savePath);
 
     }
 }

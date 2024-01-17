@@ -1,3 +1,5 @@
-*
 !public/
+!public/images/
+!public/images/LogoQrCode.png
+!public/QrCodes
 !.gitignore
