@@ -1,49 +1,16 @@
 version: "3.8"
 services:
-    mosquitto:
-        image: eclipse-mosquitto
-        container_name: broker_mqtt
+    laravel:
+        image: simonloudev/co2:latest
+        container_name: laravel
         restart: always
-        volumes:
-            - ./docker/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
-            - mosquitto:/mosquitto
-        ports:
-            - 1883:1883
-            - 9001:9001
-    socketi:
-        image: quay.io/soketi/soketi:1.4-16-debian
-        container_name: socketi
-        restart: always
-        ports:
-            - 6001:6001
-            - 9601:9601
-        environment:
-            - SOKETI_DEFAULT_APP_ID=laravelApp
-            - SOKETI_DEFAULT_APP_KEY=appkey
-            - SOKETI_DEFAULT_APP_SECRET=app-secret
-            - SOKETI_DEBUG=1
-
-    redis:
-        image: redis
-        container_name: redis
-        restart: always
-        ports:
-            - 6379:6379
-        volumes:
-            - redis:/data
-
-    postgres:
-        image: postgres:14-alpine
-        restart: unless-stopped
-        volumes:
-            - pgsql:/var/lib/postgresql/data
-        ports:
-            - 5432:5432
-        environment:
-            - POSTGRES_PASSWORD=root
+        expose:
+            - 8080
+        networks:
+            stack-network:
+                ipv4_address: 172.20.0.250
 
 
-volumes:
-    redis:
-    pgsql:
-    mosquitto:
+networks:
+    stack-network:
+        external: true
