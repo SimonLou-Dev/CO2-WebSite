@@ -3,11 +3,14 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\Room\RoomController;
+use App\Http\Controllers\Sensor\ChirpstackController;
 use App\Http\Controllers\Sensor\SensorController;
 use App\Http\Controllers\User\ApiTokenController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
@@ -24,6 +27,8 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
 Route::middleware('auth:sanctum')->group(function() {
+
+    Route::put('/chirpstack/keys', [ChirpstackController::class, "setKeys"]);
 
     Route::patch("/logout", [UserController::class, "logout"]);
     Route::get("/users", [UserController::class, "getAllUsers"]);
@@ -54,5 +59,14 @@ Route::post("/tokens/create", [ApiTokenController::class, 'create'])->name("api-
 Route::get("/health", [HomeController::class, 'getHealth'])->name("api-health");
 Route::get('/test-mqtt', [HomeController::class, 'testMqtt'])->name("test-mqtt");
 
-
+Route::get("/test", function () {
+    return Http::acceptJson()
+        ->withToken(Cache::get("CHIRPSTACK_API_KEY"))
+        ->post(env("CHIRPSTACK_API_URL")."/devices/"."000050000f055000"."/keys", [
+            "deviceKeys"=>[
+                "appKey"=>"2B7E151628AED2A6ABF7158809CF4F3C",
+                "nwkKey"=> "2B7E151628AED2A6ABF7158809CF4F3C",
+            ]
+        ]);
+});
 
