@@ -36,20 +36,22 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get("/users", [UserController::class, "getAllUsers"]);
     Route::delete("/users/{user}", [UserController::class, "destroy"]);
 
-    Route::apiResource("/sensors", SensorController::class);
+
     Route::apiResource('/rooms', RoomController::class);
 
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
 
-    Route::get("/sensors/{sensor}/mesures", [MesuresController::class, "getMesures"]);
+
 
 });
 
 
 
 Route::get("/sensors/{sensor}/qrcode", [SensorController::class, "getQrCode"]);
+Route::get("/sensors/{sensor}/mesures", [MesuresController::class, "getMesures"]);
+Route::apiResource("/sensors", SensorController::class);
 
 //Auth
 Route::post("/register", [UserController::class, 'register'])->name("register");
