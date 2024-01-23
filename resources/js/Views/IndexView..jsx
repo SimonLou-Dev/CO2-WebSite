@@ -2,11 +2,14 @@ import * as React from "react";
 import axios from "axios";
 import {useEffect, useState} from "react";
 import {AppLoadingView} from "./AppLoadingView.";
-import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
-import highchartsSolideGauge from "highcharts/modules/solid-gauge";
+import highchartsMore from "highcharts/highcharts-more"
+import highchartsSolidGauge from "highcharts/modules/solid-gauge"
+import HighchartsReact from "highcharts-react-official";
 
-highchartsSolideGauge(Highcharts);
+highchartsMore(Highcharts)
+highchartsSolidGauge(Highcharts)
+
 export const IndexView = () => {
     const [dataLoaded, setDataLoaded] = useState(true);
 
@@ -19,25 +22,99 @@ export const IndexView = () => {
     if (dataLoaded) return (<MainPage/>)
     else return (<AppLoadingView/>)
 }
+
+
 const baseTempGaugeOption = {
     chart:{
         type: "solidgauge"
     },
-    title: {
-        text: "Température"
-    },
+    title: null,
     pane: {
-        center: ['50%', '85%'],
-        size: '140%',
+        center: ['50%', "90%"],
+        size: '130%',
         startAngle: -90,
         endAngle: 90,
         background: {
-            backgroundColor:
-                Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
-            innerRadius: '60%',
-            outerRadius: '100%',
-            shape: 'arc'
+            backgroundColor: "#EDFFF9",
+            shape: "arc",
+            innerRadius: "60%",
+            outerRadius: "100%"
         }
+    },
+    rangeSelector:{
+        enabled: false
+    },
+
+    exporting: {
+        enabled: false
+    },
+
+
+    tooltip: {
+        enabled: false
+    },
+
+    // the value axis
+    yAxis: {
+        min: -40,
+        max: 60,
+
+        stops: [
+            [0.1, '#69CADE'], // green
+            [0.8, '#25D382'], // yellow
+            [0.9, '#DF5353'] // red
+        ],
+        lineWidth: 0,
+        tickWidth: 0,
+        tickAmount: 0,
+        minorTickInterval: null,
+        labels: {
+            y: 16
+        }
+
+    },
+    plotOptions: {
+        solidgauge: {
+            dataLabels: {
+                size: 50,
+                y: -40,
+                borderWidth: 0,
+            }
+        }
+    },
+    credits: {
+        enabled: false
+    },
+
+    series: [{
+        data: [-20],
+        dataLabels:  {
+            format: "{y} °C",
+        }
+    }]
+}
+const basePpmGaugeOption = {
+    chart:{
+        type: "solidgauge"
+    },
+    title: null,
+    pane: {
+        center: ['50%', "90%"],
+        size: '130%',
+        startAngle: -90,
+        endAngle: 90,
+        background: {
+            backgroundColor: "#EDFFF9",
+            shape: "arc",
+            innerRadius: "60%",
+            outerRadius: "100%"
+        }
+    },
+    rangeSelector:{
+        enabled: false
+    },
+    credits:{
+        enabled: false
     },
 
     exporting: {
@@ -50,41 +127,277 @@ const baseTempGaugeOption = {
 
     // the value axis
     yAxis: {
+        min: 200,
+        max: 1400,
         stops: [
-            [0.1, '#55BF3B'], // green
-            [0.5, '#DDDF0D'], // yellow
-            [0.9, '#DF5353'] // red
+            [0.1, '#25D382'], // green
+            [0.7, '#FF9929'], // yellow
+            [0.9, '#FF4259'] // red
         ],
         lineWidth: 0,
         tickWidth: 0,
+        tickAmount: 0,
         minorTickInterval: null,
-        tickAmount: 2,
-        title: {
-            y: -70
-        },
         labels: {
             y: 16
         }
-    },
 
+    },
     plotOptions: {
         solidgauge: {
             dataLabels: {
-                y: 5,
+                size: 50,
+                y: -40,
                 borderWidth: 0,
-                useHTML: true
             }
         }
     },
+
     series: [{
-        name: "Temperature",
-        data: [20]
+        data: [1200]
     }]
 }
+const baseHumidGaugeOption = {
+    chart:{
+        type: "solidgauge"
+    },
+    title: null,
+    pane: {
+        center: ['50%', "90%"],
+        size: '130%',
+        startAngle: -90,
+        endAngle: 90,
+        background: {
+            backgroundColor: "#EDFFF9",
+            shape: "arc",
+            innerRadius: "60%",
+            outerRadius: "100%"
+        }
 
+    },
+    rangeSelector:{
+        enabled: false
+    },
+
+    credits: {
+        enabled: false
+    },
+
+    exporting: {
+        enabled: false
+    },
+
+    tooltip: {
+        enabled: false
+    },
+
+    // the value axis
+    yAxis: {
+        min: 0,
+        max: 100,
+        stops: [
+            [0.1, '#FF4259'], // green
+            [0.5, '#25D382'], // yellow
+            [0.9, '#69CADE'] // red
+        ],
+        lineWidth: 0,
+        tickWidth: 0,
+        tickAmount: 0,
+        minorTickInterval: null,
+        labels: {
+            y: 16
+        },
+        visible: false,
+        pane: 0,
+
+    },
+    plotOptions: {
+        solidgauge: {
+            dataLabels: {
+                size: 50,
+                y: -40,
+                borderWidth: 0,
+            }
+        }
+    },
+
+    series: [{
+        data: [90],
+        dataLabels:  {
+            format: "{y} %",
+        }
+    }]
+}
+const baseCharts = {
+    chart: {
+        zoomType: "x",
+    },
+    credits: {
+        enabled: false
+    },
+    title: {
+        text: "Concentration en CO2"
+    },
+    yAxis: [{
+        labels: {
+            format: '{value} ppm'
+        },
+        title: {
+            text: "Concentration en CO2"
+        }
+    },{
+        labels: {
+            format: '{value} °C'
+        },
+        title: {
+            text: "Température"
+        },
+        opposite: true
+
+    }],
+    xAxis: {
+        type: "datetime"
+    },
+    series: [
+        {
+            type: "line",
+            name: "température",
+            yAxis: 1,
+            zIndex:4,
+            data: [
+                [
+                    1262304000000,
+                    0.7537
+                ],
+                [
+                    1262563200000,
+                    0.6951
+                ],
+                [
+                    1262649600000,
+                    0.6925
+                ],
+                [
+                    1262736000000,
+                    0.697
+                ],
+                [
+                    1262822400000,
+                    0.6992
+                ],
+                [
+                    1262908800000,
+                    0.7007
+                ],
+                [
+                    1263168000000,
+                    0.6884
+                ],
+                [
+                    1263254400000,
+                    0.6907
+                ],
+                [
+                    1263340800000,
+                    0.6868
+                ],
+                [
+                    1263427200000,
+                    0.6904
+                ],
+                [
+                    1263513600000,
+                    0.6958
+                ],
+                [
+                    1263772800000,
+                    0.696
+                ],
+                [
+                    1263859200000,
+                    0.7004
+                ],
+                [
+                    1263945600000,
+                    0.7077
+                ],
+                [
+                    1264032000000,
+                    0.7111
+                ]
+            ]
+        },{
+        type: "area",
+        name: "concentration de CO2",
+        zIndex:2,
+        data: [
+            [
+                1262304000000,
+                0.7537
+            ],
+            [
+                1262563200000,
+                0.6951
+            ],
+            [
+                1262649600000,
+                0.6925
+            ],
+            [
+                1262736000000,
+                0.697
+            ],
+            [
+                1262822400000,
+                0.6992
+            ],
+            [
+                1262908800000,
+                0.7007
+            ],
+            [
+                1263168000000,
+                0.6884
+            ],
+            [
+                1263254400000,
+                0.6907
+            ],
+            [
+                1263340800000,
+                0.6868
+            ],
+            [
+                1263427200000,
+                0.6904
+            ],
+            [
+                1263513600000,
+                0.6958
+            ],
+            [
+                1263772800000,
+                0.696
+            ],
+            [
+                1263859200000,
+                0.7004
+            ],
+            [
+                1263945600000,
+                0.7077
+            ],
+            [
+                1264032000000,
+                0.7111
+            ]
+        ]
+    },
+    ]
+
+}
 
 const MainPage = () => {
-    const [tempGaugeOption, setTempGaugeOption] = useState(baseTempGaugeOption)
 
     return (
         <div className={"charts"}>
@@ -98,32 +411,50 @@ const MainPage = () => {
                 <div className={"gauge"}>
                     <HighchartsReact
                         highcharts={Highcharts}
-                        options={tempGaugeOption}/>
-
-                    <h5>Température</h5>
+                        options={baseTempGaugeOption}/>
+                    <h4>Température</h4>
                 </div>
                 <div className={"gauge"}>
-
-                    <h5>Humidité</h5>
+                    <HighchartsReact
+                        highcharts={Highcharts}
+                        options={baseHumidGaugeOption}/>
+                    <h4>Humiditée</h4>
                 </div>
                 <div className={"gauge"}>
-
-                    <h5>Taux de Co2</h5>
+                    <HighchartsReact
+                        highcharts={Highcharts}
+                        options={basePpmGaugeOption}/>
+                    <h4>Concentration CO2</h4>
                 </div>
 
             </section>
             <section className={"charts-section"}>
                 <div className={"header"}>
-                    <h5>Courbes</h5>
-                    <div className={"tile_selector"}>
-
+                    <h3>Courbes</h3>
+                    <div className={"time_selector"}>
+                        <button className={"btn-time"}>1H</button>
+                        <button className={"btn-time"}>1J</button>
+                        <button className={"btn-time"}>1S</button>
+                        <button className={"btn-time"}>1M</button>
+                        <button className={"btn-time"}>1A</button>
                     </div>
                 </div>
+                <div className={"charts-container"}>
+                    <HighchartsReact
+                        highcharts={Highcharts}
+                        options={baseCharts}/>
+                </div>
+
             </section>
             <section className={"charts-section"}>
                 <div className={"header"}>
-                    <h5>HeatMap</h5>
+                    <h3>HeatMap</h3>
 
+                </div>
+                <div className={"charts-container"}>
+                    <HighchartsReact
+                        highcharts={Highcharts}
+                        options={baseCharts}/>
                 </div>
 
             </section>
