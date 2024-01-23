@@ -8,6 +8,11 @@ const Global = "var process = { env: {NODE_ENV: 'production'}}"
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [reactRefresh()],
+    server: {
+        watch: {
+            usePolling: true
+        }
+    },
     root: './resources',
     base: '/assets/',
     mode: 'development', // |'development | production',
@@ -17,8 +22,8 @@ export default defineConfig({
     build: {
         outDir: '../public/assets',
         assetsDir: '',
-        manifest: true,
-        minify: true,
+        manifest: false,
+        minify: false,
         rollupOptions: {
             output: {
                 manualChunks: undefined,

@@ -46,7 +46,7 @@ class ViteAssetLoader
     }
 
     public function assetDev(string $url, array $array){
-        $base = 'http://localhost:3000/assets';
+        $base = 'http://localhost:5173/assets';
         $html = '';
         $html .= <<<HTML
             <script type="module" src="{$base}/@vite/client"></script>
@@ -56,9 +56,9 @@ class ViteAssetLoader
         if(in_array('react', $array)){
             $html .= <<<HTML
                 <script type="module">
-                    import RefreshRuntime from "{$base}/@react-refresh"
-                    //RefreshRuntime.injectIntoGlobalHook(window);
-                    window.\$RefreshReg\$ = () => {}
+                    import RefreshRuntime from "{$base}/@react-refresh";
+                    RefreshRuntime.injectIntoGlobalHook(window);
+                    window.\$RefreshReg\$ = () => {};
                     window.\$RefreshSig\$ = () => (type) => type
                     window.__vite_plugin_react_preamble_installed__ = true
                 </script>
