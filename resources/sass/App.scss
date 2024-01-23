@@ -1,5 +1,241 @@
 @import 'var';
 
+body, html, .app{
+    margin: 0;
+    padding: 0;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: $bg2;
+    z-index: 1;
+
+}
+
+/* Layout */
+.layout{
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    .navBar{
+        display: flex;
+        .menu-link{
+            width: 40px;
+            height: 40px;
+
+            img{
+                margin: 2.5px;
+                width: 30px;
+                height: 30px;
+            }
+        }
+        .menu-selected{
+            background-color: $bg1;
+            fill: $primary;
+            border-radius: 15px;
+        }
+    }
+
+    @include media-max("phone"){
+        .navBar{
+            position: fixed;
+            bottom: 0;
+            height: 60px;
+            background-color: $white;
+            width: 100vw;
+            border-radius: 25px 25px 0 0;
+            z-index: 25;
+            -webkit-box-shadow: 0px -2px 10px 10px rgba(0,0,0,0.1);
+            box-shadow: 0px -2px 10px 10px rgba(0,0,0,0.1);
+            flex-direction: row;
+            justify-content: space-evenly;
+            .menu-link{
+                margin: auto 0;
+            }
+        }
+        .page-content{
+            overflow-y: auto;
+            overflow-x: hidden;
+            height: calc(100vh - 60px);
+            margin-bottom: 60px;
+
+        }
+    }
+    @include media-min("tablet"){
+        .navBar{
+            position: fixed;
+            top: 0;
+            height: 100vh;
+            background-color: $white;
+            width: 60px;
+            border-radius: 0 25px 25px 0;
+            z-index: 25;
+            -webkit-box-shadow: 2px 0 10px 10px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 10px 10px rgba(0,0,0,0.1);
+            flex-direction: column;
+
+            .menu-link{
+                margin: 20px auto;
+                transition: all 500ms;
+                &:first-child{
+                    margin: 50px auto 20px auto;
+                }
+                &:hover{
+                    transform: scale(1.1);
+                }
+            }
+            #setting_icons{
+                margin-top: auto;
+                margin-bottom: 50px !important;
+
+            }
+        }
+        .page-content{
+            overflow-y: auto;
+            overflow-x: hidden;
+            width: calc(100vw - 65px);
+            margin-left: 65px;
+        }
+    }
+
+}
+
+/* Loader */
+.loading{
+    position: fixed;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    z-index: 30;
+    background-color: $bg2;
+    display: flex;
+    #loader_container{
+        height: 100vh;
+        width: 20vw;
+        min-width: 250px;
+        display: flex;
+        #loadImg_Main{
+            width: 20vw;
+
+            height: auto;
+            min-width: 250px;
+        }
+        .little_loader{
+            margin: 0 auto;
+            position: relative;
+            width: 15vw;
+            content: " ";
+            height: 15vw;
+            min-width: 200px;
+            min-height: 200px;
+            .rotate{
+                width: 15vw;
+                min-width: 200px;
+                position: absolute;
+                top: 0;
+                z-index: 46;
+            }
+            #loader_co2{
+                width: 13vw;
+                min-width: 200px;
+                position: absolute;
+                top: 1vw;
+                left: 1vw;
+                z-index: 44;
+            }
+        }
+    }
+
+
+}
+
+/* Charts */
+.charts{
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    .header{
+        margin: 0 auto;
+        text-align: center;
+        .time_selector{
+            display: flex;
+            flex-direction: row;
+        }
+    }
+    .charts-section{
+        margin: 20px auto;
+        width: 60vw;
+        overflow: hidden;
+        justify-content: space-between;
+        .gauge{
+            border-radius: 15px;
+            margin: 10px;
+            background-color: $white;
+            min-height: 100px;
+            min-width: 100px;
+            width: 18vw;
+            height: 18vw;
+            overflow: hidden;
+            h4{
+                font-weight: 600;
+                margin-left: 15px;
+            }
+            .chart-container{
+                width: 100%;
+                height: 80%;
+            }
+            .highcharts-navigator-yaxis{
+                display: none;
+            }
+            div:first-child{
+                width: 100%;
+                height: 80%;
+            }
+        }
+        .charts-container{
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .btn-time{
+            height: fit-content;
+            width: fit-content;
+            padding: 5px 10px;
+            background-color: $primary;
+            border-radius: 15px;
+            border: none;
+            color: $bg1;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            transition: 400ms cubic-bezier(0.28,-0.46, 0.33, 1.5);
+            img{
+                width:40px;
+                height: auto;
+                margin:auto 10px;
+            }
+            &:hover{
+                -webkit-transform: scale(1.2);
+            }
+            &:disabled{
+                opacity: 0.7;
+                color: $disabled !important;
+                transition: none;
+                cursor: default;
+                animation: none;
+                &:hover{
+                    transform: none;
+                }
+            }
+        }
+    }
+}
 
 
 

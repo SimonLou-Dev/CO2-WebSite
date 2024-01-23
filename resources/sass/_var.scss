@@ -1,0 +1,254 @@
+/* media Querries */
+$breakpoints: (
+    "phone": 500px,
+    "tablet": 800px,
+    "desktop": 1024px,
+);
+
+/* from… */
+@mixin media-min($_key) {
+    @media screen
+    and (min-width: map-get($breakpoints, $_key)) {
+        &{ @content; }
+    }
+}
+
+/* to… */
+@mixin media-max($_key) {
+    @media screen
+    and (max-width: map-get($breakpoints, $_key) - 1) {
+        &{ @content; }
+    }
+}
+
+/* from… to… */
+@mixin media-between($_keymin, $_keymax) {
+    @media screen
+    and (min-width: map-get($breakpoints, $_keymin))
+    and (max-width: map-get($breakpoints, $_keymax) - 1) {
+        &{ @content; }
+    }
+}
+
+/* at… */
+@mixin media($_key) {
+    @media screen
+    and (min-width: map-get($breakpoints, $_key))
+    and (max-width: map-get(
+        $breakpoints,
+        nth(map-keys($breakpoints), index(map-keys($breakpoints), $_key) + 1)
+      ) - 1) {
+        &{ @content; }
+    }
+}
+
+
+//Import Fonts
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;800&family=Nunito:wght@200;300&display=swap');
+
+$bg1: #EDFFF9;
+$bg2: #CFF9D4;
+$disabled: #BAD4BB;
+$white: #fff;
+$black: #000B19;
+$primary: #8EDF87;
+$primary: #25D382;
+
+$orange: #FF9929;
+$red: #FF4259;
+$blue: #69CADE;
+
+.center{
+    margin: auto;
+}
+
+.flex-column{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+.flex-line{
+    display: flex;
+    flex-direction: row;
+}
+
+.rotate{
+    -webkit-animation: rotating 2s linear infinite;
+    -moz-animation: rotating 2s linear infinite;
+    -ms-animation: rotating 2s linear infinite;
+    -o-animation: rotating 2s linear infinite;
+    animation: rotating 2s linear infinite;
+}
+
+
+@-webkit-keyframes rotating /* Safari and Chrome */ {
+    from {
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@keyframes rotating {
+    from {
+        -ms-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -ms-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+
+h1{
+    font-family: 'Baloo 2';
+    font-weight: 800;
+    font-size: 35px;
+    color: $black;
+}
+h2{
+    font-family: 'Baloo 2';
+    font-weight: 700;
+    font-size: 30px;
+    color: $black;
+}
+h3{
+    font-family: 'Baloo 2';
+    font-weight: 600;
+    font-size: 28px;
+    color: $black;
+}
+h4{
+    font-family: 'Baloo 2';
+    font-weight: 500;
+    font-size: 26px;
+    color: $black;
+}
+h5{
+    font-family: 'Baloo 2';
+    font-weight: 400;
+    font-size: 24px;
+    color: $black;
+}
+h6{
+    font-family: 'Baloo 2';
+    font-weight: 300;
+    font-size: 20px;
+    color: $black;
+}
+h1, h2, h3, h4, h5, h6{
+    margin: 0 0;
+}
+p{
+    font-family: 'Baloo 2';
+    font-weight: 300;
+    font-size: 20px;
+    color: $black;
+}
+//Input Predefinition
+input, select, textarea {
+    color: $black;
+    background-color: $bg1;
+    margin: 10px 0;
+    font-size: 15px;
+    font-family: 'Baloo 2';
+    font-weight: 500;
+    box-shadow: none;
+    border: none;
+    border-radius: 15px;
+    padding: 10px;
+
+    &::placeholder {
+        color: $disabled;
+    }
+
+    &:-webkit-autofill {
+        background-color: $bg2 !important;
+        color: $black !important;
+    }
+}
+a, p, label{
+    color: $black;
+    font-family: "Baloo 2";
+    font-weight: normal;
+    font-size: 20px;
+}
+a{
+    text-decoration: none;
+}
+.--big{
+    color: $black;
+    font-family: "Baloo 2";
+    font-weight: 600;
+    font-size: 25px;
+}
+
+.disabled{
+    opacity: 0.7;
+    color: $disabled !important;
+    transition: none;
+    cursor: default;
+    animation: none;
+    &:hover{
+        transform: none;
+    }
+}
+
+.--medium{
+    color: $black;
+    font-family: "Nunito";
+    font-weight: 500;
+    font-size: 18px;
+}
+
+//Form
+.form-input{
+    height: 50px;
+}
+.form-error{
+    p{
+        color: $red;
+        margin: 0;
+    }
+}
+.form-healper{
+    font-weight: 400 !important;
+    font-style: italic !important;
+    font-family: Nunito !important;
+    font-size: 15px !important;
+    opacity: 25% !important;
+    color: $black;
+}
+
+.form-error{
+    border: $red 1px solid !important;
+}
+.error-list {
+    li {
+        font-size: 20px;
+        font-weight: 400;
+        color: red;
+    }
+
+    ul {
+        margin: 0;
+    }
+
+    font-family: "Baloo 2";
+    font-weight: 500;
+    color: $red;
+}
+
+
+

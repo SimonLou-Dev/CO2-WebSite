@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Sensor;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\AddNewDeviceToGatJob;
 use App\Models\Sensor;
 use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
 use BaconQrCode\Renderer\ImageRenderer;
@@ -10,6 +11,8 @@ use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use SimpleSoftwareIO\QrCode\QrCodeServiceProvider;
@@ -125,13 +128,36 @@ class SensorController extends Controller
     {
         $this->authorize('create', Sensor::class);
 
+
+
         $data = $request->validate([
-            'room_id' => ['required', 'integer','exists:rooms,id','unique:sensors'],
+            'room_id' => ['required', 'integer','exists:rooms,id'],
             'device_addr' => ["required"]
         ]);
-        $data["created_by"] = 1;
+        $data["created_by"] = $request->user()->id;
 
-        return Sensor::create($data);
+        if(!Cache::has("CHIRPSTACK_API_KEY")){
+            return response()->json([
+                "API_KEY"=>"You must set API KEY"
+            ],500);
+        }
+
+        if(!Cache::has("CHIRPSTACK_DEVICE_PROFILE_ID")){
+            return response()->json([
+                "DEVICE_PROFIL"=>"You must set DEVICE PROFIL ID"
+            ],500);
+        }
+        if(!Cache::has("CHIRPSTACK_APPLICATION_ID")){
+            return response()->json([
+                "APPLICATION_ID"=>"You must set APPLICATION ID"
+            ],500);
+        }
+
+        $sensor = Sensor::create($data);
+
+        AddNewDeviceToGatJob::dispatch($request->device_addr, "sensor_".$sensor->id, $request->user()->id);
+
+        return response()->json($sensor, 201);
     }
 
     /**
@@ -290,6 +316,42 @@ class SensorController extends Controller
         return response()->json();
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     *
+     *
+     * @OA\Get(
+     *     path="/sensors/{sensorId}/qrcode",
+     *     summary="Get Code code",
+     *     tags={"sensors"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     * *      name="Authorization",
+     * *      in="header",
+     * *      required=true,
+     * *      description="Bearer {access-token}",
+     * *      @OA\Schema(
+     * *          type="bearerAuth"
+     * *      )
+     * *     ),
+     *     @OA\PathParameter (
+     *        name="sensorId",
+     *        description="Id Of selected sensor",
+     *        required=true,
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=200,
+     *          description="get sensor qrCode succesfully (return png images)"
+     *    ),
+     *      @OA\Response(
+     *            response=403,
+     *            description="Not Allowed"
+     *      )
+     *
+     *)
+     */
     public function getQrCode(string $sensor){
         $path = Storage::get('public\images\LogoQrCode.png');
         $savePath = Storage::path('public/QrCodes/sensor_'.dechex($sensor).'.png');

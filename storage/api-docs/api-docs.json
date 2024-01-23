@@ -366,6 +366,72 @@
                 ]
             }
         },
+        "/chirpstack/keys": {
+            "put": {
+                "tags": [
+                    "chirpstack"
+                ],
+                "summary": "update keys",
+                "operationId": "68affd65e6762736fdbcb19053712087",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer {access-token}",
+                        "required": true,
+                        "schema": {
+                            "type": "bearerAuth"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Sensor data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "app_id",
+                                    "profile_id",
+                                    "api_key"
+                                ],
+                                "properties": {
+                                    "app_id": {
+                                        "type": "string",
+                                        "example": "87674096-09e4-41e8-b114-a994a56e9e8b"
+                                    },
+                                    "profile_id": {
+                                        "type": "string",
+                                        "example": "e4d9526a-d02d-440c-b467-61213cd55d00"
+                                    },
+                                    "api_key": {
+                                        "type": "string",
+                                        "example": "e4d9526a-d02d-440c-b467-61213cd55d00"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Keys set succesfully"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "403": {
+                        "description": "Not Allowed"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/sensors": {
             "get": {
                 "tags": [
@@ -649,6 +715,45 @@
                                 "schema": {}
                             }
                         }
+                    },
+                    "403": {
+                        "description": "Not Allowed"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/sensors/{sensorId}/qrcode": {
+            "get": {
+                "tags": [
+                    "sensors"
+                ],
+                "summary": "Get Code code",
+                "operationId": "9897f168ce2e6ce4a6ebe6e5dfaa9ed5",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer {access-token}",
+                        "required": true,
+                        "schema": {
+                            "type": "bearerAuth"
+                        }
+                    },
+                    {
+                        "name": "sensorId",
+                        "in": "path",
+                        "description": "Id Of selected sensor",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "get sensor qrCode succesfully (return png images)"
                     },
                     "403": {
                         "description": "Not Allowed"
