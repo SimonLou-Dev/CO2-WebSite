@@ -67,6 +67,10 @@ $blue: #69CADE;
     flex-direction: column;
     justify-content: space-evenly;
 }
+.flex-line{
+    display: flex;
+    flex-direction: row;
+}
 
 .rotate{
     -webkit-animation: rotating 2s linear infinite;
