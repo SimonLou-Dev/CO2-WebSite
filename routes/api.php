@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\Room\RoomController;
+use App\Http\Controllers\Sensor\MesuresController;
 use App\Http\Controllers\Sensor\SensorController;
 use App\Http\Controllers\User\ApiTokenController;
 use App\Http\Controllers\User\UserController;
@@ -35,6 +36,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
+
+    Route::get("/sensors/{sensor}/mesures", [MesuresController::class, "getMesures"]);
 
 });
 
