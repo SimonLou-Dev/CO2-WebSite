@@ -4,6 +4,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\Room\RoomController;
 
+use App\Http\Controllers\Sensor\MeasuresController;
 use App\Http\Controllers\Sensor\MesuresController;
 use App\Http\Controllers\Sensor\ChirpstackController;
 use App\Http\Controllers\Sensor\SensorController;
@@ -50,7 +51,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
 
 Route::get("/sensors/{sensor}/qrcode", [SensorController::class, "getQrCode"]);
-Route::get("/sensors/{sensor}/mesures", [MesuresController::class, "getMesures"]);
+Route::get("/sensors/{sensor}/mesures", [MeasuresController::class, "getMesures"]);
 Route::apiResource("/sensors", SensorController::class);
 
 //Auth

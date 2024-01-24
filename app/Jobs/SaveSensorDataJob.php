@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Exceptions\SensorNotFoundException;
-use App\Models\Mesurement;
+use App\Models\Measurement;
 use App\Models\Sensor;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -30,11 +30,12 @@ class SaveSensorDataJob implements ShouldQueue
 
         if(Sensor::where("id", $this->id)->count() == 1){
             $messageDecoded = json_decode($this->jsonString);
-            $mesurement = new Mesurement();
+            $mesurement = new Measurement();
             $mesurement->sensor_id = $this->id;
             $mesurement->humidity = $messageDecoded->humidity;
             $mesurement->temperature = $messageDecoded->temperature;
             $mesurement->ppm = $messageDecoded->ppm;
+            $mesurement->measured_at = Carbon::parse($messageDecoded->measured_at)->format("Y-m-d H:i:s");
             $mesurement->save();
 
             $sensor = Sensor::where("id",$this->id)->first();

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Sensor;
 
 use App\Http\Controllers\Controller;
-use App\Models\Mesurement;
+use App\Models\Measurement;
 use App\Models\Sensor;
 use Illuminate\Http\Request;
 
-class MesuresController extends Controller
+class MeasuresController extends Controller
 {
 
 
@@ -81,19 +81,22 @@ class MesuresController extends Controller
 
         switch ($period){
             case "s":
-                $start = now()->sub("day", 7);
+                $start = now()->sub("day", 6);
+                $start->setHour(0)->setMinute(0)->setSecond(0);
                 break;
             case "m":
                 $start = now()->sub("month", 1);
+                $start->setHour(0)->setMinute(0)->setSecond(0);
                 break;
             case "y":
                 $start = now()->sub("year", 1);
+                $start->setHour(0)->setMinute(0)->setSecond(0);
                 break;
             case "h":
-                $start = now()->sub("hour", 1);
+                $start = now()->sub("hour", 1)->setSecond(0);
                 break;
             case "d":
-                $start = now()->sub("day", 1);
+                $start = now()->sub("day", 1)->setSecond(0);
                 break;
 
         }
@@ -104,37 +107,37 @@ class MesuresController extends Controller
         $created_at = array();
 
         if($period == "s" || $period == "m" || $period == "y"){
-            $mesures = Mesurement::where("sensor_id", $sensor->id)->whereBetween("created_at", [$start, $end])->orderBy("created_at", "desc")->get(["created_at", "ppm", "humidity", "temperature"])->groupBy(function ($item) {
-                return $item->created_at->format('Y-m-d');
+            $mesures = Measurement::where("sensor_id", $sensor->id)->whereBetween("measured_at", [$start, $end])->orderBy("measured_at", "desc")->get(["measured_at", "ppm", "humidity", "temperature"])->groupBy(function ($item) {
+                return $item->measured_at->format('Y-m-d');
             })->map(function ($item) {
 
                 return [
-                    "ppm" => $item->avg("ppm"),
-                    "humidity" => $item->avg("humidity"),
-                    "temperature" => $item->avg("temperature"),
-                    "created_at" => $item->first()->created_at->format("Y-m-d")
+                    "ppm" => round($item->avg("ppm"), 0),
+                    "humidity" => round($item->avg("humidity"),1),
+                    "temperature" => round($item->avg("temperature"),1),
+                    "measured_at" => $item->first()->measured_at->format("Y-m-d")
                 ];
             });
 
             foreach($mesures as $mesure){
-                $created = $mesure["created_at"];
+                $created = $mesure["measured_at"];
                 $ppm[] = [$created => $mesure["ppm"]];
                 $humidity[] = [$created => $mesure["humidity"]];
                 $temperature[] = [$created => $mesure["temperature"]];
-                $created_at[] = $mesure["created_at"];
+                $created_at[] = $mesure["measured_at"];
             }
         }else{
-            $mesures = Mesurement::where("sensor_id", $sensor->id)->whereBetween("created_at", [$start, $end])->orderBy("created_at", "desc")->get(["created_at", "ppm", "humidity", "temperature"]);
+            $mesures = Measurement::where("sensor_id", $sensor->id)->whereBetween("measured_at", [$start, $end])->orderBy("measured_at", "desc")->get(["measured_at", "ppm", "humidity", "temperature"]);
             foreach($mesures as $mesure){
-                $created = $mesure->created_at->format("d/m H:i:s");
+                $created = $mesure->measured_at->format("d-m H:i:s");
                 $ppm[] = [$created =>  $mesure->ppm];
                 $humidity[] = [$created => $mesure->humidity];
                 $temperature[] = [$created => $mesure->temperature];
-                $created_at[] = $mesure->created_at->format("d/m H:i:s");
+                $created_at[] = $mesure->measured_at->format("d-m H:i:s");
             }
         }
 
-        $lastMesure = Mesurement::where("sensor_id", $sensor->id)->orderBy("created_at", "desc")->first();
+        $lastMesure = Measurement::where("sensor_id", $sensor->id)->orderBy("measured_at", "desc")->first();
 
 
         return response()->json([

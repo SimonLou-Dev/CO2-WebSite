@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Mesurement extends Model
+class Measurement extends Model
 {
     use HasFactory;
 
     protected $casts = [
         "created_at" => "datetime:Y-m-d H:i:s",
         "updated_at" => "datetime:Y-m-d H:i:s",
+        "measured_at" => "datetime:Y-m-d H:i:s",
     ];
 
 

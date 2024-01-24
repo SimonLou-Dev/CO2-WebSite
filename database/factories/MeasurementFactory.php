@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Mesurement;
+use App\Models\Measurement;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
-class MesurementFactory extends Factory
+class MeasurementFactory extends Factory
 {
-    protected $model = Mesurement::class;
+    protected $model = Measurement::class;
 
     public function definition(): array
     {

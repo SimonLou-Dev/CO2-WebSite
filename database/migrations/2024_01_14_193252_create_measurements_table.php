@@ -7,18 +7,19 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('mesurements', function (Blueprint $table) {
+        Schema::create('measurements', function (Blueprint $table) {
             $table->id();
             $table->integer('sensor_id');
             $table->float('humidity');
             $table->float('temperature');
             $table->integer('ppm');
+            $table->timestamp("measured_at")->nullable();
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('mesurements');
+        Schema::dropIfExists('measurements');
     }
 };
