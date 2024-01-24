@@ -13,6 +13,9 @@ class Measurement extends Model
         "created_at" => "datetime:Y-m-d H:i:s",
         "updated_at" => "datetime:Y-m-d H:i:s",
         "measured_at" => "datetime:Y-m-d H:i:s",
+        "ppm" => "integer",
+        "humidity" => "float",
+        "temperature" => "float",
     ];
 
 

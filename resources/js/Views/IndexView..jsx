@@ -1,6 +1,6 @@
 import * as React from "react";
 import axios from "axios";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {AppLoadingView} from "./AppLoadingView.";
 import Highcharts from "highcharts";
 import highchartsMore from "highcharts/highcharts-more"
@@ -13,10 +13,12 @@ highchartsSolidGauge(Highcharts)
 export const IndexView = () => {
     const [dataLoaded, setDataLoaded] = useState(true);
 
+
     useEffect(() => {
         setDataLoaded(true)
-
     }, []);
+
+
 
 
     if (dataLoaded) return (<MainPage/>)
@@ -255,9 +257,6 @@ const baseCharts = {
         opposite: true
 
     }],
-    xAxis: {
-        type: "datetime"
-    },
     series: [
         {
             type: "line",
@@ -397,7 +396,82 @@ const baseCharts = {
 
 }
 
-const MainPage = () => {
+const MainPage = (props) => {
+    const chartGaugeTemp = useRef(null);
+    const chartGaugeHum = useRef(null);
+    const chartGaugePpm = useRef(null);
+    const chartLine = useRef(null);
+    const [period, setPeriod] = useState("h");
+
+    const [sensorId, setSensorId] = useState(1);
+    const [room, setRoom] = useState(1);
+
+
+
+
+    useEffect(() => {
+        fetchData()
+    }, []);
+
+
+    const fetchData = async (per = period) => {
+        const gaugeTemp = chartGaugeTemp.current.chart;
+        const gaugeHum = chartGaugeHum.current.chart;
+        const gaugePpm = chartGaugePpm.current.chart;
+        const chartLineRef = chartLine.current.chart;
+
+        if(gaugeTemp.series === undefined && gaugeHum.series === undefined && gaugePpm.series === undefined) return
+
+        console.log(gaugeTemp)
+
+
+        await axios.get("http://127.0.0.1:8000/api/sensors/" + sensorId+ "/measures", {
+                params: {
+                    period: "1" + per
+                }
+            }).then((response) => {
+
+                gaugeTemp.series[0].update({
+                    data: [ parseInt(response.data.last_measure.temperature)]
+                });
+
+                gaugeHum.series[0].update({
+                    data: [ parseInt(response.data.last_measure.humidity)]
+                });
+
+                gaugePpm.series[0].update({
+                    data: [ parseInt(response.data.last_measure.ppm)]
+                });
+
+                chartLineRef.series[0].update({
+                    data: response.data.data.temperature
+                })
+
+
+            chartLineRef.xAxis[0].setCategories(response.data.data.dates)
+
+
+
+                chartLineRef.series[1].update({
+                    data: response.data.data.ppm
+                })
+
+                setPeriod(per)
+
+
+
+                console.log(response.data)
+            }).catch((error) => {
+                console.log(error)
+            })
+
+    }
+
+    const changePeriod = (_period) => {
+
+        fetchData(_period)
+    }
+
 
     return (
         <div className={"charts"}>
@@ -411,19 +485,23 @@ const MainPage = () => {
                 <div className={"gauge"}>
                     <HighchartsReact
                         highcharts={Highcharts}
-                        options={baseTempGaugeOption}/>
+                        options={baseTempGaugeOption}
+                        ref={chartGaugeTemp}/>
+
                     <h4>Température</h4>
                 </div>
                 <div className={"gauge"}>
                     <HighchartsReact
                         highcharts={Highcharts}
-                        options={baseHumidGaugeOption}/>
+                        options={baseHumidGaugeOption}
+                        ref={chartGaugeHum}/>
                     <h4>Humiditée</h4>
                 </div>
                 <div className={"gauge"}>
                     <HighchartsReact
                         highcharts={Highcharts}
-                        options={basePpmGaugeOption}/>
+                        options={basePpmGaugeOption}
+                        ref={chartGaugePpm}/>
                     <h4>Concentration CO2</h4>
                 </div>
 
@@ -432,17 +510,19 @@ const MainPage = () => {
                 <div className={"header"}>
                     <h3>Courbes</h3>
                     <div className={"time_selector"}>
-                        <button className={"btn-time"}>1H</button>
-                        <button className={"btn-time"}>1J</button>
-                        <button className={"btn-time"}>1S</button>
-                        <button className={"btn-time"}>1M</button>
-                        <button className={"btn-time"}>1A</button>
+                        <button onClick={() => changePeriod("h")} className={"btn-time " + (period === "h" ? "selected" : "")}>1H</button>
+                        <button onClick={() => changePeriod("j")} className={"btn-time " + (period === "j" ? "selected" : "")}>1J</button>
+                        <button onClick={() => changePeriod("s")} className={"btn-time " + (period === "s" ? "selected" : "")}>1S</button>
+                        <button onClick={() => changePeriod("m")} className={"btn-time " + (period === "m" ? "selected" : "")}>1M</button>
+                        <button onClick={() => changePeriod("a")} className={"btn-time " + (period === "a" ? "selected" : "")}>1A</button>
                     </div>
                 </div>
                 <div className={"charts-container"}>
                     <HighchartsReact
                         highcharts={Highcharts}
-                        options={baseCharts}/>
+                        options={baseCharts}
+                        ref={chartLine}
+                    />
                 </div>
 
             </section>

@@ -51,7 +51,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
 
 Route::get("/sensors/{sensor}/qrcode", [SensorController::class, "getQrCode"]);
-Route::get("/sensors/{sensor}/mesures", [MeasuresController::class, "getMesures"]);
+Route::get("/sensors/{sensor}/measures", [MeasuresController::class, "getMesures"]);
 Route::apiResource("/sensors", SensorController::class);
 
 //Auth
