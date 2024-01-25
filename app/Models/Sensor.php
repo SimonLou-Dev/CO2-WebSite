@@ -29,7 +29,7 @@ class Sensor extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["room_id", "created_by"];
+    protected $fillable = ["room_id", "created_by", "device_addr"];
 
 
 

@@ -9,6 +9,7 @@ return new class extends Migration {
     {
         Schema::create('sensors', function (Blueprint $table) {
             $table->id();
+            $table->string('device_addr')->unique();
             $table->dateTime('last_message')->nullable();
             $table->integer('created_by');
             $table->integer('room_id');

@@ -18,7 +18,7 @@ class SaveSensorDataJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public function __construct(
-        private int $id,
+        private string $devId,
         private string $jsonString,
     )
     {
@@ -28,19 +28,23 @@ class SaveSensorDataJob implements ShouldQueue
     {
 
 
-        if(Sensor::where("id", $this->id)->count() == 1){
+        if(Sensor::where("device_addr", $this->devId)->count() == 1){
             $messageDecoded = json_decode($this->jsonString);
-            $mesurement = new Measurement();
-            $mesurement->sensor_id = $this->id;
-            $mesurement->humidity = $messageDecoded->humidity;
-            $mesurement->temperature = $messageDecoded->temperature;
-            $mesurement->ppm = $messageDecoded->ppm;
-            $mesurement->measured_at = Carbon::parse($messageDecoded->measured_at)->format("Y-m-d H:i:s");
-            $mesurement->save();
+            $data = $messageDecoded->data;
+            $data = base64_decode($data);
+            $dataExploded = explode('_', $data);
 
-            $sensor = Sensor::where("id",$this->id)->first();
+            $sensor = Sensor::where("device_addr",$this->devId)->first();
             $sensor->last_message = Carbon::now()->format("H:i:s Y-m-d");
             $sensor->save();
+
+            $mesurement = new Measurement();
+            $mesurement->sensor_id = $sensor->id;
+            $mesurement->humidity = \Str::replace("_", "", $dataExploded[0]);
+            $mesurement->temperature = \Str::replace("_", "", $dataExploded[1]);
+            $mesurement->ppm = \Str::replace("_", "", $dataExploded[2]);
+            $mesurement->measured_at = Carbon::now()->format("Y-m-d H:i:s");
+            $mesurement->save();
 
 
         }else{

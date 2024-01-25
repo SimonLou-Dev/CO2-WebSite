@@ -126,15 +126,19 @@ class SensorController extends Controller
      */
     public function store(Request $request)
     {
-        $this->authorize('create', Sensor::class);
-
+        //$this->authorize('create', Sensor::class);
 
 
         $data = $request->validate([
-            'room_id' => ['required', 'integer','exists:rooms,id'],
+            'room_id' => ['required', 'integer'],
             'device_addr' => ["required"]
         ]);
-        $data["created_by"] = $request->user()->id;
+        $data["created_by"] = 1;
+        $data["device_addr"] = $request->device_addr;
+
+
+
+
 
         if(!Cache::has("CHIRPSTACK_API_KEY")){
             return response()->json([
@@ -153,9 +157,11 @@ class SensorController extends Controller
             ],500);
         }
 
+
+
         $sensor = Sensor::create($data);
 
-        AddNewDeviceToGatJob::dispatch($request->device_addr, "sensor_".$sensor->id, $request->user()->id);
+        AddNewDeviceToGatJob::dispatch($request->device_addr, "sensor_".$sensor->id, $sensor->created_by);
 
         return response()->json($sensor, 201);
     }

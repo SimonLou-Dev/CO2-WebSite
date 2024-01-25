@@ -34,7 +34,7 @@ Broadcast::routes(['middleware' => ['auth:sanctum']]);
 Route::middleware('auth:sanctum')->group(function() {
 
     /* Key management */
-    Route::put('/chirpstack/keys', [ChirpstackController::class, "setKeys"]);
+
 
     /* User Auth */
     Route::patch("/logout", [UserController::class, "logout"]);
@@ -45,16 +45,20 @@ Route::middleware('auth:sanctum')->group(function() {
 
     /* Room management */
     Route::get("/rooms/{room}", [RoomController::class, "show"]);
-    Route::post("/rooms/{room}", [RoomController::class, "store"]);
+    Route::post("/rooms", [RoomController::class, "store"]);
     Route::put("/rooms/{room}", [RoomController::class, "update"]);
     Route::delete("/rooms/{room}", [RoomController::class, "destroy"]);
 
     /* Sensor management */
-    Route::get("/sensors/{room}", [SensorController::class, "index"]);
-    Route::post("/sensors/{room}", [SensorController::class, "store"]);
-    Route::put("/sensors/{room}", [SensorController::class, "update"]);
-    Route::delete("/sensors/{room}", [SensorController::class, "destroy"]);
+    Route::get("/sensors/{sensor}", [SensorController::class, "index"]);
+
+    Route::put("/sensors/{sensor}", [SensorController::class, "update"]);
+    Route::delete("/sensors/{sensor}", [SensorController::class, "destroy"]);
 });
+
+Route::post("/sensors", [SensorController::class, "store"]);
+
+Route::put('/chirpstack/keys', [ChirpstackController::class, "setKeys"]);
 
 /* Public routes */
 

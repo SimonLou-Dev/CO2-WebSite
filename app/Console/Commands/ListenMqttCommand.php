@@ -45,18 +45,19 @@ class ListenMqttCommand extends Command
         $this->info("Connected to MQTT broker {$server}:{$port} as {$clientId}");
 
 
-        $mqtt->subscribe('/sensor/+', function (string $topic, string $message) {
+        $mqtt->subscribe('application/b56d3f79-a522-41e4-ad91-039252c597e8/device/+/event/up', function (string $topic, string $message) {
 
             $topicExploded = explode('/', $topic);
 
-            if(sizeof($topicExploded) == 3 && ctype_xdigit($topicExploded[2]) && Str::isJson($message)){
 
-                SaveSensorDataJob::dispatch(hexdec($topicExploded[2]), $message);
+            if(sizeof($topicExploded) == 6 && Str::isJson($message)){
 
-                $this->info("Receiving sensor ${topicExploded[2]} data successfully");
+                SaveSensorDataJob::dispatch($topicExploded[3], $message);
+
+                $this->info("Receiving sensor ${topicExploded[3]} data successfully");
 
             }else{
-                $this->warn("Error while reading message [${topic}] ${message}");
+                $this->warn("Error while reading message [${topic}] \n\t ${message}");
             }
 
         }, 0);
