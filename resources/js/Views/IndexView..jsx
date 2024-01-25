@@ -429,7 +429,8 @@ const MainPage = (props) => {
                 params: {
                     period: "1" + per
                 }
-            }).then((response) => {
+            })
+            .then((response) => {
 
                 gaugeTemp.series[0].update({
                     data: [ parseInt(response.data.last_measure.temperature)]
@@ -447,10 +448,7 @@ const MainPage = (props) => {
                     data: response.data.data.temperature
                 })
 
-
-            chartLineRef.xAxis[0].setCategories(response.data.data.dates)
-
-
+                chartLineRef.xAxis[0].setCategories(response.data.data.dates)
 
                 chartLineRef.series[1].update({
                     data: response.data.data.ppm
@@ -458,9 +456,6 @@ const MainPage = (props) => {
 
                 setPeriod(per)
 
-
-
-                console.log(response.data)
             }).catch((error) => {
                 console.log(error)
             })

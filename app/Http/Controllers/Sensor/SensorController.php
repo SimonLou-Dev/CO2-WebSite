@@ -325,16 +325,6 @@ class SensorController extends Controller
      *     path="/sensors/{sensorId}/qrcode",
      *     summary="Get Code code",
      *     tags={"sensors"},
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(
-     * *      name="Authorization",
-     * *      in="header",
-     * *      required=true,
-     * *      description="Bearer {access-token}",
-     * *      @OA\Schema(
-     * *          type="bearerAuth"
-     * *      )
-     * *     ),
      *     @OA\PathParameter (
      *        name="sensorId",
      *        description="Id Of selected sensor",

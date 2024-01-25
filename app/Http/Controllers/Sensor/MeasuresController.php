@@ -21,57 +21,50 @@ class MeasuresController extends Controller
      *     path="/sensors{sensorId}/mesures",
      *     summary="Get sensor mesures",
      *     tags={"sensors"},
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(
-     * *      name="Authorization",
-     * *      in="header",
-     * *      required=true,
-     * *      description="Bearer {access-token}",
-     * *      @OA\Schema(
-     * *          type="bearerAuth"
-     * *      )
-     * *     ),
-     *          @OA\PathParameter (
-     *         name="sensorId",
-     *         description="Id Of selected sensor",
-     *         required=true,
-     *      ),
-     *          @OA\RequestBody(
+     *     @OA\Parameter (
+     *          name="period",
+     *          in="query",
      *          required=false,
-     *          description="Request Period",
-     *           @OA\JsonContent(
-     *               @OA\Property(property="period", type="string", example="1h | 1d | 1m | 1y | 1s
-     *           )
-     *       ),
-
+     *          allowEmptyValue=true,
+     *          example="1h|1j|1s|1m|1a",
+     *      ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Sensor mesures",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="socket_path", type="string", example="sensor.1"),
+     *             @OA\Property(property="period", type="string", example="1h"),
+     *             @OA\Property(property="from", type="string", example="2024-01-01 00:00:00"),
+     *             @OA\Property(property="to", type="string", example="2024-01-01 00:20:00"),
+     *             @OA\Property(property="last_measure", type="object", example={"ppm": 100, "humidity": 50, "temperature": 20}),
+     *             @OA\Property(property="data", type="object", example={"dates": {"2024-01-01 00:00:00", "2024-01-01 00:20:00"}, "ppm": {100, 100}, "humidity": {50, 50}, "temperature": {20, 20}}),
+     *         ),
+     *     ),
+     *     @OA\Response(
+     *            response=422,
+     *            description="validation error",
+     *      ),
+     * )
      *
-     *     @OA\Response(
-     *          response=200,
-     *          description="Sensor retrieve succesfully",
-     *          @OA\JsonContent(
-     *              allOf={
-     *                  @OA\Schema (ref="#/components/schemas/PaginatedResult"),
-     *                  @OA\Schema (
-     *                      @OA\Property (property="data", type="array", @OA\Items(ref="#/components/schemas/Sensor")),
-     *                  ),
-     *              }
-     *          ),
-     *    ),
-     *     @OA\Response(
-     *           response=403,
-     *           description="Not Allowed"
-     *     )
-     *)
      */
-    public function getMesures(Request $request, Sensor $sensor)
+    public function getMesures(Request $request, string $sensor)
     {
+        if ($sensor == "0") {
+            $sensor = Sensor::first();
+        } else {
+            $sensor = Sensor::where("id", $sensor)->first();
+        }
+
+
+
+
         if ($request->has("period")) $period = $request->get("period");
         else $period = "1j";
 
         if (!\Str::startsWith($period, "1")) {
             return response()->json([
                 "message" => "Invalid period"
-            ], 403);
+            ], 405);
         }
         $period = \Str::convertCase($period, MB_CASE_LOWER);
         $period = \Str::replaceFirst("1", "", $period);
@@ -132,7 +125,7 @@ class MeasuresController extends Controller
                 $ppm[] = $mesure->ppm;
                 $humidity[] = $mesure->humidity;
                 $temperature[] = $mesure->temperature;
-                $created_at[] = $mesure->measured_at->format("H:i");
+                $created_at[] = $mesure->measured_at->format("d H:i");
             }
         }
 

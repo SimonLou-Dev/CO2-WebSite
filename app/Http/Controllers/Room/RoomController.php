@@ -19,16 +19,6 @@ class RoomController extends Controller
      *     path="/rooms",
      *     summary="Get All room",
      *     tags={"rooms"},
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(
-     *      name="Authorization",
-     *      in="header",
-     *      required=true,
-     *      description="Bearer {access-token}",
-     *      @OA\Schema(
-     *          type="bearerAuth"
-     *      )
-     *     ),
      *     @OA\Parameter (
      *         name="search",
      *         in="query",

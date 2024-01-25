@@ -101,15 +101,6 @@
                 "operationId": "ea5014f568762b3074db88efca04c9d8",
                 "parameters": [
                     {
-                        "name": "Authorization",
-                        "in": "header",
-                        "description": "Bearer {access-token}",
-                        "required": true,
-                        "schema": {
-                            "type": "bearerAuth"
-                        }
-                    },
-                    {
                         "name": "search",
                         "in": "query",
                         "required": false,
@@ -147,12 +138,7 @@
                     "403": {
                         "description": "Not Allowed"
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             },
             "post": {
                 "tags": [
@@ -430,6 +416,86 @@
                         "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/sensors{sensorId}/mesures": {
+            "get": {
+                "tags": [
+                    "sensors"
+                ],
+                "summary": "Get sensor mesures",
+                "operationId": "2ce212c249da7686b06a67c4f09fbf76",
+                "parameters": [
+                    {
+                        "name": "period",
+                        "in": "query",
+                        "required": false,
+                        "allowEmptyValue": true,
+                        "example": "1h|1j|1s|1m|1a"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sensor mesures",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "socket_path": {
+                                            "type": "string",
+                                            "example": "sensor.1"
+                                        },
+                                        "period": {
+                                            "type": "string",
+                                            "example": "1h"
+                                        },
+                                        "from": {
+                                            "type": "string",
+                                            "example": "2024-01-01 00:00:00"
+                                        },
+                                        "to": {
+                                            "type": "string",
+                                            "example": "2024-01-01 00:20:00"
+                                        },
+                                        "last_measure": {
+                                            "type": "object",
+                                            "example": {
+                                                "ppm": 100,
+                                                "humidity": 50,
+                                                "temperature": 20
+                                            }
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "example": {
+                                                "dates": [
+                                                    "2024-01-01 00:00:00",
+                                                    "2024-01-01 00:20:00"
+                                                ],
+                                                "ppm": [
+                                                    100,
+                                                    100
+                                                ],
+                                                "humidity": [
+                                                    50,
+                                                    50
+                                                ],
+                                                "temperature": [
+                                                    20,
+                                                    20
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "validation error"
+                    }
+                }
             }
         },
         "/sensors": {

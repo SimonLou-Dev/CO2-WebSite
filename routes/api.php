@@ -29,51 +29,52 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 */
 
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
+
+//Authed routes
 Route::middleware('auth:sanctum')->group(function() {
 
+    /* Key management */
     Route::put('/chirpstack/keys', [ChirpstackController::class, "setKeys"]);
 
+    /* User Auth */
     Route::patch("/logout", [UserController::class, "logout"]);
-    Route::get("/users", [UserController::class, "getAllUsers"]);
+
+    /* User management */
     Route::delete("/users/{user}", [UserController::class, "destroy"]);
+    Route::get("/users", [UserController::class, "getAllUsers"]);
 
+    /* Room management */
+    Route::get("/rooms/{room}", [RoomController::class, "show"]);
+    Route::post("/rooms/{room}", [RoomController::class, "store"]);
+    Route::put("/rooms/{room}", [RoomController::class, "update"]);
+    Route::delete("/rooms/{room}", [RoomController::class, "destroy"]);
 
-    Route::apiResource('/rooms', RoomController::class);
-
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
-
-
-
+    /* Sensor management */
+    Route::get("/sensors/{room}", [SensorController::class, "index"]);
+    Route::post("/sensors/{room}", [SensorController::class, "store"]);
+    Route::put("/sensors/{room}", [SensorController::class, "update"]);
+    Route::delete("/sensors/{room}", [SensorController::class, "destroy"]);
 });
 
+/* Public routes */
 
+/* Index and show room */
+Route::get("/rooms", [RoomController::class, "index"]);
+Route::get("/sensors/{sensor}", [SensorController::class, "show"]);
 
+/* Retrieve qrCode, measures & heatmap */
 Route::get("/sensors/{sensor}/qrcode", [SensorController::class, "getQrCode"]);
 Route::get("/sensors/{sensor}/measures", [MeasuresController::class, "getMesures"]);
-Route::apiResource("/sensors", SensorController::class);
 
-//Auth
+/* Auth routes */
 Route::post("/register", [UserController::class, 'register'])->name("register");
 Route::post("/login", [UserController::class, 'login'])->name("login");
 
+/* Token & csrf */
 Route::get("/csrf", [CsrfCookieController::class, "show"])->name("custom-csrf");
-
 Route::post("/tokens/create", [ApiTokenController::class, 'create'])->name("api-tokens.create");
 
 //Health
 Route::get("/health", [HomeController::class, 'getHealth'])->name("api-health");
 Route::get('/test-mqtt', [HomeController::class, 'testMqtt'])->name("test-mqtt");
-
-Route::get("/test", function () {
-    return Http::acceptJson()
-        ->withToken(Cache::get("CHIRPSTACK_API_KEY"))
-        ->post(env("CHIRPSTACK_API_URL")."/devices/"."000050000f055000"."/keys", [
-            "deviceKeys"=>[
-                "appKey"=>"2B7E151628AED2A6ABF7158809CF4F3C",
-                "nwkKey"=> "2B7E151628AED2A6ABF7158809CF4F3C",
-            ]
-        ]);
-});
 
