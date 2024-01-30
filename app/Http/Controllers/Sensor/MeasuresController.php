@@ -52,7 +52,7 @@ class MeasuresController extends Controller
         if ($sensor == "0") {
             $sensor = Sensor::first();
         } else {
-            $sensor = Sensor::where("id", $sensor)->first();
+            $sensor = Sensor::where("id", $sensor)->firstOrFail();
         }
 
 
@@ -137,6 +137,8 @@ class MeasuresController extends Controller
             "period" => $period,
             "from"=> $start->format("Y-m-d H:i:s"),
             "to"=> $end->format("Y-m-d H:i:s"),
+            "room" => $sensor->getRoom,
+            "sensor"=>$sensor,
             "last_measure" => [
                 "ppm" => $lastMesure->ppm,
                 "humidity" => $lastMesure->humidity,

@@ -1,10 +1,21 @@
 import * as React from "react";
-import axios from "axios";
 import {Link, Outlet} from "react-router-dom";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+
+
+
+
+
+
 
 export const LayoutComponent = () => {
     const [userAuthed, authUser] = useState(false)
+
+    useEffect(() => {
+
+
+
+    }, []);
 
 
     return (

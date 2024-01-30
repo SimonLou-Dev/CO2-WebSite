@@ -163,13 +163,17 @@ body, html, .app{
         margin: 0 auto;
         text-align: center;
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         .time_selector{
-            margin-left: auto;
             margin-right: 0;
+            margin-left: auto;
             display: flex;
             flex-direction: row;
-
+        }
+        input{
+            display: flex;
+            flex-direction: column;
+            margin: auto 0;
         }
     }
     .charts-section{
@@ -177,6 +181,11 @@ body, html, .app{
         width: 60vw;
         overflow: hidden;
         justify-content: space-between;
+        .header{
+            display: flex;
+            flex-direction: row;
+        }
+
         .gauge{
             border-radius: 15px;
             margin: 10px;
@@ -186,6 +195,7 @@ body, html, .app{
             width: 18vw;
             height: 18vw;
             overflow: hidden;
+
             h4{
                 font-weight: 600;
                 margin-left: 15px;

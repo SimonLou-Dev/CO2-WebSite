@@ -25,15 +25,7 @@ class RoomController extends Controller
      *         required=false,
      *         allowEmptyValue=true,
      *         example="L222"
-     *     ),
-     *     @OA\Parameter (
-     *          name="page",
-     *          in="query",
-     *          required=false,
-     *          allowEmptyValue=true,
-     *          example="1"
-     *      ),
-     *
+     *     )
      *     @OA\Response(
      *          response=200,
      *          description="Room retrieve succesfully",
@@ -47,11 +39,18 @@ class RoomController extends Controller
      *     )
      *)
      */
-    public function index()
+    public function index(Request $request)
     {
-        //$this->authorize('viewAny', Room::class);
 
-        return Room::all();
+        if($request->has("search")){
+            $rooms =  Room::where('name', 'like', '%' . $request->get("search") .'%')->limit(5)->get();
+
+        }else{
+            $rooms = Room::all();
+        }
+
+        foreach ($rooms as $room) $room->getSensor;
+        return $rooms;
     }
 
 

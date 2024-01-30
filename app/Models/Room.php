@@ -25,4 +25,12 @@ class Room extends Model
     use SoftDeletes, HasFactory;
 
     protected $fillable = ["name"];
+
+
+
+    public function getSensor()
+    {
+        return $this->hasOne(Sensor::class, "room_id", "id");
+    }
+
 }

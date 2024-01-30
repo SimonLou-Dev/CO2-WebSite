@@ -9,8 +9,7 @@ import {IndexView} from "./Views/IndexView.";
 import {ErrorView} from "./Views/ErrorView.";
 import {LayoutComponent} from "./Components/LayoutComponent.";
 
-axios.defaults.withCredentials = true;
-axios.defaults.withXSRFToken = true;
+
 
 let router = createBrowserRouter([
     {

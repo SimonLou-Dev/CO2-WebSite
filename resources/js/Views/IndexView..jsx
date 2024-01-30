@@ -1,11 +1,11 @@
 import * as React from "react";
-import axios from "axios";
 import {useEffect, useRef, useState} from "react";
 import {AppLoadingView} from "./AppLoadingView.";
 import Highcharts from "highcharts";
 import highchartsMore from "highcharts/highcharts-more"
 import highchartsSolidGauge from "highcharts/modules/solid-gauge"
 import HighchartsReact from "highcharts-react-official";
+import axios from "axios";
 
 highchartsMore(Highcharts)
 highchartsSolidGauge(Highcharts)
@@ -403,18 +403,22 @@ const MainPage = (props) => {
     const chartLine = useRef(null);
     const [period, setPeriod] = useState("h");
 
-    const [sensorId, setSensorId] = useState(1);
-    const [room, setRoom] = useState(1);
+    const [rooms, setRooms] = useState([]);
+    const [roomText, setRoomText] = useState([]);
+
+    const [sensorId, setSensorId] = useState(0);
+
 
 
 
 
     useEffect(() => {
         fetchData()
+        getRooms()
     }, []);
 
 
-    const fetchData = async (per = period) => {
+    const fetchData = async (per = period, sensor = sensorId) => {
         const gaugeTemp = chartGaugeTemp.current.chart;
         const gaugeHum = chartGaugeHum.current.chart;
         const gaugePpm = chartGaugePpm.current.chart;
@@ -422,10 +426,9 @@ const MainPage = (props) => {
 
         if(gaugeTemp.series === undefined && gaugeHum.series === undefined && gaugePpm.series === undefined) return
 
-        console.log(gaugeTemp)
+        setSensorId(sensor)
 
-
-        await axios.get("http://127.0.0.1:8000/api/sensors/" + sensorId+ "/measures", {
+        await axios.get("http://127.0.0.1:8000/api/sensors/" + sensor + "/measures", {
                 params: {
                     period: "1" + per
                 }
@@ -454,11 +457,32 @@ const MainPage = (props) => {
                     data: response.data.data.ppm
                 })
 
+                setRoomText(response.data.room.name + " (capteur" + response.data.sensor.id_hex + ")");
+
                 setPeriod(per)
 
             }).catch((error) => {
                 console.log(error)
             })
+
+    }
+
+    const getRooms = async (text = roomText) => {
+        setRoomText(text)
+
+        if(text.length <= 2 ) return;
+
+        await axios.get("http://127.0.0.1:8000/api/rooms", {
+            params: {
+                search: text
+            }
+        }).then((response) => {
+            setRooms(response.data)
+            if(response.data.length === 1){
+                if(response.data[0].get_sensor === null) return
+                fetchData(period, response.data[0].get_sensor.id)
+            }
+        })
 
     }
 
@@ -472,9 +496,14 @@ const MainPage = (props) => {
         <div className={"charts"}>
             <div className={"header"}>
                 <h1>Mesures et statistiques</h1>
-                <select defaultValue={0}>
-                    <option value={0} disabled={true}>Choississez une salle</option>
-                </select>
+                <input type={"text"} list={"autocomplete"} value={roomText} onChange={(e)=>getRooms(e.target.value)}/>
+                {rooms &&
+                    <datalist id={"autocomplete"}>
+                        {rooms.map((room) => (
+                            <option key={room.id} value={room.name}/>
+                        ))}
+                    </datalist>
+                }
             </div>
             <section className={"charts-section flex-line"}>
                 <div className={"gauge"}>
