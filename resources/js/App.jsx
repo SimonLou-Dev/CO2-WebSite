@@ -8,12 +8,12 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {IndexView} from "./Views/IndexView.";
 import {ErrorView} from "./Views/ErrorView.";
 import {LayoutComponent} from "./Components/LayoutComponent.";
+import {Settings} from "./Views/Settings.";
 
 
 
 let router = createBrowserRouter([
     {
-
         path: "/",
         element: <LayoutComponent/>,
         errorElement: <ErrorView/>,
@@ -21,6 +21,9 @@ let router = createBrowserRouter([
             {
                 index: true,
                 element: <IndexView/>
+            }, {
+                path: "/settings",
+                element: <Settings/>
             }
         ]
     }

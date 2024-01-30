@@ -6,6 +6,7 @@ import highchartsMore from "highcharts/highcharts-more"
 import highchartsSolidGauge from "highcharts/modules/solid-gauge"
 import HighchartsReact from "highcharts-react-official";
 import axios from "axios";
+import {useLocation} from "react-router-dom";
 
 highchartsMore(Highcharts)
 highchartsSolidGauge(Highcharts)
@@ -397,6 +398,9 @@ const baseCharts = {
 }
 
 const MainPage = (props) => {
+    const location = useLocation()
+    const myParam = new URLSearchParams(location.search).get("sensor_id");
+
     const chartGaugeTemp = useRef(null);
     const chartGaugeHum = useRef(null);
     const chartGaugePpm = useRef(null);
@@ -413,7 +417,12 @@ const MainPage = (props) => {
 
 
     useEffect(() => {
-        fetchData()
+        let params= myParam
+        if(params === null) params = 0;
+        params = parseInt(params)
+
+
+        fetchData(period, params)
         getRooms()
     }, []);
 

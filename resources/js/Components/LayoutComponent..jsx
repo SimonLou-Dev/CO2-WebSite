@@ -1,19 +1,19 @@
 import * as React from "react";
 import {Link, Outlet} from "react-router-dom";
 import {useEffect, useState} from "react";
-
-
-
-
-
-
+import UserContext from "../Utils/Context/UserContext";
+import {useLocalStorage} from "../Utils/StorageGroup";
 
 export const LayoutComponent = () => {
     const [userAuthed, authUser] = useState(false)
 
+    const [user, setUser] = useState(null)
+    const [token, setToken, removeToken] = useLocalStorage("token", null)
+
     useEffect(() => {
-
-
+        if (user == null && token !== null){
+            //Faire une request pour vérifier si le token est toujours alive
+        }
 
     }, []);
 
@@ -22,7 +22,9 @@ export const LayoutComponent = () => {
 
         <div className="layout">
             <div className={"page-content"}>
-                <Outlet/>
+                <UserContext.Provider value={{user : user, setUser: (v) => setUser(v), token: token, setToken: (v) => setToken(v), removeToken: (v) => removeToken}}>
+                    <Outlet/>
+                </UserContext.Provider>
             </div>
 
             <div className={"navBar"}>
