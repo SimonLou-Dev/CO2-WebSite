@@ -12,6 +12,74 @@ body, html, .app{
     z-index: 1;
 }
 
+.notification-wrapper {
+    position: fixed;
+    height: calc(100vh - 80px);
+    top: 80px;
+    right: 10px;
+    width: 350px;
+    pointer-events: none;
+    z-index: 15;
+    .notification-item{
+        padding: 5px 10px;
+        min-height: 65px;
+        pointer-events: all;
+        box-shadow: 0 0 10px rgba(0,0,0, 0.3), 1px 3px 4px rgba(0,0,0,.2);
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 20px;
+        animation: SlideLeft 0.4s;
+        animation-fill-mode: forwards;
+        width: 90%;
+        cursor: pointer;
+        p{
+            color: #fff;
+            max-width: calc(100% - 15px);
+            font-family: "Baloo 2", monospace;
+            font-weight: 600;
+            font-size: 22px;
+            line-height: 100%;
+            word-wrap: break-word;
+            margin-top: 10px;
+        }
+    }
+    .danger {
+        background-color: $red;
+        border-left: 8px solid #bd1120;
+    }
+    .warning {
+        background-color: $orange;
+        border-left: 8px solid #b06319;
+    }
+    .info{
+        background-color: #5b20b3;
+        border-left: 8px solid #5b20b3;
+    }
+    .success {
+        background-color: #118c45;
+        border-left: 8px solid #118c45;
+    }
+    .exit {
+        animation: SlideRight 0.4s;
+        animation-fill-mode: forwards;
+    }
+    .undefined{
+        display: none;
+    }
+}
+//Progress bar
+.bar{
+    background-color: $white;
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 20px;
+    .bar--filler{
+        height: 10px !important;
+        background-color: $primary;
+        border-radius: 20px;
+    }
+}
+
 /* Layout */
 .layout{
     top: 0;

@@ -9,6 +9,7 @@ import {IndexView} from "./Views/IndexView.";
 import {ErrorView} from "./Views/ErrorView.";
 import {LayoutComponent} from "./Components/LayoutComponent.";
 import {Settings} from "./Views/Settings.";
+import NotificationProvider from "./Utils/Context/NotificationProvider";
 
 
 
@@ -33,5 +34,5 @@ let router = createBrowserRouter([
 if (document.getElementById('app')) {
     const container  = document.getElementById("app");
     const root = createRoot(container );
-    root.render(<StrictMode><RouterProvider router={router}/></StrictMode>)
+    root.render(<StrictMode><NotificationProvider><RouterProvider router={router}/></NotificationProvider></StrictMode>)
 }
