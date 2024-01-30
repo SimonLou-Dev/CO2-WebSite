@@ -20,7 +20,7 @@ export const Settings = () => {
 
 
     const register = async (e) => {
-        await axios.post("http://127.0.0.1:8000/api/register", {
+        await axios.post("/register", {
             email: registerEmail,
             name: registerName,
             password: registerPassword,
@@ -45,7 +45,7 @@ export const Settings = () => {
     }
 
     const login = async (e) => {
-        await axios.post("http://127.0.0.1:8000/api/login", {
+        await axios.post("/login", {
             email: loginEmail,
             password: loginPassword,
             device_name: "test"

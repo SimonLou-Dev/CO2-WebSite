@@ -14,6 +14,7 @@ export const LayoutComponent = () => {
     const [token, setToken, removeToken] = useLocalStorage("token", null)
 
     useEffect(() => {
+
         if (user == null && token !== null){
             //Faire une request pour vérifier si le token est toujours alive
         }

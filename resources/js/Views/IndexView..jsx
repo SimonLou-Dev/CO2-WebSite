@@ -437,7 +437,7 @@ const MainPage = (props) => {
 
         setSensorId(sensor)
 
-        await axios.get("http://127.0.0.1:8000/api/sensors/" + sensor + "/measures", {
+        await axios.get("/sensors/" + sensor + "/measures", {
                 params: {
                     period: "1" + per
                 }
@@ -481,7 +481,7 @@ const MainPage = (props) => {
 
         if(text.length <= 2 ) return;
 
-        await axios.get("http://127.0.0.1:8000/api/rooms", {
+        await axios.get("/rooms", {
             params: {
                 search: text
             }

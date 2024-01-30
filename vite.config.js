@@ -15,15 +15,15 @@ export default defineConfig({
     },
     root: './resources',
     base: '/assets/',
-    mode: 'development', // |'development | production',
+    mode:  "production", //env.FRONT_DEBUG ? "development" : "production",
     define: {
         'process.env': {}
     },
     build: {
         outDir: '../public/assets',
         assetsDir: '',
-        manifest: false,
-        minify: false,
+        manifest: true,
+        minify: true,
         rollupOptions: {
             output: {
                 manualChunks: undefined,

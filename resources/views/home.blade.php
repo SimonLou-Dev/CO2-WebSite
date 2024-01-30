@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{str_replace('_','-', app()->getLocale())}}">
 <head>
-    
+
 
     <title>Simon Lou Template</title>
 
@@ -17,7 +17,7 @@
 
 
 </head>
-<body data-root-url={{ asset('') }}>
+<body>
 <div id="app"></div>
 </body>
 </html>
