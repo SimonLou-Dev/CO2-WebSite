@@ -17,6 +17,7 @@ class FillMeasurementCommand extends Command
         $sensor = new Sensor();
         $sensor->room_id = 1;
         $sensor->created_by = 1;
+        $sensor->device_addr= "00:00:00:00:00:00";
         $sensor->save();
         $sensor->refresh();
 

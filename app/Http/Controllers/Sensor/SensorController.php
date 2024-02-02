@@ -126,7 +126,7 @@ class SensorController extends Controller
      */
     public function store(Request $request)
     {
-        //$this->authorize('create', Sensor::class);
+        $this->authorize('create', Sensor::class);
 
 
         $data = $request->validate([
@@ -135,9 +135,6 @@ class SensorController extends Controller
         ]);
         $data["created_by"] = 1;
         $data["device_addr"] = $request->device_addr;
-
-
-
 
 
         if(!Cache::has("CHIRPSTACK_API_KEY")){
@@ -156,8 +153,6 @@ class SensorController extends Controller
                 "APPLICATION_ID"=>"You must set APPLICATION ID"
             ],500);
         }
-
-
 
         $sensor = Sensor::create($data);
 

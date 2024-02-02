@@ -14,6 +14,7 @@ class SensorFactory extends Factory
     {
         return [
             'last_message' => Carbon::now(),
+            "device_addr" => $this->faker->macAddress,
             'created_by' => $this->faker->randomNumber(),
             'room_id' => $this->faker->randomNumber(),
             'created_at' => Carbon::now(),

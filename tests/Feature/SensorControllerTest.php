@@ -4,8 +4,10 @@ namespace Tests\Feature;
 
 use App\Models\Room;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Cache;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
+use Tests\Utils\ChirpstackKeysTestTools;
 use Tests\Utils\ModelTestTools;
 use Tests\Utils\UserTestTools;
 
@@ -23,7 +25,7 @@ class SensorControllerTest extends TestCase
 
         $sensor = ModelTestTools::createSensor();
 
-        $this->get('/api/sensors')->assertStatus(403);
+        $this->get('/api/sensors')->assertStatus(200);
         $this->post('/api/sensors')->assertStatus(403);
         $this->put('/api/sensors/' . $sensor->id)->assertStatus(403);
         $this->get('/api/sensors/' . $sensor->id)->assertStatus(403);
@@ -40,10 +42,17 @@ class SensorControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
-
-
     public function test_createOne_adm()
     {
+
+        Cache::shouldReceive("has")->with("CHIRPSTACK_API_KEY")->andReturn(true);
+        Cache::shouldReceive("has")->with("CHIRPSTACK_DEVICE_PROFILE_ID")->andReturn(true);
+        Cache::shouldReceive("has")->with("CHIRPSTACK_APPLICATION_ID")->andReturn(true);
+
+        Cache::shouldReceive("get")->with("CHIRPSTACK_API_KEY")->andReturn("test");
+        Cache::shouldReceive("get")->with("CHIRPSTACK_DEVICE_PROFILE_ID")->andReturn("test");
+        Cache::shouldReceive("get")->with("CHIRPSTACK_APPLICATION_ID")->andReturn("test");
+
         $user = UserTestTools::getTestUser("administrator");
         Sanctum::actingAs($user);
 

@@ -6,6 +6,7 @@ use App\Exceptions\SensorNotFoundException;
 use App\Jobs\SaveSensorDataJob;
 use App\Models\Sensor;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use PhpMqtt\Client\ConnectionSettings;
 use PhpMqtt\Client\MqttClient;
@@ -43,24 +44,37 @@ class ListenMqttCommand extends Command
         $mqtt->connect($connectionSettings, $clean_session);
 
         $this->info("Connected to MQTT broker {$server}:{$port} as {$clientId}");
+        $this->info("Subscribing to application/+/device/+/event/up");
 
 
-        $mqtt->subscribe('application/b56d3f79-a522-41e4-ad91-039252c597e8/device/+/event/up', function (string $topic, string $message) {
+        $app_id = Cache::get('CHIRPSTACK_APPLICATION_ID', "Unknown");
+        $this->info("Process only request from app n°${app_id}");
+
+        $mqtt->subscribe("application/+/device/+/event/up", function (string $topic, string $message) {
 
             $topicExploded = explode('/', $topic);
+
+            if($topicExploded[1] != $app_id = Cache::get('CHIRPSTACK_APPLICATION_ID', "Unknown")){
+                $this->warn("Receive request on ${topicExploded[1]} but current app id is ${app_id} ! skipping...");
+                return;
+            }
+
 
 
             if(sizeof($topicExploded) == 6 && Str::isJson($message)){
 
                 SaveSensorDataJob::dispatch($topicExploded[3], $message);
 
-                $this->info("Receiving sensor ${topicExploded[3]} data successfully");
+                $this->info("Receiving data from sensor ${topicExploded[3]} successfully");
 
             }else{
                 $this->warn("Error while reading message [${topic}] \n\t ${message}");
             }
 
+
+
         }, 0);
+
 
         $mqtt->loop(true);
         return Command::SUCCESS;

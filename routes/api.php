@@ -51,12 +51,12 @@ Route::middleware('auth:sanctum')->group(function() {
 
     /* Sensor management */
     Route::get("/sensors/{sensor}", [SensorController::class, "index"]);
-
+    Route::post("/sensors", [SensorController::class, "store"]);
     Route::put("/sensors/{sensor}", [SensorController::class, "update"]);
     Route::delete("/sensors/{sensor}", [SensorController::class, "destroy"]);
 });
 
-Route::post("/sensors", [SensorController::class, "store"]);
+
 
 Route::put('/chirpstack/keys', [ChirpstackController::class, "setKeys"]);
 
