@@ -29,6 +29,18 @@ class RoomControllerTest extends TestCase
         $this->delete('/api/rooms/' . $room->id)->assertStatus(403);
     }
 
+    public  function test_unAuthed()
+    {
+        $room = ModelTestTools::createRoom();
+
+        $this->get('/api/rooms')->assertStatus(200);
+        $this->post('/api/rooms')->assertStatus(302);
+        $this->put('/api/rooms/' . $room->id)->assertStatus(302);
+        $this->get('/api/rooms/' . $room->id)->assertStatus(302);
+        $this->delete('/api/rooms/' . $room->id)->assertStatus(302);
+
+    }
+
     public function test_viewAll_usr()
     {
         $user = UserTestTools::getTestUser();

@@ -34,6 +34,7 @@ Broadcast::routes(['middleware' => ['auth:sanctum']]);
 Route::middleware('auth:sanctum')->group(function() {
 
     /* Key management */
+    Route::put('/chirpstack/keys', [ChirpstackController::class, "setKeys"]);
 
 
     /* User Auth */
@@ -42,6 +43,7 @@ Route::middleware('auth:sanctum')->group(function() {
     /* User management */
     Route::delete("/users/{user}", [UserController::class, "destroy"]);
     Route::get("/users", [UserController::class, "getAllUsers"]);
+    Route::get("/user", [UserController::class, "showUser"]);
 
     /* Room management */
     Route::get("/rooms/{room}", [RoomController::class, "show"]);
@@ -50,7 +52,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::delete("/rooms/{room}", [RoomController::class, "destroy"]);
 
     /* Sensor management */
-    Route::get("/sensors/{sensor}", [SensorController::class, "index"]);
+    Route::get("/sensors", [SensorController::class, "index"]);
     Route::post("/sensors", [SensorController::class, "store"]);
     Route::put("/sensors/{sensor}", [SensorController::class, "update"]);
     Route::delete("/sensors/{sensor}", [SensorController::class, "destroy"]);
@@ -58,7 +60,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
 
 
-Route::put('/chirpstack/keys', [ChirpstackController::class, "setKeys"]);
+
 
 /* Public routes */
 
@@ -76,9 +78,8 @@ Route::post("/login", [UserController::class, 'login'])->name("login");
 
 /* Token & csrf */
 Route::get("/csrf", [CsrfCookieController::class, "show"])->name("custom-csrf");
-Route::post("/tokens/create", [ApiTokenController::class, 'create'])->name("api-tokens.create");
 
 //Health
 Route::get("/health", [HomeController::class, 'getHealth'])->name("api-health");
-Route::get('/test-mqtt', [HomeController::class, 'testMqtt'])->name("test-mqtt");
+
 

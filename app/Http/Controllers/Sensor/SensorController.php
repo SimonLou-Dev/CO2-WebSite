@@ -170,16 +170,6 @@ class SensorController extends Controller
      *     path="/sensors/{sensorId}",
      *     summary="Update sensor",
      *     tags={"sensors"},
-     *     security={{"bearerAuth":{}}},
-     *     @OA\Parameter(
-     * *      name="Authorization",
-     * *      in="header",
-     * *      required=true,
-     * *      description="Bearer {access-token}",
-     * *      @OA\Schema(
-     * *          type="bearerAuth"
-     * *      )
-     * *     ),
      *     @OA\PathParameter (
      *        name="sensorId",
      *        description="Id Of selected sensor",
@@ -202,7 +192,6 @@ class SensorController extends Controller
      */
     public function show(Sensor $sensor)
     {
-        $this->authorize('view', $sensor);
 
         return $sensor;
     }

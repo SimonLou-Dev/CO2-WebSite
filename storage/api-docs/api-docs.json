@@ -59,39 +59,6 @@
                 }
             }
         },
-        "/test-mqtt": {
-            "get": {
-                "tags": [
-                    "health"
-                ],
-                "summary": "Check API status",
-                "operationId": "8e4f6c054166a62aeafc53bf581376f1",
-                "responses": {
-                    "200": {
-                        "description": "API is alive",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "topic": {
-                                            "type": "string",
-                                            "example": "/test"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "request lost"
-                    },
-                    "500": {
-                        "description": "api error"
-                    }
-                }
-            }
-        },
         "/rooms": {
             "get": {
                 "tags": [
@@ -106,13 +73,6 @@
                         "required": false,
                         "allowEmptyValue": true,
                         "example": "L222"
-                    },
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "required": false,
-                        "allowEmptyValue": true,
-                        "example": "1"
                     }
                 ],
                 "responses": {
@@ -642,15 +602,6 @@
                 "operationId": "6af62a07f3aa19eb8b7d5b16cb83176e",
                 "parameters": [
                     {
-                        "name": "Authorization",
-                        "in": "header",
-                        "description": "Bearer {access-token}",
-                        "required": true,
-                        "schema": {
-                            "type": "bearerAuth"
-                        }
-                    },
-                    {
                         "name": "sensorId",
                         "in": "path",
                         "description": "Id Of selected sensor",
@@ -671,12 +622,7 @@
                     "403": {
                         "description": "Not Allowed"
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             },
             "put": {
                 "tags": [
@@ -802,15 +748,6 @@
                 "operationId": "9897f168ce2e6ce4a6ebe6e5dfaa9ed5",
                 "parameters": [
                     {
-                        "name": "Authorization",
-                        "in": "header",
-                        "description": "Bearer {access-token}",
-                        "required": true,
-                        "schema": {
-                            "type": "bearerAuth"
-                        }
-                    },
-                    {
                         "name": "sensorId",
                         "in": "path",
                         "description": "Id Of selected sensor",
@@ -824,77 +761,7 @@
                     "403": {
                         "description": "Not Allowed"
                     }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/tokens/create": {
-            "post": {
-                "tags": [
-                    "USER"
-                ],
-                "operationId": "f0bcd0615fdc7228618a9bb82ca496c1",
-                "parameters": [
-                    {
-                        "name": "Authorization",
-                        "in": "header",
-                        "description": "Bearer {access-token}",
-                        "required": true,
-                        "schema": {
-                            "type": "bearerAuth"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "description": "User data",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "token_name"
-                                ],
-                                "properties": {
-                                    "token_name": {
-                                        "type": "string",
-                                        "example": "jean"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Token created successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "token": {
-                                            "type": "string",
-                                            "example": "azeaz-azeazea-azeazeaz-azeaeae"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Validation error"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
+                }
             }
         },
         "/register": {
@@ -1034,6 +901,35 @@
                     },
                     "422": {
                         "description": "Validation error"
+                    }
+                }
+            }
+        },
+        "/api/user": {
+            "get": {
+                "tags": [
+                    "USER"
+                ],
+                "summary": "Get curent user",
+                "operationId": "2c4d73bb274ed7149a33efcac3710d81",
+                "responses": {
+                    "200": {
+                        "description": "User is logged",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "302": {
+                        "description": "Not Authed"
                     }
                 }
             }

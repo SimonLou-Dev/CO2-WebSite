@@ -12,6 +12,9 @@ use Tests\Utils\UserTestTools;
 class UserTest extends TestCase
 {
 
+
+
+
     use WithFaker;
     public function test_login(){
 
@@ -58,14 +61,55 @@ class UserTest extends TestCase
         $this->patchJson("/api/logout")->assertStatus(401);
     }
 
-    public function test_tokenRefresh(){
+    public function test_authRoutes_logged()
+    {
         $user = UserTestTools::getTestUser();
         Sanctum::actingAs($user);
 
-        $this->post("/api/tokens/create", [
-            "token_name"=>$this->faker->name
-        ])->assertStatus(200);
+        $this->postJson("/api/login")->assertStatus(302);
+        $this->postJson("/api/register")->assertStatus(302);
+
     }
+
+    public function test_userRoutes_unlogged()
+    {
+
+        $userTester = User::factory()->make();
+        $userTester->save();
+        $userTester = User::where("email", $userTester->email)->first();
+
+
+        $this->get("/api/users")->assertStatus(302);
+        $this->delete("/api/users/".$userTester->id)->assertStatus(302);
+        $this->get("/api/user")->assertStatus(302);
+
+    }
+
+    public function test_userRoutes_withoutRight()
+    {
+        $user = UserTestTools::getTestUser();
+        Sanctum::actingAs($user);
+
+        $userTester = User::factory()->make();
+        $userTester->save();
+        $userTester = User::where("email", $userTester->email)->first();
+
+
+        $this->get("/api/users")->assertStatus(403);
+        $this->delete("/api/users/".$userTester->id)->assertStatus(403);
+
+    }
+
+    public function test_retrieve_current_user()
+    {
+
+        $user = UserTestTools::getTestUser();
+        Sanctum::actingAs($user);
+
+        $this->get("/api/user")->assertStatus(200);
+
+    }
+
 
     public function test_getAllUser(){
         $user = UserTestTools::getTestUser("administrator");

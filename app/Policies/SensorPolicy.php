@@ -18,12 +18,9 @@ class SensorPolicy
                 $user->hasPermissionTo("sensor_create"));
     }
 
-    public function view(User $user, Sensor $sensor): bool
+    public function view(): bool
     {
-        return ($user->hasPermissionTo("*") ||
-            $user->hasPermissionTo("sensor_delete") ||
-            $user->hasPermissionTo("sensor_update") ||
-            $user->hasPermissionTo("sensor_create"));
+        return true;
     }
 
     public function create(User $user): bool

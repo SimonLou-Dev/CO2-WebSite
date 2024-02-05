@@ -17,7 +17,7 @@ class UserController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      *
      *
      * @OA\Post(
@@ -57,6 +57,9 @@ class UserController extends Controller
 
     public function register(Request $request)
     {
+        if(!empty($request->user()->id)) return response()->redirectTo("/");
+
+
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
@@ -87,7 +90,7 @@ class UserController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      *
      *
      * @OA\Post(
@@ -123,6 +126,7 @@ class UserController extends Controller
      *
      */
     public function login(Request $request){
+        if(!empty($request->user()->id)) return response()->redirectTo("/");
 
         $request->validate([
             'email' => 'required',
@@ -146,6 +150,43 @@ class UserController extends Controller
             'message' => 'User logged in successfully',
             'user' => $user,
             'token' => $user->createToken($request->device_name)->plainTextToken
+        ], 200);
+
+    }
+
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     *
+     *
+     * @OA\Get(
+     *     path="/api/user",
+     *     summary="Get curent user",
+     *     tags={"USER"},
+     *     @OA\Response(
+     *          response=200,
+     *          description="User is logged",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="user", type="object", ref="#/components/schemas/User"),
+     *          ),
+     *    ),
+     *     @OA\Response(
+     *          response=302,
+     *          description="Not Authed"
+     *    )
+     *)
+     *
+     *
+     *
+     */
+    public function showUser(Request $request){
+
+        $user = User::where("id", $request->user()->id)->firstOrFail();
+        $user->tokens;
+
+        return response()->json([
+            'user' => $user,
         ], 200);
 
     }

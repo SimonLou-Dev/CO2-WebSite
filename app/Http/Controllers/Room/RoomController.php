@@ -25,7 +25,7 @@ class RoomController extends Controller
      *         required=false,
      *         allowEmptyValue=true,
      *         example="L222"
-     *     )
+     *     ),
      *     @OA\Response(
      *          response=200,
      *          description="Room retrieve succesfully",
