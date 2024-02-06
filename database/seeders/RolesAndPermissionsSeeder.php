@@ -16,6 +16,8 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name'=> "sensor_delete"]);
         Permission::create(['name'=> "sensor_update"]);
         Permission::create(['name'=> "sensor_create"]);
+        Permission::create(['name'=> "update_chirpstack_key"]);
+        Permission::create(['name'=> "sensor_viewAll"]);
         Permission::create(['name'=> "user_delete"]);
         Permission::create(['name'=> "user_viewAll"]);
         Permission::create(['name'=> "roles_modify"]);

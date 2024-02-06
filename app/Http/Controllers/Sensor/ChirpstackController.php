@@ -54,6 +54,8 @@ class ChirpstackController extends Controller
      */
     public function setKeys(request $request)
     {
+        $this->authorize("update_chirpstack_key", $request->user());
+
         $request->validate([
             "app_id"=>["required", "uuid"],
             "profile_id"=>["required", "uuid"],

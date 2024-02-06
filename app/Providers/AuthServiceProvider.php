@@ -40,5 +40,9 @@ class AuthServiceProvider extends ServiceProvider
         \Gate::define("user_delete", function (User $user){
             return ($user->hasPermissionTo("*") || $user->hasPermissionTo("user_delete"));
         });
+
+        \Gate::define("update_chirpstack_key", function (User $user){
+            return ($user->hasPermissionTo("*") || $user->hasPermissionTo("update_chirpstack_key"));
+        });
     }
 }
