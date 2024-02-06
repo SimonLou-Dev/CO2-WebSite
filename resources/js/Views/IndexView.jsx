@@ -493,7 +493,7 @@ const MainPage = (props) => {
 
     const selectRoom = (id) => {
         roomList.forEach((room) => {
-          if(room.id === id.value) fetchData(period, room.get_sensor.id)
+          if(room.id === id.value && room.get_sensor !== null) fetchData(period, room.get_sensor.id)
         })
 
     }
@@ -507,7 +507,7 @@ const MainPage = (props) => {
         <div className={"charts"}>
             <div className={"header"}>
                 <h1>Mesures et statistiques</h1>
-                <Select options={rooms}  onChange={selectRoom} placeholder={"Choisir une salle"} />
+                <Select options={rooms}  onChange={selectRoom} placeholder={"Choisir une salle"} className={"roomSelector"} classNamePrefix="react-select"/>
             </div>
             <section className={"charts-section flex-line"}>
                 <div className={"gauge"}>

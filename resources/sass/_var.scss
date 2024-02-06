@@ -288,5 +288,41 @@ a{
     }
 }
 
+.roomSelector{
+    background-color: $bg1;
+    padding: 15px;
+    border-radius: 25px;
+    min-width: 300px;
+    max-width: 500px;
+    width: 30vw;
+    .react-select__control{
+        background-color: $bg1;
+        border: none;
+        font-family: "Baloo 2";
+        font-weight: 600;
+        font-size: 20px;
+        .react-select__value-container{
+            background-color: $bg1;
+        }
+        .react-select__indicators{
+            background-color: $bg1;
+        }
+    }
+    .react-select__menu{
+        background-color: $bg1;
+        border: none;
+        .react-select__option{
+            background-color: $bg1;
+            color: $black;
+            font-family: "Baloo 2";
+            font-weight: 500;
+            font-size: 20px;
+            &:hover{
+                background-color: $bg2;
+            }
+        }
+    }
+}
+
 
 

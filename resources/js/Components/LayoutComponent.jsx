@@ -4,7 +4,9 @@ import {useEffect, useState} from "react";
 import {v4} from "uuid"
 import UserContext from "../Utils/Context/UserContext";
 import {useLocalStorage} from "../Utils/StorageGroup";
-import {useNotifications} from "../Utils/Context/NotificationProvider";
+import {pushNotification, useNotifications} from "../Utils/Context/NotificationProvider";
+import axios from "axios";
+import {setAuthToken} from "../Utils/AxiosFunction";
 
 export const LayoutComponent = () => {
     const [userAuthed, authUser] = useState(false)
@@ -13,61 +15,37 @@ export const LayoutComponent = () => {
     const [user, setUser] = useState(null)
     const [token, setToken, removeToken] = useLocalStorage("token", null)
 
-    useEffect(() => {
+    useEffect( () => {
+
+        fetchToken()
+
+    }, [token]);
+
+    const fetchToken = async () => {
+        console.log(token)
 
         if (user == null && token !== null){
-            //Faire une request pour vérifier si le token est toujours alive
+            setAuthToken(token)
+
+            await axios.get("/user").then(response => {
+                setUser(response.data)
+            }).catch(e => {
+                removeToken()
+                pushNotification(dispatch, {
+                    type: 4,
+                    text: "Votre session a expiré",
+                })
+                
+            })
         }
-
-        addNotification({
-            type: 1,
-            text: "Salut"
-        })
-
-
-    }, []);
+    }
 
     const addNotification = (data) => {
-        let payload = {};
-        switch (data.type){
-            case 1:
-                payload= {
-                    id:v4(),
-                    type: 'success',
-                    message: data.text
-                }
-                break
-            case 2:
-                payload= {
-                    id:v4(),
-                    type: 'info',
-                    message: data.text
-                }
-                break;
-            case 3:
-                payload= {
-                    id:v4(),
-                    type: 'warning',
-                    message: data.text
-                }
-                break;
-            case 4:
-                payload= {
-                    id:v4(),
-                    type: 'danger',
-                    message: data.text
-                }
-                break;
-            default: break;
-        }
-        dispatch({
-            type: 'ADD_NOTIFICATION',
-            payload: {
-                id: payload.id,
-                type: payload.type,
-                message: payload.message
-            }
-        });
+        pushNotification(dispatch, {
+            type: data.type,
+            text: data.text,
+        })
+
     }
 
 
@@ -85,12 +63,12 @@ export const LayoutComponent = () => {
                 <Link to={"/"} className={"menu-link menu-selected"}>
                     <img src={"/assets/icons/graphique.svg"}/>
                 </Link>
-                {userAuthed &&
+                {user != null &&
                 <Link to={"/sensors"} className={"menu-link"}>
                     <img src={"/assets/icons/capteur.svg"}/>
                 </Link>
                 }
-                {userAuthed &&
+                {user != null &&
                 <Link to={"/users"} className={"menu-link"}>
                     <img src={"/assets/icons/user.svg"}/>
                 </Link>

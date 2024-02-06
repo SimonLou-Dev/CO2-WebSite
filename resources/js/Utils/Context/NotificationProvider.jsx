@@ -54,3 +54,47 @@ export const useNotifications = () => {
 }
 
 export default NotificationsProvider;
+
+export const pushNotification = (dispatch, data) => {
+    let payload = {};
+    switch (data.type){
+        case 1:
+            payload= {
+                id:v4(),
+                type: 'success',
+                message: data.text
+            }
+            break
+        case 2:
+            payload= {
+                id:v4(),
+                type: 'info',
+                message: data.text
+            }
+            break;
+        case 3:
+            payload= {
+                id:v4(),
+                type: 'warning',
+                message: data.text
+            }
+            break;
+        case 4:
+            payload= {
+                id:v4(),
+                type: 'danger',
+                message: data.text
+            }
+            break;
+        default: break;
+    }
+    dispatch({
+        type: 'ADD_NOTIFICATION',
+        payload: {
+            id: payload.id,
+            type: payload.type,
+            message: payload.message
+        }
+    });
+}
+

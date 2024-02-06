@@ -3,10 +3,13 @@ import axios from "axios";
 import {useContext, useState} from "react";
 import userContext from "../Utils/Context/UserContext";
 import {useNavigate} from "react-router-dom";
+import {pushNotification, useNotifications} from "../Utils/Context/NotificationProvider";
 
 export const Settings = () => {
     const user = useContext(userContext)
     const navigate = useNavigate()
+    const dispatch = useNotifications()
+
 
     const [loginEmail, setLoginEmail] = useState()
     const [loginPassword, setLoginPassword] = useState()
@@ -30,12 +33,20 @@ export const Settings = () => {
 
             user.setToken(response.data.token)
             user.setUser(response.data.user)
+            pushNotification(dispatch, {
+                type: 1,
+                text: "Inscription confirmée",
+            })
             navigate("/")
 
 
         }).catch(e => {
             let response = e.response
             console.log(response)
+            pushNotification(dispatch, {
+                type: 4,
+                text: "Erreur lors de l'inscription",
+            })
             if(response.status === 422){
                 setRegisterError(response.data.errors)
             }
@@ -53,11 +64,20 @@ export const Settings = () => {
 
             user.setToken(response.data.token)
             user.setUser(response.data.user)
+            pushNotification(dispatch, {
+                type: 1,
+                text: "Connexion confirmée",
+            })
             navigate("/")
+
 
 
         }).catch(e => {
             let response = e.response
+            pushNotification(dispatch, {
+                type: 4,
+                text: "Erreur lors de l'inscription",
+            })
             if(response.status === 422){
                 setLoginError(response.data.errors)
             }
