@@ -7,6 +7,7 @@ import highchartsSolidGauge from "highcharts/modules/solid-gauge"
 import HighchartsReact from "highcharts-react-official";
 import axios from "axios";
 import {useLocation} from "react-router-dom";
+import Select from 'react-select'
 
 highchartsMore(Highcharts)
 highchartsSolidGauge(Highcharts)
@@ -408,7 +409,7 @@ const MainPage = (props) => {
     const [period, setPeriod] = useState("h");
 
     const [rooms, setRooms] = useState([]);
-    const [roomText, setRoomText] = useState([]);
+    const [roomList, setRoomList] = useState([]);
 
     const [sensorId, setSensorId] = useState(0);
 
@@ -466,8 +467,6 @@ const MainPage = (props) => {
                     data: response.data.data.ppm
                 })
 
-                setRoomText(response.data.room.name + " (capteur" + response.data.sensor.id_hex + ")");
-
                 setPeriod(per)
 
             }).catch((error) => {
@@ -476,27 +475,30 @@ const MainPage = (props) => {
 
     }
 
-    const getRooms = async (text = roomText) => {
-        setRoomText(text)
+    const getRooms = async () => {
 
-        if(text.length <= 2 ) return;
+        const rooms = [];
 
-        await axios.get("/rooms", {
-            params: {
-                search: text
-            }
-        }).then((response) => {
-            setRooms(response.data)
-            if(response.data.length === 1){
-                if(response.data[0].get_sensor === null) return
-                fetchData(period, response.data[0].get_sensor.id)
-            }
+
+        await axios.get("/rooms", ).then((response) => {
+
+            response.data.forEach((room) => {
+                rooms.push({value: room.id, label: room.name + (room.get_sensor ? " (#" + room.get_sensor.id_hex + ")" : "")})
+            })
+            setRooms(rooms)
+            setRoomList(response.data)
+        })
+
+    }
+
+    const selectRoom = (id) => {
+        roomList.forEach((room) => {
+          if(room.id === id.value) fetchData(period, room.get_sensor.id)
         })
 
     }
 
     const changePeriod = (_period) => {
-
         fetchData(_period)
     }
 
@@ -505,14 +507,7 @@ const MainPage = (props) => {
         <div className={"charts"}>
             <div className={"header"}>
                 <h1>Mesures et statistiques</h1>
-                <input type={"text"} list={"autocomplete"} value={roomText} onChange={(e)=>getRooms(e.target.value)}/>
-                {rooms &&
-                    <datalist id={"autocomplete"}>
-                        {rooms.map((room) => (
-                            <option key={room.id} value={room.name}/>
-                        ))}
-                    </datalist>
-                }
+                <Select options={rooms}  onChange={selectRoom} placeholder={"Choisir une salle"} />
             </div>
             <section className={"charts-section flex-line"}>
                 <div className={"gauge"}>

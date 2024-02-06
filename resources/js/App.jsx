@@ -11,7 +11,7 @@ import {LayoutComponent} from "./Components/LayoutComponent";
 import {Settings} from "./Views/Settings";
 import NotificationProvider from "./Utils/Context/NotificationProvider";
 
-axios.defaults.baseURL = import.meta.env.APP_URL + "/api";
+axios.defaults.baseURL = process.env.APP_URL + "/api";
 
 let router = createBrowserRouter([
     {
