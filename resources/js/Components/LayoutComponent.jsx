@@ -35,7 +35,7 @@ export const LayoutComponent = () => {
                     type: 4,
                     text: "Votre session a expiré",
                 })
-                
+
             })
         }
     }

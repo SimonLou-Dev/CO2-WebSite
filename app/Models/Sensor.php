@@ -34,7 +34,7 @@ class Sensor extends Model
 
 
     protected $casts = [
-        'last_message' => 'datetime',
+        'last_message' => 'datetime:d/m/Y H:i:s',
     ];
 
     protected $appends = ["id_hex"];

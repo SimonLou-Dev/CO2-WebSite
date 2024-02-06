@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Sensor;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\AddNewDeviceToGatJob;
+use App\Models\Room;
 use App\Models\Sensor;
 use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
 use BaconQrCode\Renderer\ImageRenderer;
@@ -72,11 +73,11 @@ class SensorController extends Controller
      *     )
      *)
      */
-    public function index()
+    public function index(Request $request)
     {
         $this->authorize('viewAny', Sensor::class);
 
-        return Sensor::paginate();
+        return Sensor::orderBy('id', 'asc')->paginate(10);
     }
 
     /**
