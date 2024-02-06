@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useEffect, useRef, useState} from "react";
-import {AppLoadingView} from "./AppLoadingView.";
+import {AppLoadingView} from "./AppLoadingView";
 import Highcharts from "highcharts";
 import highchartsMore from "highcharts/highcharts-more"
 import highchartsSolidGauge from "highcharts/modules/solid-gauge"

@@ -1,7 +1,7 @@
 import React, {useReducer, useState, createContext, useContext} from "react";
 import {v4} from 'uuid';
 import NotificationContext from "../../Components/NotificationContext";
-import Notification from "../../Components/Notification.";
+import Notification from "../../Components/Notification";
 
 
 

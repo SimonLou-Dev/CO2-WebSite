@@ -5,10 +5,10 @@ import Pusher from "pusher-js";
 import axios from "axios";
 import {createRoot} from "react-dom/client";
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import {IndexView} from "./Views/IndexView.";
-import {ErrorView} from "./Views/ErrorView.";
-import {LayoutComponent} from "./Components/LayoutComponent.";
-import {Settings} from "./Views/Settings.";
+import {IndexView} from "./Views/IndexView";
+import {ErrorView} from "./Views/ErrorView";
+import {LayoutComponent} from "./Components/LayoutComponent";
+import {Settings} from "./Views/Settings";
 import NotificationProvider from "./Utils/Context/NotificationProvider";
 
 axios.defaults.baseURL = import.meta.env.APP_URL + "/api";
