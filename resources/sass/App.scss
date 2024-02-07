@@ -347,5 +347,36 @@ body, html, .app{
     overflow-y: scroll;
 }
 
+.sensor-popup{
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-left: 60px;
+    z-index: 11;
+    width: calc(100vw - 60px);
+    height: 100vh;
+    display: flex;
+    backdrop-filter: blur(10px);
+    .popup-card{
+        box-shadow: 0 0 10px rgba(0,0,0, 0.3), 1px 3px 4px rgba(0,0,0,.2);
+        h2{
+            text-align: center;
+        }
+        padding: 10px 25px;
+        margin: auto;
+        width: 25vw;
+        border-radius: 15px;
+        background-color: $white;
+        .btn:first-child{
+            margin-left: 0;
+            margin-right: auto;
+            background-color: $secondary;
+            &:hover{
+                background-color: $bg2;
+            }
+        }
+    }
+}
+
 
 

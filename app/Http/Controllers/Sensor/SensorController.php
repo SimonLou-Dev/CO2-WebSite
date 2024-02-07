@@ -15,6 +15,7 @@ use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use SimpleSoftwareIO\QrCode\QrCodeServiceProvider;
 
@@ -131,11 +132,11 @@ class SensorController extends Controller
 
 
         $data = $request->validate([
-            'room_id' => ['required', 'integer'],
+            'room_id' => ['required', 'integer', 'min:1'],
             'device_addr' => ["required"]
         ]);
         $data["created_by"] = 1;
-        $data["device_addr"] = $request->device_addr;
+        $data["device_addr"] = Str::replace(":", "", $data["device_addr"]);
 
 
         if(!Cache::has("CHIRPSTACK_API_KEY")){

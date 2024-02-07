@@ -39,6 +39,7 @@ class AddNewDeviceToGatJob implements ShouldQueue
                     "name"=>$this->name
                 ]
             ]);
+        $this->fail("Pute");
 
         if ($postDevicesReqt->status() != 200){
             $this->fail("Request Error");

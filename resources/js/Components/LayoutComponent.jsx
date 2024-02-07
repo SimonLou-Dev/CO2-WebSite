@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Link, Outlet} from "react-router-dom";
+import {Link, Outlet, useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {v4} from "uuid"
 import UserContext from "../Utils/Context/UserContext";
@@ -11,6 +11,7 @@ import {setAuthToken} from "../Utils/AxiosFunction";
 export const LayoutComponent = () => {
     const [userAuthed, authUser] = useState(false)
     const dispatch = useNotifications()
+    const location = useLocation()
 
     const [user, setUser] = useState(null)
     const [token, setToken, removeToken] = useLocalStorage("token", null)
@@ -60,20 +61,20 @@ export const LayoutComponent = () => {
             </div>
 
             <div className={"navBar"}>
-                <Link to={"/"} className={"menu-link menu-selected"}>
+                <Link to={"/"} className={"menu-link " + (location.pathname === "/" ? "menu-selected" : "")}>
                     <img src={"/assets/icons/graphique.svg"}/>
                 </Link>
                 {user != null &&
-                <Link to={"/sensors"} className={"menu-link"}>
+                <Link to={"/sensors"} className={"menu-link " + (location.pathname === "/sensors" ? "menu-selected" : "")}>
                     <img src={"/assets/icons/capteur.svg"}/>
                 </Link>
                 }
                 {user != null &&
-                <Link to={"/users"} className={"menu-link"}>
+                <Link to={"/users"} className={"menu-link " + (location.pathname === "/users" ? "menu-selected" : "")}>
                     <img src={"/assets/icons/user.svg"}/>
                 </Link>
                 }
-                <Link to={"/settings"} className={"menu-link"} id={"setting_icons"}>
+                <Link to={"/settings"} className={"menu-link " + (location.pathname === "/settings" ? "menu-selected" : "")} id={"setting_icons"}>
                     <img src={"/assets/icons/setting.svg"} />
                 </Link>
 
