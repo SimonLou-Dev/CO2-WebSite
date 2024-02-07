@@ -6,6 +6,7 @@ import {UpdaterBtn} from "../Components/table/UpdaterBtn";
 import {useEffect, useState} from "react";
 import {pushNotification, useNotifications} from "../Utils/Context/NotificationProvider";
 import {SensorPopup} from "../Components/SensorPopup/SensorPopup";
+import {useNavigate} from "react-router-dom";
 
 export const Sensor = () => {
     const [sensor, setSensors ] = useState([]);
@@ -13,6 +14,7 @@ export const Sensor = () => {
     const [limit, setLimit] = useState(1);
     const [open, setOpen] = useState(false);
     const dispatch = useNotifications()
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -87,7 +89,9 @@ export const Sensor = () => {
                                 <td>{item.last_message}</td>
                                 <td>{item.device_addr}</td>
                                 <td>
-                                    <button className={"btn"}><img src={"/assets/icons/editer.svg"}/></button>
+                                    <button className={"btn"} onClick={()=>{
+                                        navigate(`/sensors/${item.id}`)
+                                    }}><img src={"/assets/icons/editer.svg"}/></button>
                                 </td>
                                 <td>
                                     <button className={"btn"}><img src={"/assets/icons/supprimer.svg"} onClick={async ()=>{

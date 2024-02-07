@@ -41,6 +41,7 @@ export const SensorPopup = (props) => {
             setCurrentRoom(0)
             setError({})
             setDevEui("")
+            getRooms()
         }).catch((e) => {
             if(e.response.status === 422){
                 setError(e.response.data.errors)
