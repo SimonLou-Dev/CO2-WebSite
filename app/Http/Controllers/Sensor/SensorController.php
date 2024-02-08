@@ -113,7 +113,8 @@ class SensorController extends Controller
      *          response=201,
      *          description="Sensor created succesfully",
      *          @OA\JsonContent(
-     *              ref="#/components/schemas/Sensor",
+     *              @OA\Property (property="rooms", type="array", @OA\Items(ref="#/components/schemas/Room")),
+     *              @OA\Property (property="sensor", type="object", ref="#/components/schemas/Sensor"),
      *          ),
      *    ),
      *     @OA\Response(
@@ -195,7 +196,20 @@ class SensorController extends Controller
     public function show(Sensor $sensor)
     {
 
-        return $sensor;
+        $sensors = Sensor::all();
+
+        $rooms = Room::all();
+
+        foreach ($rooms as $key => $room){
+            if($sensors->has($room->id) && $room->id != $sensor->room_id) $rooms->forget($key);
+        }
+
+
+
+        return response()->json([
+            "sensor"=> $sensor,
+            "rooms"=> array_values($rooms->toArray())
+        ]);
     }
 
     /**

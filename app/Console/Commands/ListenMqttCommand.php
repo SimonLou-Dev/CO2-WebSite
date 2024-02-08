@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Exceptions\SensorNotFoundException;
 use App\Jobs\SaveSensorDataJob;
 use App\Models\Sensor;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
@@ -65,7 +66,7 @@ class ListenMqttCommand extends Command
 
                 SaveSensorDataJob::dispatch($topicExploded[3], $message);
 
-                $this->info("Receiving data from sensor ${topicExploded[3]} successfully");
+                $this->info("Receiving data from sensor ${topicExploded[3]} successfully at " . Carbon::now()->format("d/m/Y H:i:s"));
 
             }else{
                 $this->warn("Error while reading message [${topic}] \n\t ${message}");

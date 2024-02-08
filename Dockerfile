@@ -69,8 +69,8 @@ RUN chmod +x /var/www/start-container.sh
 #nginx config
 RUN cp ./docker/default.conf /etc/nginx/sites-enabled/default.conf
 
-RUN chown $user -R /var/www/*
-RUN chmod 777 -R /var/www/*
+RUN chown $user -R /var/www/storage
+RUN chmod 777 -R /var/www/storage
 
 EXPOSE 8080
 ENTRYPOINT ["/var/www/start-container.sh"]

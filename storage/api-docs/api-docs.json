@@ -574,7 +574,18 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Sensor"
+                                    "properties": {
+                                        "rooms": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Room"
+                                            }
+                                        },
+                                        "sensor": {
+                                            "$ref": "#/components/schemas/Sensor"
+                                        }
+                                    },
+                                    "type": "object"
                                 }
                             }
                         }
