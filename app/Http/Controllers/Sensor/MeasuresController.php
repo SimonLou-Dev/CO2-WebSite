@@ -142,7 +142,7 @@ class MeasuresController extends Controller
             "sensor"=>$sensor,
             "last_measure" => [
                 "ppm" => (is_null($lastMesure) ? null  :  $lastMesure->ppm),
-                "humidity" => (is_null($lastMesure) ? null  :  $$lastMesure->humidity),
+                "humidity" => (is_null($lastMesure) ? null  :  $lastMesure->humidity),
                 "temperature" => (is_null($lastMesure) ? null  : $lastMesure->temperature),
             ],
             "data" => [
