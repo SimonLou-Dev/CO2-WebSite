@@ -3,7 +3,7 @@
 <head>
 
 
-    <title>Simon Lou Template</title>
+    <title>Mesure du CO2 en milieux clos</title>
 
     <!-- META -->
     <meta charset="utf-8">

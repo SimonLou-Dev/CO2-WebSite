@@ -141,9 +141,9 @@ class MeasuresController extends Controller
             "room" => $sensor->getRoom,
             "sensor"=>$sensor,
             "last_measure" => [
-                "ppm" => (isNull($lastMesure) ? null  :  $lastMesure->ppm),
-                "humidity" => (isNull($lastMesure) ? null  :  $$lastMesure->humidity),
-                "temperature" => (isNull($lastMesure) ? null  : $lastMesure->temperature),
+                "ppm" => (is_null($lastMesure) ? null  :  $lastMesure->ppm),
+                "humidity" => (is_null($lastMesure) ? null  :  $$lastMesure->humidity),
+                "temperature" => (is_null($lastMesure) ? null  : $lastMesure->temperature),
             ],
             "data" => [
                 "dates" => array_reverse($created_at),
