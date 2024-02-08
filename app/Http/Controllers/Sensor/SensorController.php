@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Sensor;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\AddNewDeviceToGatJob;
+use App\Jobs\DeleteDeviceToGatJob;
 use App\Models\Room;
 use App\Models\Sensor;
 use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
@@ -78,7 +79,13 @@ class SensorController extends Controller
     {
         $this->authorize('viewAny', Sensor::class);
 
-        return Sensor::orderBy('id', 'asc')->paginate(10);
+        $sensors = Sensor::orderBy('id', 'asc')->paginate(10);
+
+        foreach ($sensors as $sensor){
+            $sensor->getRoom;
+        }
+
+        return $sensors;
     }
 
     /**
@@ -313,9 +320,30 @@ class SensorController extends Controller
      *
      *)
      */
-    public function destroy(Sensor $sensor)
+    public function destroy(Request $request, Sensor $sensor)
     {
         $this->authorize('delete', $sensor);
+
+
+        if(!Cache::has("CHIRPSTACK_API_KEY")){
+            return response()->json([
+                "API_KEY"=>"You must set API KEY"
+            ],500);
+        }
+
+        if(!Cache::has("CHIRPSTACK_DEVICE_PROFILE_ID")){
+            return response()->json([
+                "DEVICE_PROFIL"=>"You must set DEVICE PROFIL ID"
+            ],500);
+        }
+        if(!Cache::has("CHIRPSTACK_APPLICATION_ID")){
+            return response()->json([
+                "APPLICATION_ID"=>"You must set APPLICATION ID"
+            ],500);
+        }
+
+        DeleteDeviceToGatJob::dispatch($sensor->device_addr, $request->user()->id);
+
 
         $sensor->delete();
 
@@ -348,11 +376,11 @@ class SensorController extends Controller
      *
      *)
      */
-    public function getQrCode(string $sensor){
+    public function getQrCode(Sensor $sensor){
         $path = Storage::get('public\images\LogoQrCode.png');
-        $savePath = Storage::path('public/QrCodes/sensor_'.dechex($sensor).'.png');
+        $savePath = Storage::path('public/QrCodes/sensor_'.dechex($sensor->id).'.png');
         if(Storage::exists($savePath)) return response()->file($savePath);
-        $url = env("APP_URL") . '/sensor/'.dechex($sensor);
+        $url = env("APP_URL") . '?id='.$sensor->id;
 
 
         \CodeQr::size(500)

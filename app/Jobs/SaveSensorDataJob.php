@@ -43,7 +43,7 @@ class SaveSensorDataJob implements ShouldQueue
             $mesurement->humidity = \Str::replace("_", "", $dataExploded[0]);
             $mesurement->temperature = \Str::replace("_", "", $dataExploded[1]);
             $mesurement->ppm = \Str::replace("_", "", $dataExploded[2]);
-            $mesurement->measured_at = Carbon::now()->format("d/m/Y H:i:s");
+            $mesurement->measured_at = Carbon::now()->format("Y-m-d H:i:s");
             $mesurement->save();
 
 

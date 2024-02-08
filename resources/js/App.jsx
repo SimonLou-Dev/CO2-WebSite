@@ -24,7 +24,8 @@ let router = createBrowserRouter([
             {
                 index: true,
                 element: <IndexView/>
-            }, {
+            },
+            {
                 path: "/settings",
                 element: <Settings/>
             }, {

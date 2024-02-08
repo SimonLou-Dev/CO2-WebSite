@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Measurement;
 use App\Models\Sensor;
 use Illuminate\Http\Request;
+use function PHPUnit\Framework\isNull;
 
 class MeasuresController extends Controller
 {
@@ -140,15 +141,15 @@ class MeasuresController extends Controller
             "room" => $sensor->getRoom,
             "sensor"=>$sensor,
             "last_measure" => [
-                "ppm" => $lastMesure->ppm,
-                "humidity" => $lastMesure->humidity,
-                "temperature" => $lastMesure->temperature,
+                "ppm" => (isNull($lastMesure) ? null  :  $lastMesure->ppm),
+                "humidity" => (isNull($lastMesure) ? null  :  $$lastMesure->humidity),
+                "temperature" => (isNull($lastMesure) ? null  : $lastMesure->temperature),
             ],
             "data" => [
-                "dates" => $created_at,
-                "ppm" => $ppm,
-                "humidity" => $humidity,
-                "temperature" => $temperature,
+                "dates" => array_reverse($created_at),
+                "ppm" => array_reverse($ppm),
+                "humidity" => array_reverse($humidity),
+                "temperature" => array_reverse($temperature),
             ]
 
         ]);

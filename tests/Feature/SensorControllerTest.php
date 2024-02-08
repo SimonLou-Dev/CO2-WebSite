@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Jobs\AddNewDeviceToGatJob;
+use App\Jobs\DeleteDeviceToGatJob;
 use App\Models\Room;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Cache;
@@ -115,6 +116,16 @@ class SensorControllerTest extends TestCase
 
     public function test_deleteOne_adm()
     {
+        Queue::fake();
+
+        Cache::shouldReceive("has")->with("CHIRPSTACK_API_KEY")->andReturn(true);
+        Cache::shouldReceive("has")->with("CHIRPSTACK_DEVICE_PROFILE_ID")->andReturn(true);
+        Cache::shouldReceive("has")->with("CHIRPSTACK_APPLICATION_ID")->andReturn(true);
+
+        Cache::shouldReceive("get")->with("CHIRPSTACK_API_KEY")->andReturn("test");
+        Cache::shouldReceive("get")->with("CHIRPSTACK_DEVICE_PROFILE_ID")->andReturn("test");
+        Cache::shouldReceive("get")->with("CHIRPSTACK_APPLICATION_ID")->andReturn("test");
+
         $user = UserTestTools::getTestUser("administrator");
         Sanctum::actingAs($user);
 
@@ -123,6 +134,8 @@ class SensorControllerTest extends TestCase
         $response = $this->delete('/api/sensors/'.$sensor->id);
 
         $response->assertStatus(200);
+
+        Queue::shouldReceive(DeleteDeviceToGatJob::class);
 
         $this->assertDatabaseMissing("sensors", [
             "id"=> $sensor->id,

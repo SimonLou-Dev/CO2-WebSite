@@ -400,7 +400,7 @@ const baseCharts = {
 
 const MainPage = (props) => {
     const location = useLocation()
-    const myParam = new URLSearchParams(location.search).get("sensor_id");
+    const myParam = new URLSearchParams(location.search).get("id");
 
     const chartGaugeTemp = useRef(null);
     const chartGaugeHum = useRef(null);

@@ -85,7 +85,7 @@ export const Sensor = () => {
                         {sensor && sensor.map((item) =>
                             <tr key={item.id}>
                                 <td>{item.id_hex}</td>
-                                <td>{item.room_id}</td>
+                                <td>{item.get_room.name}</td>
                                 <td>{item.last_message}</td>
                                 <td>{item.device_addr}</td>
                                 <td>

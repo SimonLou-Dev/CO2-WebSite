@@ -1,7 +1,10 @@
 version: "3.8"
 services:
     laravel:
-        image: simonloudev/co2:latest
+        image: simonloudev/co2
+        build:
+            context: .
+            dockerfile: Dockerfile
         container_name: laravel
         restart: always
         expose:

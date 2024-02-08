@@ -86,7 +86,7 @@ export const EditSensor = () => {
                 </div>
                 <div className={"qrCode"}>
                     <div className={"card"}>
-                        <img src={"https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=HelloWorld"}
+                        <img src={(process.env.APP_URL + "/api" + "/sensors/" + id + "/qrcode")}
                              alt={"QR code"}/>
                         <h1>{(sensor !== null ? sensor.id_hex : "Ox....")}</h1>
                     </div>

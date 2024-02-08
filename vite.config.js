@@ -25,7 +25,7 @@ export default defineConfig((command, mode) => {
         build: {
             outDir: '../public/assets',
             assetsDir: '',
-            manifest: !env.FRONT_DEBUG,
+            manifest: true,
             minify: !env.FRONT_DEBUG,
             rollupOptions: {
                 output: {
