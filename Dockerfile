@@ -1,6 +1,6 @@
 FROM php:8.3-fpm
-
-LABEL maintainer="Taylor Otwell"
+ENV TZ="Europe/Paris"
+LABEL maintainer="Simon Bidet, Charlotte Comte, Ilias Blum"
 
 ARG user
 ARG uid
@@ -69,8 +69,8 @@ RUN chmod +x /var/www/start-container.sh
 #nginx config
 RUN cp ./docker/default.conf /etc/nginx/sites-enabled/default.conf
 
-RUN chown $user -R /var/www/storage
-RUN chmod 777 -R /var/www/storage
+RUN chown $user -R /var/www/storage/*
+RUN chmod 777 -R /var/www/storage/*
 
 EXPOSE 8080
 ENTRYPOINT ["/var/www/start-container.sh"]

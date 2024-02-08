@@ -468,6 +468,7 @@ const MainPage = (props) => {
                 })
 
                 setPeriod(per)
+                setSensorId(sensor)
 
             }).catch((error) => {
                 console.log(error)
