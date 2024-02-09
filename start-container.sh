@@ -6,7 +6,6 @@ echo 'installing pm2...'
 npm install -g pm2
 
 echo 'caching data ... '
-php artisan cache:clear
 php artisan storage:link
 php artisan key:generate
 php artisan schedule-monitor:sync
