@@ -12,6 +12,7 @@ import {Settings} from "./Views/Settings";
 import NotificationProvider from "./Utils/Context/NotificationProvider";
 import {Sensor} from "./Views/Sensor";
 import {EditSensor} from "./Views/EditSensor";
+import {UserView} from "./Views/UserView";
 
 axios.defaults.baseURL = process.env.APP_URL + "/api";
 
@@ -34,6 +35,9 @@ let router = createBrowserRouter([
             }, {
                 path: "/sensors/:id",
                 element: <EditSensor/>
+            }, {
+                path: "/users",
+                element: <UserView/>
             }
         ]
     }

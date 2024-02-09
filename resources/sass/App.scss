@@ -124,6 +124,7 @@ body, html, .app{
             }
         }
         .page-content{
+
             overflow-y: auto;
             overflow-x: hidden;
             height: calc(100vh - 60px);
@@ -164,6 +165,7 @@ body, html, .app{
             overflow-y: auto;
             overflow-x: hidden;
             width: calc(100vw - 65px);
+            height: calc(100vh);
             margin-left: 65px;
         }
     }
@@ -444,6 +446,12 @@ body, html, .app{
             transform: scale(1.1);
         }
     }
+}
+
+.user-viewer{
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
 }
 
 

@@ -394,7 +394,7 @@ a{
 .table-wrapper {
     margin: 50px auto auto auto;
     width: 80%;
-    height: 60vh;
+    height: 80vh;
     .table-header {
         display: flex;
         flex-direction: row;
@@ -536,6 +536,9 @@ a{
                 color: $black;
                 font-family: 'Nunito';
                 font-size: 22px;
+                input, select{
+                    background-color: $bg2;
+                }
             }
         }
     }

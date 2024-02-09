@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use OpenApi\Annotations\OpenApi as OA;
 use Psy\Util\Str;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -146,6 +147,8 @@ class UserController extends Controller
             if ($token->name == $request->device_name) $token->delete();
         }
 
+        $user->updated_at = now();
+
         return response()->json([
             'message' => 'User logged in successfully',
             'user' => $user,
@@ -181,10 +184,8 @@ class UserController extends Controller
      *
      */
     public function showUser(Request $request){
-
         $user = User::where("id", $request->user()->id)->firstOrFail();
-        $user->tokens;
-
+        $user->updated_at = now();
         return response()->json([
             'user' => $user,
         ], 200);
@@ -229,6 +230,91 @@ class UserController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json();
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     *
+     *
+     * @OA\Patch(
+     *     path="/logout",
+     *     summary="logout a user",
+     *     tags={"USER"},
+     *          security={{"bearerAuth":{}}},
+     *       @OA\Parameter(
+     *   *      name="Authorization",
+     *   *      in="header",
+     *   *      required=true,
+     *   *      description="Bearer {access-token}",
+     *   *      @OA\Schema(
+     *   *          type="bearerAuth"
+     *   *      )
+     *   *     ),
+     *     @OA\Response(
+     *          response=200,
+     *          description="User logged out successfully",
+     *    ),
+     *     @OA\Response(
+     *          response=403,
+     *          description="Auth error"
+     *    )
+     *)
+     *
+     *
+     *
+     */
+
+    /**
+     * @param Request $request
+     *
+     *
+     * @OA\Patch(
+     *     path="/users/{userId}/role/{roleId}",
+     *     summary="get all users paginated",
+     *     tags={"USER"},
+     *     security={{"bearerAuth":{}}},
+     *      @OA\Parameter(
+     *  *      name="Authorization",
+     *  *      in="header",
+     *  *      required=true,
+     *  *      description="Bearer {access-token}",
+     *  *      @OA\Schema(
+     *  *          type="bearerAuth"
+     *  *      )
+     *  *     ),
+     *
+     *      @OA\PathParameter (
+     *         name="userId",
+     *         description="Id Of selected user",
+     *         required=true,
+     *      ),
+     *      @OA\PathParameter (
+     *         name="roleId",
+     *         description="Id Of selected role",
+     *         required=true,
+     *      ),
+     *     @OA\Response(
+     *          response=200,
+     *          description="Role changed succesfully",
+     *    ),
+     *     @OA\Response(
+     *          response=403,
+     *          description="Auth error"
+     *    )
+     *)
+     */
+    public function setRoles(Request $request, User $user, Role $role){
+
+        $this->authorize('user_viewAll', $request->user());
+
+
+        $user->removeRole($user->roles()->first()->name);
+        $user->assignRole($role->name);
+
+
+        return response()->json();
+
     }
 
 
@@ -278,10 +364,25 @@ class UserController extends Controller
     public function getAllUsers(Request $request){
 
         $this->authorize('user_viewAll', $request->user());
+        $roles = Role::all();
+        $search = $request->get("search");
+        $users = User::where("name","LIKE", "%".$search."%")->orWhere("email","LIKE", "%".$search."%")->paginate();
 
-        $search = $request->get("user");
+        foreach ($users as $user) {
+            if ($user->roles->count() > 0){
+                $user->role_id = $user->roles->first()->id;
+            }else{
+                $user->role_id = 0;
+            }
 
-        return User::where("name","LIKE", "%".$search."%")->orWhere("email","LIKE", "%".$search."%")->paginate();
+
+        }
+
+
+        return response()->json([
+            "users" => $users,
+            "roles" => $roles
+        ]);
 
     }
 

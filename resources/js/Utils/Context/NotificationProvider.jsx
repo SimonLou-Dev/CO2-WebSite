@@ -98,3 +98,10 @@ export const pushNotification = (dispatch, data) => {
     });
 }
 
+export const pushNotificationSimply = (dispatch, type, text) => {
+    pushNotification(dispatch, {
+        type: type,
+        text: text
+    })
+}
+

@@ -44,6 +44,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::delete("/users/{user}", [UserController::class, "destroy"]);
     Route::get("/users", [UserController::class, "getAllUsers"]);
     Route::get("/user", [UserController::class, "showUser"]);
+    Route::patch("/users/{user}/role/{role}", [UserController::class, "setRoles"]);
+
 
     /* Room management */
     Route::get("/rooms/{room}", [RoomController::class, "show"]);
