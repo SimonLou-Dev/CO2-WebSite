@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Sensor;
 use App\Http\Controllers\Controller;
 use App\Models\Measurement;
 use App\Models\Sensor;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use function PHPUnit\Framework\isNull;
 
 class MeasuresController extends Controller
@@ -157,4 +159,60 @@ class MeasuresController extends Controller
 
 
     }
+
+    public function getHeatmap(Request $request, string $sensor)
+    {
+        if ($sensor == "0") {
+            $sensor = Sensor::first();
+        } else {
+            $sensor = Sensor::where("id", $sensor)->firstOrFail();
+        }
+
+        Carbon::setLocale('fr');
+        setlocale(LC_TIME, 'fr_FR.utf8', 'fra');
+        $mesures = Measurement::where("sensor_id", $sensor->id)->whereBetween("measured_at", [now()->sub("day", 7), now()])->orderBy("measured_at", "desc")->get(["measured_at", "ppm"]);
+        $mesures = $mesures->groupBy(function ($item) {
+            return $item->measured_at->format('Y-m-d H');
+        })->map(function ($item) {
+            return [
+                "ppm" => round($item->avg("ppm"), 0),
+                "x" => $item->first()->measured_at->translatedFormat("H"),
+                "y" => $item->first()->measured_at->translatedFormat("l")
+            ];
+        });
+
+        $data = new Collection();
+        $days = [];
+        for ($j = 6; $j >= 0; $j--) {
+
+            $key = Carbon::now()->sub("day", $j);
+
+            for ($h = 6; $h < 20; $h++) {
+                $key->setHour($h);
+                $date = $key->format("Y-m-d H");
+
+                $data->add([
+                    "ppm" => isset($mesures[$date]) ? $mesures[$key->format("Y-m-d H")]["ppm"] : null,
+                    "x" => $h,
+                    "y" =>  $j
+                ]);
+            }
+        }
+
+        $current = Carbon::now();
+        for ($i = 6; $i >= 0; $i--) {
+            $days[] = $current->translatedFormat("l");
+            $current = $current->sub("day", 1);
+        }
+
+
+
+        return response()->json([
+            "data" => $data->toArray(),
+            "days"=> $days
+
+        ]);
+
+    }
+
 }

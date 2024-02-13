@@ -73,6 +73,7 @@ Route::get("/sensors/{sensor}", [SensorController::class, "show"]);
 /* Retrieve qrCode, measures & heatmap */
 Route::get("/sensors/{sensor}/qrcode", [SensorController::class, "getQrCode"]);
 Route::get("/sensors/{sensor}/measures", [MeasuresController::class, "getMesures"]);
+Route::get("/sensors/{sensor}/heatmap", [MeasuresController::class, "getHeatmap"]);
 
 /* Auth routes */
 Route::post("/register", [UserController::class, 'register'])->name("register");

@@ -8,9 +8,14 @@ import HighchartsReact from "highcharts-react-official";
 import axios from "axios";
 import {useLocation} from "react-router-dom";
 import Select from 'react-select'
+import highchartsSeriesLabel from "highcharts/modules/series-label";
+import highchartsHeatmap from "highcharts/modules/heatmap";
+import highchartsAccessibility from "highcharts/modules/accessibility";
 
 highchartsMore(Highcharts)
 highchartsSolidGauge(Highcharts)
+highchartsHeatmap(Highcharts)
+highchartsAccessibility(Highcharts)
 
 export const IndexView = () => {
     const [dataLoaded, setDataLoaded] = useState(true);
@@ -245,7 +250,46 @@ const baseCharts = {
         },
         title: {
             text: "Concentration en CO2"
-        }
+        },
+        plotBands: [
+            {
+                from: 0,
+                to: 800,
+                zIndex: 10,
+                color: "rgba(37,211,130,0.2)",
+                label: {
+                    zIndex: 10,
+                    text: "Bonne qualité d'air",
+                    style: {
+                        color: "#25D382"
+                    }
+                }
+            },{
+                from: 800,
+                to: 1200,
+                zIndex: 10,
+                color: "rgba(255,153,41,0.2)",
+                label: {
+                    zIndex: 10,
+                    text: "Qualité d'air moyenne",
+                    style: {
+                        color: "#FF9929"
+                    }
+                }
+            },{
+                from: 1200,
+                to: 8000,
+                zIndex: 10,
+                color: "rgb(255,66,89,0.2)",
+                label: {
+                    zIndex: 10,
+                    text: "Mauvaise qualité",
+                    style: {
+                        color: "#FF4259"
+                    }
+                }
+            }
+        ]
     },{
         labels: {
             format: '{value} °C'
@@ -270,6 +314,33 @@ const baseCharts = {
     ]
 
 }
+const mapOptions = {
+    chart: {
+        type: 'heatmap',
+    },
+    title: {
+        text: 'Heatmap'
+    },
+    colorAxis: {
+        stops: [
+            [0, '#25D382'],
+            [800/1200, '#FF9929'],
+            [1200/1200, '#FF4259']
+        ],
+        max: 1200,
+        startOnTick: false,
+        endOnTick: false,
+    },
+
+    series: [{
+        name: "Concentration de CO2",
+        dataLabels: {
+            enabled: true,
+            color: '#000',
+            borderColor: "none",
+        }
+    }]
+}
 
 const MainPage = (props) => {
     const location = useLocation()
@@ -279,10 +350,12 @@ const MainPage = (props) => {
     const chartGaugeHum = useRef(null);
     const chartGaugePpm = useRef(null);
     const chartLine = useRef(null);
+    const chartMap = useRef(null);
     const [period, setPeriod] = useState("h");
 
     const [rooms, setRooms] = useState([]);
     const [roomList, setRoomList] = useState([]);
+    const [heatMapDates, setHeatMapDates] = useState([]);
 
     const [sensorId, setSensorId] = useState(0);
 
@@ -298,6 +371,7 @@ const MainPage = (props) => {
 
         fetchData(period, params)
         getRooms()
+        getHeatmapData()
     }, []);
 
 
@@ -367,13 +441,50 @@ const MainPage = (props) => {
 
     const selectRoom = (id) => {
         roomList.forEach((room) => {
-          if(room.id === id.value && room.get_sensor !== null) fetchData(period, room.get_sensor.id)
+          if(room.id === id.value && room.get_sensor !== null){
+              fetchData(period, room.get_sensor.id);
+                getHeatmapData(room.get_sensor.id)
+          }
         })
 
     }
 
     const changePeriod = (_period) => {
         fetchData(_period)
+    }
+
+    const getHeatmapData = async (sensor = sensorId) => {
+        const chartMapRef = chartMap.current.chart
+
+        await axios.get("/sensors/" + sensorId + "/heatmap", {})
+            .then((response) => {
+                let measures = response.data.data;
+                let days = response.data.days;
+                const data = [];
+                measures.forEach((measure) => {
+                  data.push([measure.x, measure.y, measure.ppm])
+                })
+                setHeatMapDates(days);
+
+
+                chartMapRef.series[0].update({
+                    data: data
+                })
+
+                chartMapRef.yAxis[0].setCategories(days)
+
+                chartMapRef.tooltip.update({
+                    format: '<b>{series.yAxis.categories.(point.y)}</b> à <b>{point.x}h</b> la concentration est de <b>{point.value}</b> ppm'
+                });
+
+
+
+
+
+
+            }).catch((error) => {
+                console.log(error)
+            })
     }
 
 
@@ -435,8 +546,9 @@ const MainPage = (props) => {
                 </div>
                 <div className={"charts-container"}>
                     <HighchartsReact
+                        ref={chartMap}
                         highcharts={Highcharts}
-                        options={baseCharts}/>
+                        options={mapOptions}/>
                 </div>
 
             </section>
