@@ -37,6 +37,9 @@ const baseTempGaugeOption = {
     chart:{
         type: "solidgauge"
     },
+    accessibility: {
+      enabled: false
+    },
     title: null,
     pane: {
         center: ['50%', "90%"],
@@ -105,6 +108,9 @@ const basePpmGaugeOption = {
     chart:{
         type: "solidgauge"
     },
+    accessibility: {
+        enabled: false
+    },
     title: null,
     pane: {
         center: ['50%', "90%"],
@@ -167,6 +173,9 @@ const basePpmGaugeOption = {
 const baseHumidGaugeOption = {
     chart:{
         type: "solidgauge"
+    },
+    accessibility: {
+        enabled: false
     },
     title: null,
     pane: {
