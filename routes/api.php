@@ -28,7 +28,7 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 |
 */
 
-Broadcast::routes(['middleware' => ['auth:sanctum']]);
+Broadcast::routes();
 
 //Authed routes
 Route::middleware('auth:sanctum')->group(function() {
@@ -85,4 +85,9 @@ Route::get("/csrf", [CsrfCookieController::class, "show"])->name("custom-csrf");
 //Health
 Route::get("/health", [HomeController::class, 'getHealth'])->name("api-health");
 
+Route::get('/test', function (Request $request) {
+    \App\Events\UpdateGraphEvent::dispatch(2);
+
+    return "Send";
+});
 

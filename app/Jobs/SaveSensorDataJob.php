@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\UpdateGraphEvent;
 use App\Exceptions\SensorNotFoundException;
 use App\Models\Measurement;
 use App\Models\Sensor;
@@ -45,6 +46,8 @@ class SaveSensorDataJob implements ShouldQueue
             $mesurement->ppm = \Str::replace("_", "", $dataExploded[2]);
             $mesurement->measured_at = Carbon::now()->format("Y-m-d H:i:s");
             $mesurement->save();
+
+            UpdateGraphEvent::dispatch($sensor->id);
 
 
         }else{

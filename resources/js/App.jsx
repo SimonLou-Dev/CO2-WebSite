@@ -47,5 +47,5 @@ let router = createBrowserRouter([
 if (document.getElementById('app')) {
     const container  = document.getElementById("app");
     const root = createRoot(container );
-    root.render(<StrictMode><NotificationProvider><RouterProvider router={router}/></NotificationProvider></StrictMode>)
+    root.render(<NotificationProvider><RouterProvider router={router}/></NotificationProvider>)
 }

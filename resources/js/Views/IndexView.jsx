@@ -11,6 +11,9 @@ import Select from 'react-select'
 import highchartsSeriesLabel from "highcharts/modules/series-label";
 import highchartsHeatmap from "highcharts/modules/heatmap";
 import highchartsAccessibility from "highcharts/modules/accessibility";
+import {pushNotification} from "../Utils/Context/NotificationProvider";
+import Pusher from "pusher-js";
+import Echo from "laravel-echo";
 
 highchartsMore(Highcharts)
 highchartsSolidGauge(Highcharts)
@@ -384,6 +387,19 @@ const MainPage = (props) => {
     }, []);
 
 
+
+    const listenForUpdates = (_sensorId = sensorId) => {
+        //updateGraphEvent
+
+        window.Echo.private("Sensor." +  process.env.APP_ENV + "." + _sensorId)
+            .listen(".updateGraphEvent", (e) => {
+                fetchData()
+            })
+
+        window.Echo.leaveChannel("Sensor." +  process.env.APP_ENV + "." + sensorId)
+    }
+
+
     const fetchData = async (per = period, sensor = sensorId) => {
         const gaugeTemp = chartGaugeTemp.current.chart;
         const gaugeHum = chartGaugeHum.current.chart;
@@ -424,11 +440,13 @@ const MainPage = (props) => {
                 })
 
                 setPeriod(per)
-                setSensorId(sensor)
+                setSensorId(response.data.sensor.id)
+                listenForUpdates(response.data.sensor.id)
 
             }).catch((error) => {
                 console.log(error)
             })
+
 
     }
 
@@ -451,8 +469,9 @@ const MainPage = (props) => {
     const selectRoom = (id) => {
         roomList.forEach((room) => {
           if(room.id === id.value && room.get_sensor !== null){
-              fetchData(period, room.get_sensor.id);
-                getHeatmapData(room.get_sensor.id)
+              const _sensorId=  room.get_sensor.id
+              fetchData(period, _sensorId);
+              getHeatmapData(_sensorId)
           }
         })
 

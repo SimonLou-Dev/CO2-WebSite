@@ -15,3 +15,10 @@ use Illuminate\Support\Facades\Log;
 */
 
 
+Broadcast::channel('User.'.env("APP_ENV").".{id}", function ($user, $id) {
+    return $user->id === (int) $id;
+});
+
+Broadcast::channel('Sensor.'.env("APP_ENV").".{sensorId}", function ($user) {
+    return true;
+});

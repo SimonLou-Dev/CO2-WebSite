@@ -7,6 +7,9 @@ import {useLocalStorage} from "../Utils/StorageGroup";
 import {pushNotification, useNotifications} from "../Utils/Context/NotificationProvider";
 import axios from "axios";
 import {setAuthToken} from "../Utils/AxiosFunction";
+import Echo from "laravel-echo";
+import Pusher from "pusher-js";
+
 
 export const LayoutComponent = () => {
     const [userAuthed, authUser] = useState(false)
@@ -22,14 +25,84 @@ export const LayoutComponent = () => {
 
     }, [token]);
 
+    useEffect(() => {
+        fetchToken()
+        connectToSocket()
+    })
+
+
+
+
+    const connectToSocket = (_token = token, _user = user) => {
+
+        window.Pusher = Pusher
+        axios.defaults.headers.common['Authorization'] = `Bearer ${_token}`;
+
+        window.Echo = new Echo({
+            broadcaster: 'pusher',
+            key: process.env.PUSHER_APP_KEY,
+            wsHost: process.env.PUSHER_HOST ,
+            cluster: 'mt1',
+            wsPort: 6001,
+            wssPort: 6001,
+            forceTLS: false,
+        });
+
+        if(!_user) return
+
+        window.Echo = new Echo({
+            broadcaster: 'pusher',
+            key: process.env.PUSHER_APP_KEY,
+            wsHost: process.env.PUSHER_HOST ,
+            cluster: 'mt1',
+            wsPort: 6001,
+            wssPort: 6001,
+            forceTLS: false,
+            authorizer: (channel, options) => {
+                return {
+                    authorize: (socketId, callback) => {
+                        axios.post('/broadcasting/auth', {
+                            socket_id: socketId,
+                            channel_name: channel.name
+                        })
+                            .then(response => {
+                                console.log("Auth to the socket");
+                                callback(false, response.data);
+                            })
+                            .catch(error => {
+                                callback(true, error);
+                            });
+                    }
+                };
+            },
+        });
+
+        window.Echo.private("User." +  process.env.APP_ENV + "." + _user.id)
+            .listen(".notify", (e) => {
+                console.log(e)
+                pushNotification(dispatch, {
+                    type: e.type,
+                    text: e.message,
+                })
+            })
+
+        window.Echo.leaveChannel("User." +  process.env.APP_ENV + "." + user.id)
+
+
+    }
+
     const fetchToken = async () => {
-        console.log(token)
+
 
         if (user == null && token !== null){
             setAuthToken(token)
 
+
+
             await axios.get("/user").then(response => {
-                setUser(response.data)
+                let user = response.data.user;
+                setUser(user)
+                connectToSocket(token, user)
             }).catch(e => {
                 removeToken()
                 pushNotification(dispatch, {
