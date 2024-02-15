@@ -14,6 +14,9 @@ echo 'building front ...'
 yarn sass ./resources/sass/app.scss ./public/css/app.css
 yarn build
 
+echo "Deleting manifest"
+php artisan front:clear
+
 echo 'start worker & nginx... '
 pm2 start ./queueworker.yml
 nginx -t && service nginx restart
