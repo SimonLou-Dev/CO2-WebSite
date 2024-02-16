@@ -253,6 +253,7 @@ const baseCharts = {
     credits: {
         enabled: false
     },
+
     title: {
         text: "Concentration en CO2"
     },
@@ -312,6 +313,39 @@ const baseCharts = {
         opposite: true
 
     }],
+    responsive: {
+      rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+                legend: {
+                    layout: "horizontal",
+                    align: "left",
+                    verticalAlign: "bottom"
+                },
+                yAxis: [{
+                    labels: {
+                        align: "right",
+                        x: 0,
+                        y: -6
+                    },
+                    title: {
+                        text: null
+                    }
+                },{
+                    labels: {
+                        align: "left",
+                        x: 0,
+                        y: -6
+                    },
+                    title: {
+                        text: null
+                    }
+                }]
+            }
+      }]
+    },
     series: [
         {
             type: "line",
@@ -342,6 +376,30 @@ const mapOptions = {
         max: 1200,
         startOnTick: false,
         endOnTick: false,
+    },
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+                legend: {
+                    layout: "horizontal",
+                    align: "left",
+                    verticalAlign: "bottom"
+                },
+                yAxis: [{
+                    labels: {
+                        align: "left",
+                        x: 0,
+                        y: -6
+                    },
+                    title: {
+                        text: null
+                    }
+                }]
+            }
+        }]
     },
 
     series: [{
@@ -481,10 +539,10 @@ const MainPage = (props) => {
         fetchData(_period)
     }
 
-    const getHeatmapData = async (sensor = sensorId) => {
+    const getHeatmapData = async (_sensorId = sensorId) => {
         const chartMapRef = chartMap.current.chart
 
-        await axios.get("/sensors/" + sensorId + "/heatmap", {})
+        await axios.get("/sensors/" + _sensorId + "/heatmap", {})
             .then((response) => {
                 let measures = response.data.data;
                 let days = response.data.days;
@@ -531,7 +589,7 @@ const MainPage = (props) => {
 
                     <h4>Température</h4>
                 </div>
-                <div className={"gauge"}>
+                <div className={"gauge phoneHidden"}>
                     <HighchartsReact
                         highcharts={Highcharts}
                         options={baseHumidGaugeOption}

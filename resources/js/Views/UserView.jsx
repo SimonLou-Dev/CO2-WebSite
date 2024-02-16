@@ -73,8 +73,8 @@ export const UserView = () => {
                         <tr>
                             <th>id</th>
                             <th>nom</th>
-                            <th>email</th>
-                            <th>dernière connexion</th>
+                            <th className={"phoneHidden"}>email</th>
+                            <th className={"phoneHidden"}>dernière connexion</th>
                             <th>role</th>
                             <th>supprimer</th>
                         </tr>
@@ -84,8 +84,8 @@ export const UserView = () => {
                             <tr key={item.id}>
                                 <td>{item.id}</td>
                                 <td>{item.name}</td>
-                                <td>{item.email}</td>
-                                <td>{item.updated_at}</td>
+                                <td className={"phoneHidden"}>{item.email}</td>
+                                <td className={"phoneHidden"}>{item.updated_at}</td>
                                 <td>
                                     <select defaultValue={0} value={item.role_id} onChange={async (e) => {
                                         await axios.patch("/users/" + item.id + "/role/" + e.target.value,).then(r => {

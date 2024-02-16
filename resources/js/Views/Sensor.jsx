@@ -75,7 +75,7 @@ export const Sensor = () => {
                             <tr>
                                 <th>id</th>
                                 <th>salle</th>
-                                <th>dernier message</th>
+                                <th className={"phoneHidden"}>dernier message</th>
                                 <th>dev eui</th>
                                 <th>modifier</th>
                                 <th>supprimer</th>
@@ -86,7 +86,7 @@ export const Sensor = () => {
                             <tr key={item.id}>
                                 <td>{item.id_hex}</td>
                                 <td>{item.get_room.name}</td>
-                                <td>{item.last_message}</td>
+                                <td className={"phoneHidden"}>{item.last_message}</td>
                                 <td>{item.device_addr}</td>
                                 <td>
                                     <button className={"btn"} onClick={()=>{

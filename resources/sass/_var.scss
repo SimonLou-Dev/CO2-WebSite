@@ -395,6 +395,7 @@ a{
     margin: 50px auto auto auto;
     width: 80%;
     height: 80vh;
+    zoom: 2.5;
     .table-header {
         display: flex;
         flex-direction: row;
@@ -402,17 +403,55 @@ a{
         width: 100%;
         margin: 0 auto 20px auto;
 
+        .searcher{
+            @include media-max('phone'){
+                width: 150px;
+                height: 30px;
+                img{
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+        }
+
         .PageNavigator {
             margin: auto 0;
+
+            @include media-max('phone'){
+                img{
+                    width: 30px;
+                    height: 30px;
+                }
+            }
         }
 
         .btn {
-            font-size: 28px;
+            @include media-max('phone'){
+                font-size: 20px;
+            }
+            @include media-min('tablet'){
+                font-size: 24px;
+            }
+
             margin: auto 0;
         }
 
         select {
-            width: 200px !important;
+            @include media-max('phone'){
+                width: 50px !important;
+            }
+            @include media-min('tablet'){
+                width: 200px !important;
+            }
+
+        }
+        .updater{
+            @include media-max('phone'){
+                img{
+                    width: 30px;
+                    height: 30px;
+                }
+            }
         }
 
         .selector {
@@ -493,7 +532,13 @@ a{
             }
 
             td, th {
-                padding: 5px 20px;
+                @include media-max('phone'){
+                    padding: 2px 6px;
+                }
+                @include media-min('tablet'){
+                    padding: 5px 20px;
+                }
+
                 text-align: center;
                 border: $red 1px solid;
                 color: $black;
@@ -527,17 +572,39 @@ a{
             }
 
             th {
+                @include media-max('phone'){
+                    font-size: 12px;
+                }
+                @include media-min('tablet'){
+                    font-size: 25px;
+                }
                 font-family: 'Baloo 2';
                 font-size: 25px;
                 color: $bg2;
             }
 
             td {
+                @include media-max('phone'){
+                    font-size: 12px;
+                }
+                @include media-min('tablet'){
+                    ffont-size: 22px;
+                }
                 color: $black;
                 font-family: 'Nunito';
                 font-size: 22px;
                 input, select{
+                    @include media-max('phone'){
+                        width: 150px;
+                        height: 40px;
+                    }
                     background-color: $bg2;
+                }
+                .btn{
+                    @include media-max('phone'){
+                        width: 30px;
+                        height: 30px;
+                    }
                 }
             }
         }
