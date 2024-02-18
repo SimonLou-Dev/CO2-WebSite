@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use OpenApi\Annotations\OpenApi as OA;
 use Psy\Util\Str;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -186,6 +187,29 @@ class UserController extends Controller
     public function showUser(Request $request){
         $user = User::where("id", $request->user()->id)->firstOrFail();
         $user->updated_at = now();
+        $user->save();
+
+        $permsList = [];
+        $allPerms = Permission::all();
+        foreach ($allPerms as $perm){
+            $permsList[$perm->id] =  $perm->name;
+        }
+
+        $UserPerms = [];
+        foreach ($permsList as $perms){
+            $UserPerms[$perms] = false;
+        }
+
+        foreach ($user->roles[0]->permissions as $perm){
+
+            $UserPerms[$permsList[$perm->pivot->permission_id]]= true;
+        }
+
+        $user->perm = $UserPerms;
+
+
+
+
         return response()->json([
             'user' => $user,
         ], 200);

@@ -17,57 +17,46 @@ export const LayoutComponent = () => {
     const location = useLocation()
 
     const [user, setUser] = useState(null)
-    const [token, setToken, removeToken] = useLocalStorage("token", null)
+    const [token, setToken] = useState(null)
 
-    useEffect( () => {
-
-        fetchToken()
-
-    }, [token]);
 
     useEffect(() => {
 
-        fetchToken()
-        connectToSocket()
-    })
+        const jsonValue = window.localStorage.getItem("token")
+
+        fetchToken(jsonValue)
+        window.Pusher = Pusher
+
+        window.Echo = new Echo({
+            broadcaster: 'pusher',
+            key: process.env.PUSHER_APP_KEY,
+            wsHost: process.env.PUSHER_HOST ,
+            cluster: 'mt1',
+            wsPort: 6001,
+            wssPort: 6001,
+            forceTLS: false})
+
+        return () => {
+            window.Echo.leaveAllChannels();
+        }
+
+    }, [])
 
 
 
 
     const connectToSocket = (_token = token, _user = user) => {
-
-        window.Pusher = Pusher
-        axios.defaults.headers.common['Authorization'] = `Bearer ${_token}`;
-
-        window.Echo = new Echo({
-            broadcaster: 'pusher',
-            key: process.env.PUSHER_APP_KEY,
-            wsHost: process.env.PUSHER_HOST ,
-            cluster: 'mt1',
-            wsPort: 6001,
-            wssPort: 6001,
-            forceTLS: false,
-            authorizer: (channel, options) => {
-                return {
-                    authorize: (socketId, callback) => {
-                        axios.post('/broadcasting/auth', {
-                            socket_id: socketId,
-                            channel_name: channel.name
-                        })
-                            .then(response => {
-                                console.log("Auth to the socket");
-                                callback(false, response.data);
-                            })
-                            .catch(error => {
-                                callback(true, error);
-                            });
-                    }
-                };
-            },
-        });
+        if(!_token || !_user){
+            console.log("RTN")
+            return;
+        }
+        console.log(_token, _user)
 
         if(!_user) return
 
+
+        setAuthToken(_token)
+
         window.Echo = new Echo({
             broadcaster: 'pusher',
             key: process.env.PUSHER_APP_KEY,
@@ -76,12 +65,17 @@ export const LayoutComponent = () => {
             wsPort: 6001,
             wssPort: 6001,
             forceTLS: false,
+
             authorizer: (channel, options) => {
                 return {
                     authorize: (socketId, callback) => {
                         axios.post('/broadcasting/auth', {
                             socket_id: socketId,
                             channel_name: channel.name
+                        }, {
+                            headers: {
+                                "Authorization":  `Bearer ${_token}`,
+                            }
                         })
                             .then(response => {
                                 console.log("Auth to the socket");
@@ -103,49 +97,49 @@ export const LayoutComponent = () => {
                     text: e.message,
                 })
             })
-
+        /*if(user === _user || user == null) return;
         window.Echo.leaveChannel("User." +  process.env.APP_ENV + "." + user.id)
+
+         */
 
 
     }
 
-    const fetchToken = async () => {
+    const fetchToken = async (_token = token, _user = user) => {
+        if(_token !== null) setToken(_token)
+        if(_user !== null) setUser(_user)
 
-
-        if (user == null && token !== null){
-            setAuthToken(token)
-
-
+        if(token !== _token){
+            window.localStorage.setItem("token", _token)
+            setAuthToken(_token)
 
             await axios.get("/user").then(response => {
-                let user = response.data.user;
-                setUser(user)
-                connectToSocket(token, user)
+                let Ruser = response.data.user;
+                setUser(Ruser)
+                if (Ruser !== null && _token !== null){
+                    console.log("connecting to socket")
+                    connectToSocket(_token, Ruser)
+                }
+
             }).catch(e => {
-                removeToken()
+                console.log("ICI", e)
+                window.localStorage.removeItem("token")
                 pushNotification(dispatch, {
                     type: 4,
                     text: "Votre session a expiré",
                 })
 
             })
+
         }
-    }
-
-    const addNotification = (data) => {
-        pushNotification(dispatch, {
-            type: data.type,
-            text: data.text,
-        })
 
     }
-
 
     return (
 
         <div className="layout">
             <div className={"page-content"}>
-                <UserContext.Provider value={{user : user, setUser: (v) => setUser(v), token: token, setToken: (v) => setToken(v), removeToken: (v) => removeToken}}>
+                <UserContext.Provider value={{user : user, setUser: (v) => fetchToken(token, v), token: token, setToken: (v) => fetchToken(v), removeToken: (v) => removeToken}}>
                     <Outlet/>
 
                 </UserContext.Provider>
@@ -155,12 +149,12 @@ export const LayoutComponent = () => {
                 <Link to={"/"} className={"menu-link " + (location.pathname === "/" ? "menu-selected" : "")}>
                     <img src={"/assets/icons/graphique.svg"}/>
                 </Link>
-                {user != null &&
+                {user != null && user.perm != null && (user.perm.sensor_viewAll || user.perm["*"]) &&
                 <Link to={"/sensors"} className={"menu-link " + (location.pathname === "/sensors" ? "menu-selected" : "")}>
                     <img src={"/assets/icons/capteur.svg"}/>
                 </Link>
                 }
-                {user != null &&
+                {user != null && user.perm != null && (user.perm.user_viewAll || user.perm["*"]) &&
                 <Link to={"/users"} className={"menu-link " + (location.pathname === "/users" ? "menu-selected" : "")}>
                     <img src={"/assets/icons/user.svg"}/>
                 </Link>
