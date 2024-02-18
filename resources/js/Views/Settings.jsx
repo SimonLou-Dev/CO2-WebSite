@@ -22,13 +22,14 @@ export const Settings = () => {
     const [registerError, setRegisterError] = useState({});
 
 
+
     const register = async (e) => {
         await axios.post("/register", {
             email: registerEmail,
             name: registerName,
             password: registerPassword,
             password_confirmation: registerCPassword,
-            device_name: "test"
+            device_name: navigator.userAgent
         }).then(response => {
 
             user.setToken(response.data.token)
@@ -59,7 +60,7 @@ export const Settings = () => {
         await axios.post("/login", {
             email: loginEmail,
             password: loginPassword,
-            device_name: "test"
+            device_name: navigator.userAgent
         }).then(response => {
 
             user.setToken(response.data.token)

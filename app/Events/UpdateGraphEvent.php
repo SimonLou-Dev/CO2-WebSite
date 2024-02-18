@@ -22,7 +22,7 @@ class UpdateGraphEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('Sensor.'.env("APP_ENV").'.'.$this->sensorId)
+            new Channel('Sensor.'.env("APP_ENV").'.'.$this->sensorId)
         ];
     }
 

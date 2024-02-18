@@ -26,6 +26,7 @@ export const LayoutComponent = () => {
     }, [token]);
 
     useEffect(() => {
+
         fetchToken()
         connectToSocket()
     })
@@ -46,6 +47,23 @@ export const LayoutComponent = () => {
             wsPort: 6001,
             wssPort: 6001,
             forceTLS: false,
+            authorizer: (channel, options) => {
+                return {
+                    authorize: (socketId, callback) => {
+                        axios.post('/broadcasting/auth', {
+                            socket_id: socketId,
+                            channel_name: channel.name
+                        })
+                            .then(response => {
+                                console.log("Auth to the socket");
+                                callback(false, response.data);
+                            })
+                            .catch(error => {
+                                callback(true, error);
+                            });
+                    }
+                };
+            },
         });
 
         if(!_user) return

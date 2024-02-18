@@ -102,6 +102,7 @@ class MeasuresController extends Controller
         $temperature = array();
         $created_at = array();
 
+
         if($period == "s" || $period == "m" || $period == "a"){
             $mesures = Measurement::where("sensor_id", $sensor->id)->whereBetween("measured_at", [$start, $end])->orderBy("measured_at", "desc")->get(["measured_at", "ppm", "humidity", "temperature"])->groupBy(function ($item) {
                 return $item->measured_at->format('Y-m-d');
@@ -111,7 +112,7 @@ class MeasuresController extends Controller
                     "ppm" => round($item->avg("ppm"), 0),
                     "humidity" => round($item->avg("humidity"),1),
                     "temperature" => round($item->avg("temperature"),1),
-                    "measured_at" => $item->first()->measured_at->format("Y-m-d")
+                    "measured_at" => $item->first()->measured_at->timestamp * 1000,
                 ];
             });
 
@@ -128,20 +129,38 @@ class MeasuresController extends Controller
                 $ppm[] = $mesure->ppm;
                 $humidity[] = $mesure->humidity;
                 $temperature[] = $mesure->temperature;
-                $created_at[] = $mesure->measured_at->format("d H:i");
+                $created_at[] = $mesure->measured_at->timestamp * 1000;
             }
         }
 
         $lastMesure = Measurement::where("sensor_id", $sensor->id)->orderBy("measured_at", "desc")->first();
-
+        $interval = 0;
+        switch ($period){
+            case "h":
+                $interval = 10 * 60;
+                break;
+            case "j":
+                $interval = 3600;
+                break;
+            case "s":
+                $interval = 3600 * 24;
+                break;
+            case "m":
+                $interval = 3600 * 24 * 2;
+                break;
+            case "a":
+                $interval = 3600 * 24 * 30;
+                break;
+        }
 
         return response()->json([
             "socket_path" => "sensor." . $sensor->id,
             "period" => $period,
-            "from"=> $start->format("Y-m-d H:i:s"),
-            "to"=> $end->format("Y-m-d H:i:s"),
+            "from"=> $start->timestamp * 1000,
+            "to"=> $end->timestamp * 1000,
             "room" => $sensor->getRoom,
             "sensor"=>$sensor,
+            "interval" => $interval * 1000,
             "last_measure" => [
                 "ppm" => (is_null($lastMesure) ? null  :  $lastMesure->ppm),
                 "humidity" => (is_null($lastMesure) ? null  :  $lastMesure->humidity),

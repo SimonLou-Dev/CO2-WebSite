@@ -28,7 +28,7 @@ use Laravel\Sanctum\Http\Controllers\CsrfCookieController;
 |
 */
 
-Broadcast::routes(['middleware' => ['auth:sanctum']]);
+Broadcast::routes();
 
 //Authed routes
 Route::middleware('auth:sanctum')->group(function() {

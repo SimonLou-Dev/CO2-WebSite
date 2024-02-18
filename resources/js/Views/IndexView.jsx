@@ -36,6 +36,7 @@ export const IndexView = () => {
 }
 
 
+
 const baseTempGaugeOption = {
     chart:{
         type: "solidgauge"
@@ -257,6 +258,12 @@ const baseCharts = {
     title: {
         text: "Concentration en CO2"
     },
+    xAxis: {
+      type: 'datetime',
+        labels:{
+            format: '{value:%d/%m %H:%M}'
+        }
+    },
     yAxis: [{
         labels: {
             format: '{value} ppm'
@@ -313,6 +320,7 @@ const baseCharts = {
         opposite: true
 
     }],
+
     responsive: {
       rules: [{
             condition: {
@@ -449,12 +457,19 @@ const MainPage = (props) => {
     const listenForUpdates = (_sensorId = sensorId) => {
         //updateGraphEvent
 
-        window.Echo.private("Sensor." +  process.env.APP_ENV + "." + _sensorId)
-            .listen(".updateGraphEvent", (e) => {
-                fetchData()
-            })
+        if(_sensorId != sensorId){
+            window.Echo.leaveChannel("Sensor." +  process.env.APP_ENV + "." + sensorId)
 
-        window.Echo.leaveChannel("Sensor." +  process.env.APP_ENV + "." + sensorId)
+            window.Echo.channel("Sensor." +  process.env.APP_ENV + "." + _sensorId)
+                .listen(".updateGraphEvent", (e) => {
+                    if(period === "h" || period === "j") fetchData()
+                    if( new Date().getMinutes() <= 10) getHeatmapData();
+                })
+        }
+
+
+
+
     }
 
 
@@ -468,6 +483,8 @@ const MainPage = (props) => {
 
         setSensorId(sensor)
 
+        console.log(Date.UTC(2010,0,1))
+
         await axios.get("/sensors/" + sensor + "/measures", {
                 params: {
                     period: "1" + per
@@ -480,7 +497,7 @@ const MainPage = (props) => {
                 });
 
                 gaugeHum.series[0].update({
-                    data: [ parseInt(response.data.last_measure.humidity)]
+                    data: [ parseInt(response.data.last_measure.humidity)],
                 });
 
                 gaugePpm.series[0].update({
@@ -491,10 +508,14 @@ const MainPage = (props) => {
                     data: response.data.data.temperature
                 })
 
+
                 chartLineRef.xAxis[0].setCategories(response.data.data.dates)
 
+
+
                 chartLineRef.series[1].update({
-                    data: response.data.data.ppm
+                    data: response.data.data.ppm,
+                    pointInterval: response.data.pointInterval,
                 })
 
                 setPeriod(per)
