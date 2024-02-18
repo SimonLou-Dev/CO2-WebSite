@@ -76,7 +76,7 @@ export const Sensor = () => {
                                 <th>id</th>
                                 <th>salle</th>
                                 <th className={"phoneHidden"}>dernier message</th>
-                                <th>dev eui</th>
+                                <th className={"phoneHidden"}>dev eui</th>
                                 <th>modifier</th>
                                 <th>supprimer</th>
                             </tr>
@@ -87,7 +87,7 @@ export const Sensor = () => {
                                 <td>{item.id_hex}</td>
                                 <td>{item.get_room.name}</td>
                                 <td className={"phoneHidden"}>{item.last_message}</td>
-                                <td>{item.device_addr}</td>
+                                <td className={"phoneHidden"}>{item.device_addr}</td>
                                 <td>
                                     <button className={"btn"} onClick={()=>{
                                         navigate(`/sensors/${item.id}`)

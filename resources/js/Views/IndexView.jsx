@@ -594,7 +594,7 @@ const MainPage = (props) => {
                         highcharts={Highcharts}
                         options={baseHumidGaugeOption}
                         ref={chartGaugeHum}/>
-                    <h4>Humiditée</h4>
+                    <h4>Humidité</h4>
                 </div>
                 <div className={"gauge"}>
                     <HighchartsReact
