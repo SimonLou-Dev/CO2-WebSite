@@ -43,7 +43,6 @@ export const Settings = () => {
 
         }).catch(e => {
             let response = e.response
-            console.log(response)
             pushNotification(dispatch, {
                 type: 4,
                 text: "Erreur lors de l'inscription",

@@ -11,7 +11,7 @@ import Select from 'react-select'
 import highchartsSeriesLabel from "highcharts/modules/series-label";
 import highchartsHeatmap from "highcharts/modules/heatmap";
 import highchartsAccessibility from "highcharts/modules/accessibility";
-import {pushNotification} from "../Utils/Context/NotificationProvider";
+import {pushNotification, pushNotificationSimply, useNotifications} from "../Utils/Context/NotificationProvider";
 import Pusher from "pusher-js";
 import Echo from "laravel-echo";
 
@@ -436,6 +436,7 @@ const MainPage = (props) => {
     const [heatMapDates, setHeatMapDates] = useState([]);
 
     const [sensorId, setSensorId] = useState(0);
+    const dispatch = useNotifications()
 
 
 
@@ -483,8 +484,6 @@ const MainPage = (props) => {
 
         setSensorId(sensor)
 
-        console.log(Date.UTC(2010,0,1))
-
         await axios.get("/sensors/" + sensor + "/measures", {
                 params: {
                     period: "1" + per
@@ -523,7 +522,7 @@ const MainPage = (props) => {
                 listenForUpdates(response.data.sensor.id)
 
             }).catch((error) => {
-                console.log(error)
+                pushNotificationSimply(dispatch, 4, "Une erreur est survenue")
             })
 
 
@@ -590,7 +589,7 @@ const MainPage = (props) => {
 
 
             }).catch((error) => {
-                console.log(error)
+                pushNotificationSimply(dispatch, 4, "Une erreur est survenue")
             })
     }
 

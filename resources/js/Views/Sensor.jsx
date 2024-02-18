@@ -4,7 +4,7 @@ import {PageNavigator} from "../Components/table/PageNavigator";
 import {Searcher} from "../Components/table/Searcher";
 import {UpdaterBtn} from "../Components/table/UpdaterBtn";
 import {useEffect, useState} from "react";
-import {pushNotification, useNotifications} from "../Utils/Context/NotificationProvider";
+import {pushNotification, pushNotificationSimply, useNotifications} from "../Utils/Context/NotificationProvider";
 import {SensorPopup} from "../Components/SensorPopup/SensorPopup";
 import {useNavigate} from "react-router-dom";
 
@@ -38,7 +38,7 @@ export const Sensor = () => {
                 setLimit(response.data.last_page)
         }).catch(e => {
             if (e.response.status === 401){
-                console.log("Unauthorized")
+                pushNotificationSimply(dispatch, 4, "Une erreur est survenue")
             }
         });
     }
