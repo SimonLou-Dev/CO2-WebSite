@@ -496,6 +496,7 @@ a{
         margin: 0 auto;
         background-color: $bg1;
         border-radius: 25px;
+        box-shadow: 2px 0 10px 10px rgba(0,0,0,0.1);
 
         table {
             width: 100%;
@@ -518,7 +519,7 @@ a{
             }
 
             tr {
-                border: $red 1px solid;
+                border: $secondary 1px solid;
                 height: 10px;
                 border-left: none;
                 border-right: none;
@@ -541,7 +542,7 @@ a{
                 }
 
                 text-align: center;
-                border: $red 1px solid;
+                border: $secondary 1px solid;
                 color: $black;
                 border-top: none;
                 border-bottom: none;

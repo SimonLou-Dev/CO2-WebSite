@@ -251,6 +251,9 @@ const baseCharts = {
     chart: {
         zoomType: "x",
     },
+    time: {
+      timezone: "Europe/Paris"
+    },
     credits: {
         enabled: false
     },
@@ -372,6 +375,9 @@ const mapOptions = {
     chart: {
         type: 'heatmap',
     },
+    time: {
+        timezone: "Europe/Paris"
+    },
     title: {
         text: 'Heatmap'
     },
@@ -463,7 +469,7 @@ const MainPage = (props) => {
 
             window.Echo.channel("Sensor." +  process.env.APP_ENV + "." + _sensorId)
                 .listen(".updateGraphEvent", (e) => {
-                    if(period === "h" || period === "j") fetchData()
+                    if(period === "h" || period === "j") fetchData(period, _sensorId)
                     if( new Date().getMinutes() <= 10) getHeatmapData();
                 })
         }
@@ -475,12 +481,15 @@ const MainPage = (props) => {
 
 
     const fetchData = async (per = period, sensor = sensorId) => {
+
         const gaugeTemp = chartGaugeTemp.current.chart;
         const gaugeHum = chartGaugeHum.current.chart;
         const gaugePpm = chartGaugePpm.current.chart;
         const chartLineRef = chartLine.current.chart;
 
-        if(gaugeTemp.series === undefined && gaugeHum.series === undefined && gaugePpm.series === undefined) return
+
+
+        if(gaugeTemp.series === undefined || gaugeHum.series === undefined || gaugePpm.series === undefined || chartLineRef.series === undefined) return
 
         setSensorId(sensor)
 
