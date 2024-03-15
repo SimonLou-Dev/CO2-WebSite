@@ -15,6 +15,7 @@ import {EditSensor} from "./Views/EditSensor";
 import {UserView} from "./Views/UserView";
 
 axios.defaults.baseURL = process.env.APP_URL + "/api";
+axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 
 let router = createBrowserRouter([
     {
