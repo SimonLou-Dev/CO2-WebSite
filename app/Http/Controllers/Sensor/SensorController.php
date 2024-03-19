@@ -139,12 +139,14 @@ class SensorController extends Controller
         $this->authorize('create', Sensor::class);
 
 
+
+
         $data = $request->validate([
             'room_id' => ['required', 'integer', 'min:1'],
             'device_addr' => ["required"]
         ]);
         $data["created_by"] = 1;
-        $data["device_addr"] = Str::replace(":", "", $data["device_addr"]);
+        $data["device_addr"] = Str::replace(['-', ' ', ':'],'', $data["device_addr"]);
 
 
         if(!Cache::has("CHIRPSTACK_API_KEY")){

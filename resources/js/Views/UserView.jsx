@@ -102,7 +102,7 @@ export const UserView = () => {
                                     </select>
                                 </td>
                                 <td>
-                                    <button className={"btn"}><img src={"/assets/icons/supprimer.svg"}
+                                    <button className={"btn"} disabled={!(userC.user && userC.user.perm != null && (userC.user.perm.user_delete || userC.user.perm["*"]))}><img src={"/assets/icons/supprimer.svg"}
                                                                    onClick={async () => {
                                                                        await axios.delete("/users/" + item.id).then(response => {
                                                                            pushNotificationSimply(dispatch, 1, "Utilisateur supprimé")

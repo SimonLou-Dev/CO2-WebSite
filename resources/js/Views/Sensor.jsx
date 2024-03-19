@@ -3,10 +3,11 @@ import axios from "axios";
 import {PageNavigator} from "../Components/table/PageNavigator";
 import {Searcher} from "../Components/table/Searcher";
 import {UpdaterBtn} from "../Components/table/UpdaterBtn";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import {pushNotification, pushNotificationSimply, useNotifications} from "../Utils/Context/NotificationProvider";
 import {SensorPopup} from "../Components/SensorPopup/SensorPopup";
 import {useNavigate} from "react-router-dom";
+import userContext from "../Utils/Context/UserContext";
 
 export const Sensor = () => {
     const [sensor, setSensors ] = useState([]);
@@ -15,6 +16,7 @@ export const Sensor = () => {
     const [open, setOpen] = useState(false);
     const dispatch = useNotifications()
     const navigate = useNavigate();
+    const user = useContext(userContext)
 
 
     useEffect(() => {
@@ -55,7 +57,7 @@ export const Sensor = () => {
                     setOpen(o)
                 }}/>
                 <div className={'table-header'}>
-                    <button className={"btn"} onClick={() => setOpen(true)}>Ajouter</button>
+                    <button className={"btn"} onClick={() => setOpen(true)} disabled={!(user.user && user.user.perm != null && (user.user.perm['*'] || user.user.perm.sensor_create))}>Ajouter</button>
                     <PageNavigator
                         prev={() => {
                             getSensor(page - 1)
@@ -94,7 +96,7 @@ export const Sensor = () => {
                                     }}><img src={"/assets/icons/editer.svg"}/></button>
                                 </td>
                                 <td>
-                                    <button className={"btn"}><img src={"/assets/icons/supprimer.svg"} onClick={async ()=>{
+                                    <button className={"btn"} disabled={!(user.user && user.user.perm != null && (user.user.perm['*'] || user.user.perm.sensor_delete))}><img src={"/assets/icons/supprimer.svg"} onClick={async ()=>{
                                         await axios.delete(`/sensors/${item.id}`).then(response => {
                                             pushNotification(dispatch, {
                                                 type: 1,

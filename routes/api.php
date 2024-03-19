@@ -35,6 +35,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     /* Key management */
     Route::put('/chirpstack/keys', [ChirpstackController::class, "setKeys"]);
+    Route::get('/chirpstack/keys', [ChirpstackController::class, "getKeys"]);
 
 
     /* User Auth */

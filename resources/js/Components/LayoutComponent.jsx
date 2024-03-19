@@ -135,11 +135,19 @@ export const LayoutComponent = () => {
 
     }
 
+    const clearToken = () => {
+        console.log("clearing token")
+        setToken(null)
+        setUser(null)
+        window.localStorage.removeItem("token")
+        setAuthToken(null)
+    }
+
     return (
 
         <div className="layout">
             <div className={"page-content"}>
-                <UserContext.Provider value={{user : user, setUser: (v) => fetchToken(token, v), token: token, setToken: (v) => fetchToken(v), removeToken: (v) => removeToken}}>
+                <UserContext.Provider value={{user : user, setUser: (v) => fetchToken(token, v), token: token, setToken: (v) => fetchToken(v), removeToken: () => clearToken()}}>
                     <Outlet/>
 
                 </UserContext.Provider>

@@ -286,6 +286,15 @@ a{
         -webkit-transform: scale(1.05);
         background-color: $secondary;
     }
+    &:disabled{
+        opacity: 60%;
+        cursor: not-allowed;
+        background-color: $secondary;
+        &:hover{
+            background-color: $secondary;
+        }
+
+    }
 }
 
 .roomSelector{

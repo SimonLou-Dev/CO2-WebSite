@@ -58,7 +58,7 @@ export const EditSensor = () => {
                     <div className={"card form-card"}>
                         <div className={"form-group"}>
                             <label>Affectation</label>
-                            <select defaultValue={0} value={roomSelected} onClick={(e) => {
+                            <select defaultValue={0}  disabled={(userC.user && userC.user.perm != null && (userC.user.perm['*'] || userC.user.perm.sensor_update))} value={roomSelected} onClick={(e) => {
                                 setRoomSelected(e.target.value)
                             }}>
                                 <option value={0} disabled={true}>chargement ...</option>
@@ -68,7 +68,7 @@ export const EditSensor = () => {
                             </select>
                         </div>
                         <div className={"form-button"}>
-                            <button className={"btn"} onClick={() => updateSensor()}>Enregistrer</button>
+                            <button className={"btn"} disabled={(userC.user && userC.user.perm != null && (userC.user.perm['*'] || userC.user.perm.sensor_update))} onClick={() => updateSensor()}>Enregistrer</button>
                         </div>
                     </div>
                     <div className={"card form-card"}>
