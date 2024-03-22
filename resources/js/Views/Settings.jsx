@@ -30,8 +30,8 @@ export const Settings = () => {
     const [rooms, setRooms] = useState([])
 
     useEffect(() => {
-        if(user && user.perm != null && (user.perm.update_chirpstack_key|| user.perm["*"])) getKeys()
-        if(user && user.perm != null && (user.perm.room_modify || user.perm["*"])) getRoom()
+        if(user.user && user.user.perm != null && (user.user.perm.update_chirpstack_key|| user.user.perm["*"])) getKeys()
+        if(user.user && user.user.perm != null && (user.user.perm.room_modify || user.user.perm["*"])) getRoom()
 
 
 
