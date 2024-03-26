@@ -61,7 +61,7 @@ export const EditSensor = () => {
                             <select defaultValue={0}  disabled={(userC.user && userC.user.perm != null && (userC.user.perm['*'] || userC.user.perm.sensor_update))} value={roomSelected} onClick={(e) => {
                                 setRoomSelected(e.target.value)
                             }}>
-                                <option value={0} disabled={true}>chargement ...</option>
+                                <option value={0} disabled={true}>{rooms != null ? 'non affecté' : 'chargement ...'}</option>
                                 {rooms && rooms.map((room, index) =>
                                     <option key={index} value={room.id}>{room.name + (sensor.room_id === room.id ? " (actuel) " : "")}</option>
                                 )}

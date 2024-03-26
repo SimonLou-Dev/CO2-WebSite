@@ -67,7 +67,7 @@ class Sensor extends Model
 
     public function getRoom()
     {
-        return $this->belongsTo(Room::class, "room_id");
+        return $this->belongsTo(Room::class, "room_id")->withTrashed();
     }
 
 

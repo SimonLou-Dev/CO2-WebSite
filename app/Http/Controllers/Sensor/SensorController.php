@@ -207,7 +207,7 @@ class SensorController extends Controller
 
         $sensors = Sensor::all();
 
-        $rooms = Room::all();
+        $rooms = Room::withTrashed()->get();
 
         foreach ($rooms as $key => $room){
             if($sensors->has($room->id) && $room->id != $sensor->room_id) $rooms->forget($key);
