@@ -18,5 +18,10 @@ class Measurement extends Model
         "temperature" => "float",
     ];
 
+    public function getSensor(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Sensor::class, 'sensor_id', 'id');
+    }
+
 
 }

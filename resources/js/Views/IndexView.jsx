@@ -441,6 +441,8 @@ const MainPage = (props) => {
     const [roomList, setRoomList] = useState([]);
     const [heatMapDates, setHeatMapDates] = useState([]);
 
+    const [selectedRoom, setSelectedRoom] = useState(null);
+
     const [sensorId, setSensorId] = useState(0);
     const dispatch = useNotifications()
 
@@ -528,6 +530,10 @@ const MainPage = (props) => {
 
                 setPeriod(per)
                 setSensorId(response.data.sensor.id)
+                if(selectedRoom === null){
+                    getHeatmapData(response.data.sensor.id)
+                }
+                setSelectedRoom({label: response.data.room.name +  " ( #" + response.data.sensor.id_hex + ")", value: response.data.sensor.room_id})
                 listenForUpdates(response.data.sensor.id)
 
             }).catch((error) => {
@@ -559,6 +565,7 @@ const MainPage = (props) => {
               const _sensorId=  room.get_sensor.id
               fetchData(period, _sensorId);
               getHeatmapData(_sensorId)
+              setSelectedRoom({label: room.name + " (#" + room.get_sensor.id_hex + ")", value: room.id})
           }
         })
 
@@ -569,6 +576,8 @@ const MainPage = (props) => {
     }
 
     const getHeatmapData = async (_sensorId = sensorId) => {
+        if(_sensorId === 0) return
+
         const chartMapRef = chartMap.current.chart
 
         await axios.get("/sensors/" + _sensorId + "/heatmap", {})
@@ -607,7 +616,7 @@ const MainPage = (props) => {
         <div className={"charts"}>
             <div className={"header"}>
                 <h1>Mesures et statistiques</h1>
-                <Select options={rooms}  onChange={selectRoom} placeholder={"Choisir une salle"} className={"roomSelector"} classNamePrefix="react-select"/>
+                <Select options={rooms}  onChange={selectRoom} value={selectedRoom}  placeholder={"Choisir une salle"} className={"roomSelector"} classNamePrefix="react-select"/>
             </div>
             <section className={"charts-section flex-line"}>
                 <div className={"gauge"}>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Sensor;
 use App\Http\Controllers\Controller;
 use App\Jobs\AddNewDeviceToGatJob;
 use App\Jobs\DeleteDeviceToGatJob;
+use App\Jobs\DeleteMeasuresJob;
 use App\Models\Room;
 use App\Models\Sensor;
 use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
@@ -344,8 +345,13 @@ class SensorController extends Controller
             ],500);
         }
 
-        DeleteDeviceToGatJob::dispatch($sensor->device_addr, $request->user()->id);
+        //DeleteDeviceToGatJob::dispatch($sensor->device_addr, $request->user()->id);
 
+        if($sensor->getRoom->deleted_at != null){
+            $sensor->getRoom->forceDelete();
+        }
+
+        DeleteMeasuresJob::dispatch($sensor->id, $request->user()->id) ;
 
         $sensor->delete();
 

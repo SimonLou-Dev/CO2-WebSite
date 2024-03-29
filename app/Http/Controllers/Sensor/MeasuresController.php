@@ -53,7 +53,7 @@ class MeasuresController extends Controller
     public function getMesures(Request $request, string $sensor)
     {
         if ($sensor == "0") {
-            $sensor = Sensor::first();
+            $sensor = Measurement::orderBy("id", "desc")->first()->getSensor;
         } else {
             $sensor = Sensor::where("id", $sensor)->firstOrFail();
         }
@@ -102,8 +102,8 @@ class MeasuresController extends Controller
         $temperature = array();
         $created_at = array();
 
-
-        if($period == "s" || $period == "m" || $period == "a"){
+        $mesures = null;
+        if($period == "s" || $period == "m"){
             $mesures = Measurement::where("sensor_id", $sensor->id)->whereBetween("measured_at", [$start, $end])->orderBy("measured_at", "desc")->get(["measured_at", "ppm", "humidity", "temperature"])->groupBy(function ($item) {
                 return $item->measured_at->format('Y-m-d');
             })->map(function ($item) {
@@ -116,22 +116,41 @@ class MeasuresController extends Controller
                 ];
             });
 
-            foreach($mesures as $mesure){
-                $ppm[] = $mesure["ppm"];
-                $humidity[] = $mesure["humidity"];
-                $temperature[] = $mesure["temperature"];
-                $created_at[] = $mesure["measured_at"];
-            }
+
+        }elseif ($period == "a") {
+            $mesures = Measurement::where("sensor_id", $sensor->id)->whereBetween("measured_at", [$start, $end])->orderBy("measured_at", "desc")->get(["measured_at", "ppm", "humidity", "temperature"])->groupBy(function ($item) {
+                return $item->measured_at->format('Y-m');
+            })->map(function ($item) {
+
+                return [
+                    "ppm" => round($item->avg("ppm"), 0),
+                    "humidity" => round($item->avg("humidity"),1),
+                    "temperature" => round($item->avg("temperature"),1),
+                    "measured_at" => $item->first()->measured_at->timestamp * 1000,
+                ];
+            });
+
         }else{
             $mesures = Measurement::where("sensor_id", $sensor->id)->whereBetween("measured_at", [$start, $end])->orderBy("measured_at", "desc")->get(["measured_at", "ppm", "humidity", "temperature"]);
-            foreach($mesures as $mesure){
 
-                $ppm[] = $mesure->ppm;
-                $humidity[] = $mesure->humidity;
-                $temperature[] = $mesure->temperature;
-                $created_at[] = $mesure->measured_at->timestamp * 1000;
-            }
         }
+
+        foreach($mesures as $mesure){
+
+
+            $ppm[] = $mesure["ppm"];
+
+            $humidity[] = $mesure["humidity"];
+            $temperature[] = $mesure["temperature"];
+            if($period == "a")
+                $created_at[] = date("Y-m", ($mesure["measured_at"]/1000));
+            else if ($period == "s" || $period == "m")
+                $created_at[] = date("Y-m-d", ($mesure["measured_at"]/1000));
+            else
+                $created_at[] = Carbon::createFromTimeString($mesure["measured_at"])->timestamp * 1000;
+        }
+
+
 
         $lastMesure = Measurement::where("sensor_id", $sensor->id)->orderBy("measured_at", "desc")->first();
         $interval = 0;
