@@ -457,4 +457,118 @@ class UserController extends Controller
         return response()->json();
     }
 
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     *
+     *
+     * @OA\Get(
+     *     path="/permissions",
+     *     summary="List moderator permissions",
+     *     tags={"PERM"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     * *      name="Authorization",
+     * *      in="header",
+     * *      required=true,
+     * *      description="Bearer {access-token}",
+     * *      @OA\Schema(
+     * *          type="bearerAuth"
+     * *      )
+     * *     ),
+
+     *
+     *     @OA\Response(
+     *          response=200,
+     *          description="List perms",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="perms", type="array", @OA\Items(type="string")),
+     *
+     *          ),
+     *    ),
+     *      @OA\Response(
+     *            response=403,
+     *            description="Not Allowed"
+     *      )
+     *
+     *)
+     */
+    public function getModoPerm(Request $request)
+    {
+        if(!$request->user()->hasRole("administrator")) return response()->json([], 403);
+
+        $perms = Permission::all();
+        $permList = array();
+
+
+        $permissions = Role::where("name", "moderator")->first()->permissions;
+
+        foreach ($perms as $perm){
+            if($permissions->contains("name", $perm->name))
+                $permList[$perm->name] = true;
+            else
+                $permList[$perm->name] = false;
+        }
+
+        return \response()->json([
+            "perms" => $permList
+        ]);
+
+
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     *
+     *
+     * @OA\Patch(
+     *     path="/permissions/{permName}",
+     *     summary="Modify permission of user",
+     *     tags={"PERM"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     * *      name="Authorization",
+     * *      in="header",
+     * *      required=true,
+     * *      description="Bearer {access-token}",
+     * *      @OA\Schema(
+     * *          type="bearerAuth"
+     * *      )
+     * *     ),
+     *     @OA\PathParameter (
+     *        name="permName",
+     *        description="Name of permission",
+     *        required=true,
+     *     ),
+     *
+     *     @OA\Response(
+     *          response=200,
+     *          description="user permissions updates successfully",
+     *          @OA\JsonContent(
+     *          ),
+     *    ),
+     *      @OA\Response(
+     *            response=403,
+     *            description="Not Allowed"
+     *      )
+     *
+     *)
+     */
+    public function updateModoPerm(Request $request, string $permName)
+    {
+        if(!$request->user()->hasRole("administrator")) return response()->json([], 403);
+
+        $role = Role::where("name", "moderator")->first();
+        if($role->permissions->contains("name", $permName)){
+            $role->revokePermissionTo([$permName]);
+        }else {
+            $role->givePermissionTo([$permName]);
+        }
+
+        return \response()->json([]);
+
+    }
+
 }

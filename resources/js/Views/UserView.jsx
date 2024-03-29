@@ -10,6 +10,7 @@ import {Searcher} from "../Components/table/Searcher";
 import UserContext from "../Utils/Context/UserContext";
 import {setAuthToken} from "../Utils/AxiosFunction";
 import {useNotifications} from "../Utils/Context/NotificationProvider";
+import {PermPopup} from "../Components/User/PermPopup";
 
 export const UserView = () => {
     const navigate = useNavigate();
@@ -22,6 +23,8 @@ export const UserView = () => {
 
     const [users, setUsers] = useState([]);
     const [roles, setRoles] = useState([])
+
+    const [display, setDisplay] = useState(false);
 
     useEffect(() => {
         getUser()
@@ -50,6 +53,10 @@ export const UserView = () => {
     return (
 
         <div className="user-viewer">
+            {display &&
+                <PermPopup display={display} setDisplay={setDisplay}/>
+            }
+
             <div className={'table-wrapper'}>
                 <div className={'table-header'}>
 
@@ -63,6 +70,7 @@ export const UserView = () => {
                         prevDisabled={(page === 1)}
                         nextDisabled={(page === limit)}/>
                     <Searcher callback={(v) => {getUser(page, v)}} value={search} />
+                    <button className={"btn"} onClick={()=>setDisplay(true)}>permissions</button>
                     <UpdaterBtn callback={getUser}/>
 
 

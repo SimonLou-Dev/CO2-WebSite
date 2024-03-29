@@ -29,7 +29,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $role->givePermissionTo();
 
         $role = Role::create(["name" => "moderator"]);
-        $role->givePermissionTo(["sensor_update"]);
+        $role->givePermissionTo(["sensor_viewAll"]);
 
         $role = Role::create(["name" => "administrator"]);
         $role->givePermissionTo(["*"]);

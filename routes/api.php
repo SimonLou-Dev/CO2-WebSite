@@ -37,6 +37,10 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::put('/chirpstack/keys', [ChirpstackController::class, "setKeys"]);
     Route::get('/chirpstack/keys', [ChirpstackController::class, "getKeys"]);
 
+    /* Role Management */
+    Route::get("/permissions", [UserController::class, "getModoPerm"]);
+    Route::patch("/permissions/{permName}", [UserController::class, "updateModoPerm"]);
+
 
     /* User Auth */
     Route::patch("/logout", [UserController::class, "logout"]);

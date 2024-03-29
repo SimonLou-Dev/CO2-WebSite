@@ -532,5 +532,44 @@ body, html, .app{
     height: 100%;
 }
 
+.popup{
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    backdrop-filter: blur(5px);
+    top: 0;
+    left: 0;
+    z-index: 11;
+    display: flex;
+    .card{
+        min-width: 300px;
+        width: 40vw;
+        max-width: 1000px;
+        margin: auto;
+        background-color: white;
+        padding: 10px;
+        border-radius: 25px;
+        .card-header{
+            display: flex;
+            flex-direction: row;
+        }
+        .perm-list{
+            width: 100%;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            .perm-item{
+                flex-direction: row;
+                display: flex;
+                justify-content: space-between;
+                width: 95%;
+                margin: 10px 0;
+            }
+        }
+
+    }
+}
+
 
 
