@@ -113,15 +113,21 @@ export const SensorPopup = (props) => {
                 <h2>Information du capteur</h2>
                 <div className={"form-group"}>
                     <label>Capteur n°</label>
-                    <input type={"text"} disabled={true}/>
+                    <input type={"text"} value={sensor.id_hex} disabled={true}/>
                 </div>
                 <div className={"form-group"}>
                     <label>QrCode</label>
-                    <input type={"text"} disabled={true}/>
+                    <a href={(process.env.APP_URL + "/api" + "/sensors/" + sensor.id + "/qrcode")} target={"_blank"}
+                       className={"downloader"}>
+                        <img src={"/assets/icons/downloads 1.svg"}/>
+                    </a>
                 </div>
                 <div className={"form-group"}>
                     <label>Code du capteur (.ino)</label>
-                    <input type={"text"} disabled={true}/>
+                    <a href={(process.env.APP_URL + "/api" + "/sensors/" + sensor.id + "/code")} target={"_blank"}
+                       className={"downloader"}>
+                        <img src={"/assets/icons/downloads 1.svg"}/>
+                    </a>
                 </div>
                 <div className={"form-button"}>
                     <button className={"btn"} onClick={() => {

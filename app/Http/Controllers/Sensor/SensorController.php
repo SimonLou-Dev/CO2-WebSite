@@ -12,6 +12,7 @@ use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
 use BaconQrCode\Renderer\ImageRenderer;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
 use BaconQrCode\Writer;
+use File;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Cache;
@@ -345,7 +346,7 @@ class SensorController extends Controller
             ],500);
         }
 
-        //DeleteDeviceToGatJob::dispatch($sensor->device_addr, $request->user()->id);
+        DeleteDeviceToGatJob::dispatch($sensor->device_addr, $request->user()->id);
 
         if($sensor->getRoom->deleted_at != null){
             $sensor->getRoom->forceDelete();
@@ -403,4 +404,40 @@ class SensorController extends Controller
         return response()->file($savePath);
 
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     *
+     *
+     * @OA\Get(
+     *     path="/sensors/code",
+     *     summary="Get code",
+     *     tags={"sensors"},
+
+     *
+     *     @OA\Response(
+     *          response=200,
+     *          description="Dowload file",
+     *          @OA\JsonContent(
+     *
+     *
+     *          ),
+     *    ),
+     *      @OA\Response(
+     *            response=403,
+     *            description="Not Allowed"
+     *      )
+     *
+     *)
+     */
+        public function getCode()
+        {
+
+            $file = Storage::path('public/code.ino');
+
+            return response()->download($file, 'code.ino', ['Content-Type' => 'application/octet-stream']);
+
+        }
+
 }

@@ -63,6 +63,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post("/sensors", [SensorController::class, "store"]);
     Route::put("/sensors/{sensor}", [SensorController::class, "update"]);
     Route::delete("/sensors/{sensor}", [SensorController::class, "destroy"]);
+
 });
 
 
@@ -77,6 +78,7 @@ Route::get("/sensors/{sensor}", [SensorController::class, "show"]);
 
 /* Retrieve qrCode, measures & heatmap */
 Route::get("/sensors/{sensor}/qrcode", [SensorController::class, "getQrCode"]);
+Route::get("/sensors/{sensor}/code", [SensorController::class, "getCode"]);
 Route::get("/sensors/{sensor}/measures", [MeasuresController::class, "getMesures"]);
 Route::get("/sensors/{sensor}/heatmap", [MeasuresController::class, "getHeatmap"]);
 

@@ -52,7 +52,7 @@ export const EditSensor = () => {
         <div className="oneSensor">
             <button className={"btn back-btn"} onClick={() => {
                 window.history.back()
-            }}>R</button>
+            }}>Retour</button>
             <section className={"sensor-info"}>
                 <div className={"sensor-info-form"}>
                     <div className={"card form-card"}>
@@ -79,7 +79,10 @@ export const EditSensor = () => {
                         </div>
                         <div className={"form-group"}>
                             <label>Code (.ino)</label>
-                            <input type={"text"} disabled={true}/>
+                                <a href={(process.env.APP_URL + "/api" + "/sensors/" + id + "/code")} target={"_blank"} className={"downloader"}>
+                                    <img src={"/assets/icons/downloads 1.svg"}/>
+                                </a>
+
                         </div>
                     </div>
                     <button className={"del-btn"}>Supprimer</button>
