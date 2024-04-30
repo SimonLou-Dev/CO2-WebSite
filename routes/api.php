@@ -8,6 +8,7 @@ use App\Http\Controllers\Sensor\MeasuresController;
 use App\Http\Controllers\Sensor\MesuresController;
 use App\Http\Controllers\Sensor\ChirpstackController;
 use App\Http\Controllers\Sensor\SensorController;
+use App\Http\Controllers\Sensor\ThresholdController;
 use App\Http\Controllers\User\ApiTokenController;
 use App\Http\Controllers\User\UserController;
 use Illuminate\Http\Request;
@@ -63,6 +64,11 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post("/sensors", [SensorController::class, "store"]);
     Route::put("/sensors/{sensor}", [SensorController::class, "update"]);
     Route::delete("/sensors/{sensor}", [SensorController::class, "destroy"]);
+
+    /* Threshold management */
+    Route::get("/threshold", [ThresholdController::class, "getThreshold"]);
+    Route::put("/threshold", [ThresholdController::class, "updateThreshold"]);
+
 
 });
 

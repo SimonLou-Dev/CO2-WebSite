@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Sensor;
 
+use App\Events\NotifyEvent;
 use App\Http\Controllers\Controller;
 use App\Jobs\AddNewDeviceToGatJob;
 use App\Jobs\DeleteDeviceToGatJob;
@@ -151,26 +152,13 @@ class SensorController extends Controller
         $data["device_addr"] = Str::replace(['-', ' ', ':'],'', $data["device_addr"]);
 
 
-        if(!Cache::has("CHIRPSTACK_API_KEY")){
-            return response()->json([
-                "API_KEY"=>"You must set API KEY"
-            ],500);
-        }
-
-        if(!Cache::has("CHIRPSTACK_DEVICE_PROFILE_ID")){
-            return response()->json([
-                "DEVICE_PROFIL"=>"You must set DEVICE PROFIL ID"
-            ],500);
-        }
-        if(!Cache::has("CHIRPSTACK_APPLICATION_ID")){
-            return response()->json([
-                "APPLICATION_ID"=>"You must set APPLICATION ID"
-            ],500);
-        }
 
         $sensor = Sensor::create($data);
-
-        AddNewDeviceToGatJob::dispatch($request->device_addr, "sensor_".$sensor->id, $sensor->created_by);
+        if(!Cache::has("CHIRPSTACK_DEVICE_PROFILE_ID") && !Cache::has("CHIRPSTACK_API_KEY") && !Cache::has("CHIRPSTACK_APPLICATION_ID")){
+            NotifyEvent::dispatch("Le capteur ne sera pas ajouté à chirpstack", 3, $request->user()->id);
+        }else{
+            AddNewDeviceToGatJob::dispatch($request->device_addr, "sensor_".$sensor->id, $sensor->created_by);
+        }
 
         return response()->json($sensor, 201);
     }

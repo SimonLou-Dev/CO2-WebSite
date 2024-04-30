@@ -29,9 +29,15 @@ export const Settings = () => {
     const [newRoom, setNewRoom] = useState()
     const [rooms, setRooms] = useState([])
 
+    const [thresholdLowQ, setLowQThreshold] = useState([])
+    const [thresholdMediumQ, setMediumQThreshold] = useState([])
+    const [thresholdHighQ, setHighQThreshold] = useState([])
+    const [thresholdError, setThresholdError] = useState({})
+
     useEffect(() => {
         if(user.user && user.user.perm != null && (user.user.perm.update_chirpstack_key|| user.user.perm["*"])) getKeys()
         if(user.user && user.user.perm != null && (user.user.perm.room_modify || user.user.perm["*"])) getRoom()
+        if(user.user && user.user.perm != null && (user.user.perm.update_threshold || user.user.perm["*"])) getThreshold()
 
 
 
@@ -54,6 +60,34 @@ export const Settings = () => {
 
     }
 
+    const getThreshold = async () => {
+        setAuthToken(user.token)
+        await axios.get("/threshold").then(response => {
+            setLowQThreshold(response.data.low)
+            setMediumQThreshold(response.data.medium)
+            setHighQThreshold(response.data.high)})
+    }
+
+    const updateThreshold = async () => {
+        setAuthToken(user.token)
+        await axios.put("/threshold", {
+            low: thresholdLowQ,
+            medium: thresholdMediumQ,
+            high: thresholdHighQ
+        }).then(response => {
+            pushNotification(dispatch, {
+                type: 1,
+                text: "Seuils mis à jours",
+            })
+            getThreshold()
+        }).catch(e => {
+            if(e.response.status === 422){
+                setRegisterError(e.response.data.errors)
+            }
+            pushNotification(4, "Erreur lors de la mise à jour des seuils")
+        })
+    }
+
     const postKeys = async () => {
         await axios.put("/chirpstack/keys", {
             app_id: chirpstackAppID,
@@ -64,7 +98,7 @@ export const Settings = () => {
                 type: 1,
                 text: "Clefs modifées",
             })
-            getKeys()
+                getKeys()
         }).catch(e => {
             if(e.response.status === 422){
                 setRegisterError(e.response.data.errors)
@@ -380,6 +414,60 @@ export const Settings = () => {
                     </div>
                     <div className={"form-button"}>
                         <button className={"btn"} onClick={postKeys}>valider</button>
+                    </div>
+                </div>
+            </div>}
+
+            {user.user && user.user.perm != null && (user.user.perm.update_threshold || user.user.perm["*"]) && <div className={"card"}>
+                <h2>Modifier les seuils</h2>
+                <div className={"card-content"}>
+                    <div className={"form-group"}>
+                        <label>Seuil de basse qualité</label>
+                        <input type={"number"} onChange={(e) => {
+                            setLowQThreshold(e.target.value)
+                        }} value={thresholdLowQ}/>
+                        {thresholdError.low &&
+                            <div className={'errors-list'}>
+                                <ul>
+                                    {thresholdError.low.map((error) =>
+                                        <li>{error}</li>
+                                    )}
+                                </ul>
+                            </div>
+                        }
+                    </div>
+                    <div className={"form-group"}>
+                        <label>Seuil de qualité moyenne</label>
+                        <input type={"number"} onChange={(e) => {
+                            setMediumQThreshold(e.target.value)
+                        }} value={thresholdMediumQ}/>
+                        {thresholdError.profile_id &&
+                            <div className={'errors-list'}>
+                                <ul>
+                                    {thresholdError.profile_id.map((error) =>
+                                        <li>{error}</li>
+                                    )}
+                                </ul>
+                            </div>
+                        }
+                    </div>
+                    <div className={"form-group"}>
+                        <label>Seuil de bonne qualité</label>
+                        <input type={"number"} onChange={(e) => {
+                            setHighQThreshold(e.target.value)
+                        }} value={thresholdHighQ}/>
+                        {thresholdError.api_key &&
+                            <div className={'errors-list'}>
+                                <ul>
+                                    {thresholdError.api_key.map((error) =>
+                                        <li>{error}</li>
+                                    )}
+                                </ul>
+                            </div>
+                        }
+                    </div>
+                    <div className={"form-button"}>
+                        <button className={"btn"} onClick={updateThreshold}>valider</button>
                     </div>
                 </div>
             </div>}

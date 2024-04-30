@@ -383,7 +383,7 @@ body, html, .app{
     }
     .card{
 
-        margin: auto 0;
+        margin: 10px;
         @include media-max("tablet"){
             margin-top: 40px;
         }

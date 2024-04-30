@@ -23,6 +23,7 @@ class RolesAndPermissionsSeeder extends Seeder
         Permission::create(['name'=> "roles_modify"]);
         Permission::create(['name'=> "roles_create"]);
         Permission::create(['name'=> "room_modify"]);
+        Permission::create(['name'=> "update_threshold"]);
         Permission::create(['name'=> "*"]);
 
         $role = Role::create(["name"=> "user"]);

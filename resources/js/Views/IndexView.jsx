@@ -172,6 +172,9 @@ const basePpmGaugeOption = {
     },
 
     series: [{
+        dataLabels:  {
+            format: "{y} ppm",
+        }
     }]
 }
 const baseHumidGaugeOption = {
@@ -520,6 +523,45 @@ const MainPage = (props) => {
 
 
                 chartLineRef.xAxis[0].setCategories(response.data.data.dates)
+                chartLineRef.yAxis[0].update({plotBands: [
+                        {
+                            from: 0,
+                            to: response.data.quality_threshold.high,
+                            zIndex: 10,
+                            color: "rgba(37,211,130,0.2)",
+                            label: {
+                                zIndex: 10,
+                                text: "Bonne qualité d'air",
+                                style: {
+                                    color: "#25D382"
+                                }
+                            }
+                        },{
+                            from: response.data.quality_threshold.high,
+                            to: response.data.quality_threshold.medium,
+                            zIndex: 10,
+                            color: "rgba(255,153,41,0.2)",
+                            label: {
+                                zIndex: 10,
+                                text: "Qualité d'air moyenne",
+                                style: {
+                                    color: "#FF9929"
+                                }
+                            }
+                        },{
+                            from: response.data.quality_threshold.medium,
+                            to: response.data.quality_threshold.low*10,
+                            zIndex: 10,
+                            color: "rgb(255,66,89,0.2)",
+                            label: {
+                                zIndex: 10,
+                                text: "Mauvaise qualité",
+                                style: {
+                                    color: "#FF4259"
+                                }
+                            }
+                        }
+                    ]})
 
 
 
@@ -594,6 +636,15 @@ const MainPage = (props) => {
                 chartMapRef.series[0].update({
                     data: data
                 })
+
+                chartMapRef.update({colorAxis: {
+                        stops: [
+                            [0, '#25D382'],
+                            [ response.data.quality_threshold.medium/response.data.quality_threshold.low, '#FF9929'],
+                            [1, '#FF4259']
+                        ],
+                        max:response.data.quality_threshold.low,
+                }})
 
                 chartMapRef.yAxis[0].setCategories(days)
 

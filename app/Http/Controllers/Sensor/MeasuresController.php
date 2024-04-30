@@ -8,6 +8,7 @@ use App\Models\Sensor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use function PHPUnit\Framework\isNull;
 
 class MeasuresController extends Controller
@@ -41,6 +42,7 @@ class MeasuresController extends Controller
      *             @OA\Property(property="to", type="string", example="2024-01-01 00:20:00"),
      *             @OA\Property(property="last_measure", type="object", example={"ppm": 100, "humidity": 50, "temperature": 20}),
      *             @OA\Property(property="data", type="object", example={"dates": {"2024-01-01 00:00:00", "2024-01-01 00:20:00"}, "ppm": {100, 100}, "humidity": {50, 50}, "temperature": {20, 20}}),
+     *             @OA\Property(property="quality_threshold", type="object", example={"low": 400, "medium": 800, "high": 1200}),
      *         ),
      *     ),
      *     @OA\Response(
@@ -180,6 +182,11 @@ class MeasuresController extends Controller
             "room" => $sensor->getRoom,
             "sensor"=>$sensor,
             "interval" => $interval * 1000,
+            "quality_threshold" => [
+                "low" => Cache::get("CONCENTRATION_THRESHOLD_LOW", "400"),
+                "medium" => Cache::get("CONCENTRATION_THRESHOLD_MEDIUM", "800"),
+                "high" => Cache::get("CONCENTRATION_THRESHOLD_HIGH", "1200")
+            ],
             "last_measure" => [
                 "ppm" => (is_null($lastMesure) ? null  :  $lastMesure->ppm),
                 "humidity" => (is_null($lastMesure) ? null  :  $lastMesure->humidity),
@@ -247,6 +254,11 @@ class MeasuresController extends Controller
 
         return response()->json([
             "data" => $data->toArray(),
+            "quality_threshold" => [
+                "low" => Cache::get("CONCENTRATION_THRESHOLD_LOW", "400"),
+                "medium" => Cache::get("CONCENTRATION_THRESHOLD_MEDIUM", "800"),
+                "high" => Cache::get("CONCENTRATION_THRESHOLD_HIGH", "1200")
+            ],
             "days"=> $days
 
         ]);

@@ -39,7 +39,7 @@ export const PermPopup = (props) => {
         <div className="popup">
             <div className={"card"}>
                 <div className={"card-header"}>
-                    <h3>Permission des modérateurs</h3>
+                    <h3>Permission(s) des modérateurs</h3>
                     <button onClick={() => props.setDisplay(false)} className={"btn"}>fermer</button>
                 </div>
                 <div className={"card-body"}>
@@ -102,6 +102,12 @@ export const PermPopup = (props) => {
                             <label>modifier la liste des salles</label>
                             <SwitchBtn number={8} checked={(perms &&  perms.room_modify)} callback={() => {
                                 updatePerm("room_modify", !perms.room_modify)
+                            }}/>
+                        </div>
+                        <div className={"perm-item"}>
+                            <label>Modifier les seuils de concentration</label>
+                            <SwitchBtn number={9} checked={(perms &&  perms.update_threshold)} callback={() => {
+                                updatePerm("update_threshold", !perms.update_threshold)
                             }}/>
                         </div>
                     </div>
