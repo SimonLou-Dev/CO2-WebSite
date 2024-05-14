@@ -451,21 +451,6 @@ export const Settings = () => {
                             </div>
                         }
                     </div>
-                    <div className={"form-group"}>
-                        <label>Seuil de bonne qualité</label>
-                        <input type={"number"} onChange={(e) => {
-                            setHighQThreshold(e.target.value)
-                        }} value={thresholdHighQ}/>
-                        {thresholdError.api_key &&
-                            <div className={'errors-list'}>
-                                <ul>
-                                    {thresholdError.api_key.map((error) =>
-                                        <li>{error}</li>
-                                    )}
-                                </ul>
-                            </div>
-                        }
-                    </div>
                     <div className={"form-button"}>
                         <button className={"btn"} onClick={updateThreshold}>valider</button>
                     </div>

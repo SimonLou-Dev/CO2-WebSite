@@ -51,7 +51,7 @@ class ThresholdController extends Controller
     {
 
         return response()->json([
-            "low" => Cache::get("CONCENTRATION_THRESHOLD_LOW", "400"),
+            "low" => Cache::get("CONCENTRATION_THRESHOLD_LOW", "1200"),
             "medium" => Cache::get("CONCENTRATION_THRESHOLD_MEDIUM", "800"),
         ]);
 
@@ -104,7 +104,6 @@ class ThresholdController extends Controller
         $request->validate([
             "low" => ["required", "numeric"],
             "medium" => ["required", "numeric"],
-            "high" => ["required", "numeric"]
         ]);
 
         if(Cache::store("redis")->has("CONCENTRATION_THRESHOLD_LOW")) Cache::store("redis")->put("CONCENTRATION_THRESHOLD_LOW", $request->low);

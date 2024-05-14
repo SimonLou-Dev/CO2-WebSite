@@ -183,9 +183,8 @@ class MeasuresController extends Controller
             "sensor"=>$sensor,
             "interval" => $interval * 1000,
             "quality_threshold" => [
-                "low" => Cache::get("CONCENTRATION_THRESHOLD_LOW", "400"),
+                "low" => Cache::get("CONCENTRATION_THRESHOLD_LOW", "1200"),
                 "medium" => Cache::get("CONCENTRATION_THRESHOLD_MEDIUM", "800"),
-                "high" => Cache::get("CONCENTRATION_THRESHOLD_HIGH", "1200")
             ],
             "last_measure" => [
                 "ppm" => (is_null($lastMesure) ? null  :  $lastMesure->ppm),
@@ -255,7 +254,7 @@ class MeasuresController extends Controller
         return response()->json([
             "data" => $data->toArray(),
             "quality_threshold" => [
-                "low" => Cache::get("CONCENTRATION_THRESHOLD_LOW", "400"),
+                "low" => Cache::get("CONCENTRATION_THRESHOLD_LOW", "1200"),
                 "medium" => Cache::get("CONCENTRATION_THRESHOLD_MEDIUM", "800"),
             ],
             "days"=> $days
