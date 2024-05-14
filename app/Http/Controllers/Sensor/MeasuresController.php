@@ -257,7 +257,6 @@ class MeasuresController extends Controller
             "quality_threshold" => [
                 "low" => Cache::get("CONCENTRATION_THRESHOLD_LOW", "400"),
                 "medium" => Cache::get("CONCENTRATION_THRESHOLD_MEDIUM", "800"),
-                "high" => Cache::get("CONCENTRATION_THRESHOLD_HIGH", "1200")
             ],
             "days"=> $days
 

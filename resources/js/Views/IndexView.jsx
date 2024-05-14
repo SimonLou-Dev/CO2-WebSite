@@ -526,7 +526,7 @@ const MainPage = (props) => {
                 chartLineRef.yAxis[0].update({plotBands: [
                         {
                             from: 0,
-                            to: response.data.quality_threshold.high,
+                            to: response.data.quality_threshold.medium,
                             zIndex: 10,
                             color: "rgba(37,211,130,0.2)",
                             label: {
@@ -537,8 +537,8 @@ const MainPage = (props) => {
                                 }
                             }
                         },{
-                            from: response.data.quality_threshold.high,
-                            to: response.data.quality_threshold.medium,
+                            from: response.data.quality_threshold.medium,
+                            to: response.data.quality_threshold.low,
                             zIndex: 10,
                             color: "rgba(255,153,41,0.2)",
                             label: {
@@ -549,7 +549,7 @@ const MainPage = (props) => {
                                 }
                             }
                         },{
-                            from: response.data.quality_threshold.medium,
+                            from: response.data.quality_threshold.low,
                             to: response.data.quality_threshold.low*10,
                             zIndex: 10,
                             color: "rgb(255,66,89,0.2)",

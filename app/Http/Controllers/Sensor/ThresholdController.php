@@ -32,10 +32,9 @@ class ThresholdController extends Controller
      *          response=200,
      *          description="Threshold set succesfully",
      *          @OA\JsonContent(
-     *               required={"low", "medium", "high"},
+     *               required={"low", "medium"},
      *               @OA\Property(property="low", type="int", example="1200"),
      *               @OA\Property(property="medium", type="int", example="800"),
-     *               @OA\Property(property="high", type="int", example="400"),
      *           )
      *    ),
      *     @OA\Response(
@@ -54,7 +53,6 @@ class ThresholdController extends Controller
         return response()->json([
             "low" => Cache::get("CONCENTRATION_THRESHOLD_LOW", "400"),
             "medium" => Cache::get("CONCENTRATION_THRESHOLD_MEDIUM", "800"),
-            "high" => Cache::get("CONCENTRATION_THRESHOLD_HIGH", "1200")
         ]);
 
     }
@@ -82,10 +80,9 @@ class ThresholdController extends Controller
      *         required=true,
      *         description="Thres data",
      *          @OA\JsonContent(
-     *              required={"low", "medium", "high"},
+     *              required={"low", "medium"},
      *              @OA\Property(property="low", type="int", example="1200"),
      *              @OA\Property(property="medium", type="int", example="800"),
-     *              @OA\Property(property="high", type="int", example="400"),
      *          )
      *      ),
      *     @OA\Response(
@@ -115,9 +112,6 @@ class ThresholdController extends Controller
 
         if(Cache::store("redis")->has("CONCENTRATION_THRESHOLD_MEDIUM")) Cache::store("redis")->put("CONCENTRATION_THRESHOLD_MEDIUM", $request->medium);
         else Cache::store("redis")->add("CONCENTRATION_THRESHOLD_MEDIUM",$request->medium);
-
-        if(Cache::store("redis")->has("CONCENTRATION_THRESHOLD_HIGH")) Cache::store("redis")->put("CONCENTRATION_THRESHOLD_HIGH", $request->high);
-        else Cache::store("redis")->add("CONCENTRATION_THRESHOLD_HIGH", $request->high);
 
 
     }
