@@ -17,9 +17,18 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/{any}', function () {
+Route::get('/sensors', function () {
+    return view('home');
+});
+
+Route::get('/sensors/{any}', function () {
     return view('home');
 })->where('any', '.*');
-Route::get('/{any}/{any}', function () {
+
+Route::get('/users', function () {
     return view('home');
-})->where('any', '.*');
+});
+
+Route::get('/settings', function () {
+    return view('home');
+});

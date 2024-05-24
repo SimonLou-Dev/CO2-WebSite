@@ -383,7 +383,7 @@ body, html, .app{
     }
     .card{
 
-        margin: 10px;
+        margin: auto;
         @include media-max("tablet"){
             margin-top: 40px;
         }
@@ -392,6 +392,7 @@ body, html, .app{
         padding: 10px 40px;
         width: 30vw;
         min-width: 280px;
+        height: fit-content;
         h2{
             text-align: center;
         }
