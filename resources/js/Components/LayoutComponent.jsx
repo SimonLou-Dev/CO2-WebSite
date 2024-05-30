@@ -28,12 +28,12 @@ export const LayoutComponent = () => {
         window.Pusher = Pusher
 
         window.Echo = new Echo({
-            broadcaster: 'pusher',
-            key: process.env.PUSHER_APP_KEY,
-            wsHost: process.env.PUSHER_HOST ,
-            cluster: 'mt1',
-            wsPort: 6001,
-            wssPort: 6001,
+            broadcaster: process.env.VITE_WS_BROADCASTER,
+            key: process.env.VITE_WS_APP_KEY,
+            wsHost: process.env.VITE_WS_HOST,
+            wsPort: process.env.VITE_WS_PORT,
+            wssPort: process.env.VITE_WS_PORT_SECURE,
+            wsPath: process.env.VITE_WS_PATH,
             forceTLS: false})
 
         return () => {
@@ -58,12 +58,12 @@ export const LayoutComponent = () => {
         setAuthToken(_token)
 
         window.Echo = new Echo({
-            broadcaster: 'pusher',
-            key: process.env.PUSHER_APP_KEY,
-            wsHost: process.env.PUSHER_HOST ,
-            cluster: 'mt1',
-            wsPort: 6001,
-            wssPort: 6001,
+            broadcaster: process.env.VITE_WS_BROADCASTER,
+            key: process.env.VITE_WS_APP_KEY,
+            wsHost: process.env.VITE_WS_HOST,
+            wsPort: process.env.VITE_WS_PORT,
+            wssPort: process.env.VITE_WS_PORT_SECURE,
+            wsPath: process.env.VITE_WS_PATH,
             forceTLS: false,
 
             authorizer: (channel, options) => {
