@@ -30,11 +30,8 @@ export const LayoutComponent = () => {
         window.Echo = new Echo({
             broadcaster: process.env.VITE_WS_BROADCASTER,
             key: process.env.VITE_WS_APP_KEY,
-            wsHost: process.env.VITE_WS_HOST,
-            wsPort: process.env.VITE_WS_PORT,
-            wssPort: process.env.VITE_WS_PORT_SECURE,
-            wsPath: process.env.VITE_WS_PATH,
-            forceTLS: false})
+            cluster: "eu",
+            forceTLS: true})
 
         return () => {
             window.Echo.leaveAllChannels();
@@ -60,11 +57,8 @@ export const LayoutComponent = () => {
         window.Echo = new Echo({
             broadcaster: process.env.VITE_WS_BROADCASTER,
             key: process.env.VITE_WS_APP_KEY,
-            wsHost: process.env.VITE_WS_HOST,
-            wsPort: process.env.VITE_WS_PORT,
-            wssPort: process.env.VITE_WS_PORT_SECURE,
-            wsPath: process.env.VITE_WS_PATH,
-            forceTLS: false,
+            cluster: "eu",
+            forceTLS: true,
 
             authorizer: (channel, options) => {
                 return {
