@@ -8,7 +8,7 @@
 
 
 <div align="center">
-    <a href="[CGU.md](https://github.com/Blumilias/Co2-Hardware)" width="25%">code des capteurs</a>
+    <a href="https://github.com/Blumilias/Co2-Hardware" width="25%">code des capteurs</a>
     <a href="https://github.com/SimonLou-Dev/CO2-WebSite" width="25%">site web</a>
     <a href="https://github.com/SimonLou-Dev/co2Docker" width="25%">infrastructure</a>
 </div>
