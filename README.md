@@ -1,66 +1,57 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<p align="center"><a href="co2.loritz.fr" target="_blank"><img src="./.github/logoCO2.png" width="400"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+<br>
 
-## About Laravel
+<h1 align="center"> Réseau de mesure de concentration de CO2 en milieux clos </h1>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<br>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+<div align="center">
+    <a href="CGU.md" width="25%">https://github.com/Blumilias/Co2-Hardware</a>
+    <a href="https://github.com/SimonLou-Dev/CO2-WebSite" width="25%">site web</a>
+    <a href="https://github.com/SimonLou-Dev/co2Docker" width="25%">infrastructure</a>
+</div>
 
-## Learning Laravel
+___
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+# Le Projet
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Ce dépôt est une partie d'un projet réalisé en collaboration avec d'autres étudiants dans le cadre de mon projet de BTS au sein du lycée Henri Loritz à Nancy (2022-2024).
 
-## Laravel Sponsors
+Voici ci-dessous le diagramme de contexte
+<img src="./.github/DiagContext.jpg" align="center">
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Le but
 
-### Premium Partners
+Le but du projet est d'installer un système de mesure de la concentration de CO2 dans l'ensemble du lycée afin de pouvoir évaluer facilement la qualité de l'air des salles de classe. En effet, une concentration trop élevée en CO2 peut être néfaste pour la concentration et peut provoquer des maux de tête.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## Décomposition
 
-## Contributing
+le projet se divise en trois partie, le site web, les capteurs et l'infrastructure.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Le site web est réalisé avec Laravel 11 et  React 19. L'infrstucture est réalisé grace à docker. Les capteur utilisent l'environement arduino
 
-## Code of Conduct
+## Infrastructre
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Pour représenter l'infrastructure, nous avons établi un diagramme de déploiement.
 
-## Security Vulnerabilities
+<img src="./.github/DiagDeploiment.jpg" align="center">
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Communication
 
-## License
+Le projet utilise le protocole LoRaWAN pour établir une communication entre les capteurs et le serveur, ce qui permet une portée allant jusqu'à 10 km. Ci-dessous, la chaîne de communication allant de la mesure de la concentration de CO2 à l'enregistrement en base de données.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+<img src="./.github/ChainneComm.jpg" align="center">
+
+<br>
+
+Voici le diagramme de séquence correspondant
+
+<br>
+
+<img src="./.github/DiagSeqGlobalMesure.jpg" align="center">
+
+
+
